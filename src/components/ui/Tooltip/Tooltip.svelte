@@ -1,0 +1,85 @@
+<script>
+    import { getContext } from "svelte";
+    import { v4 } from "uuid";
+
+    import TooltipContent from "./TooltipContent.svelte";
+
+    /**
+     * @typedef {Object} TooltipProps
+     * @prop {import('svelte').Snippet} content
+     * @prop {import('svelte').Snippet<[{attach:import('svelte/attachments').Attachment}]>} trigger
+     * @prop {"top"|"bottom"|"left"|"right"} [preferredSide]
+     * @prop {number} [sideOffset]
+     * @prop {number} [delay]
+     * @prop {number} [duration]
+     * @prop {boolean} [isOpen]
+     * @prop {boolean} [flyOpposite]
+     * @prop {"start"|"center"|"end"} [align]
+     */
+    /** @type {TooltipProps & import('svelte/elements').SvelteHTMLElements['div']} */
+    let { content, trigger, delay = 300, ...props } = $props();
+
+    let timer = $state();
+    let isOpen = $state(false);
+    let triggerRef = $state();
+    let id = $state(v4());
+    /**
+     * @type {(id:string,s:import('svelte').Snippet<[{hidden:boolean}]>)=>any}
+     */
+    const portalSubscriber = getContext("SubscribePortal");
+    /**
+     * @type {(id:string)=>any}
+     */
+    const portalUnsubscriber = getContext("UnsubscribePortal");
+    /**
+     * @type {(id:string)=>any}
+     */
+    const portalShow = getContext("ShowTip");
+
+    $effect(() => {
+        portalSubscriber(id, renderer);
+        return () => {
+            portalUnsubscriber(id);
+        };
+    });
+
+    const startTimer = () => {
+        if (!timer) {
+            timer = setTimeout(() => {
+                isOpen = true;
+                portalShow(id);
+            }, delay);
+        }
+    };
+
+    const stopTimer = () => {
+        if (timer) {
+            clearTimeout(timer);
+            timer = undefined;
+        }
+        isOpen = false;
+        portalShow(undefined);
+    };
+
+    /**
+     * @param {HTMLElement} el
+     */
+    const attach = (el) => {
+        triggerRef = el;
+        el.addEventListener("mouseenter", startTimer);
+        el.addEventListener("mouseleave", stopTimer);
+
+        return () => {
+            triggerRef = undefined;
+            el.removeEventListener("mouseenter", startTimer);
+            el.removeEventListener("mouseleave", stopTimer);
+        };
+    };
+</script>
+
+{@render trigger?.({ attach })}
+{#snippet renderer({ hidden })}
+    <TooltipContent isOpen={hidden} {triggerRef} {...props}>
+        {@render content?.()}
+    </TooltipContent>
+{/snippet}
