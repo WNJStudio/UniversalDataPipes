@@ -79,6 +79,9 @@
      */
     let dragCore = $state();
 
+    let zoomed = $state(false);
+    let moved = $state(false);
+
     const findHandle = (handleId) => {
         return Object.values(nodes)
             .flatMap((n) => [...n.inputs, ...n.outputs])
@@ -155,6 +158,7 @@
         canvasTransform.x = newX;
         canvasTransform.y = newY;
         canvasTransform.scale = newScale;
+        zoomed = true;
     };
 
     const onZoomIn = () => {
@@ -324,6 +328,7 @@
                         }
                     }
                 });
+                moved = true;
             }
             return;
         }
@@ -332,6 +337,7 @@
             const dy = (e.clientY - panStart.y) / canvasTransform.scale;
             canvasTransform.x = panStart.tx + dx;
             canvasTransform.y = panStart.ty + dy;
+            moved = true;
             return;
         }
         const canvasRect = canvasRef?.getBoundingClientRect();
@@ -438,6 +444,8 @@
         pendingEdge = undefined;
         selectStart = undefined;
         selectionRect = undefined;
+        moved = false;
+        zoomed = false;
     };
     /**
      * @param {MouseEvent} e
@@ -509,6 +517,7 @@
             canvasTransform.x = newX;
             canvasTransform.y = newY;
             canvasTransform.scale = newScale;
+            zoomed = true;
         }
     };
 
@@ -556,7 +565,7 @@
                 class="absolute w-full h-full pointer-events-none transform-[scale(1)] left-0 top-0 overflow-visible"
             >
                 {#each Object.entries(edges) as [id, edge] (id)}
-                    <EdgePath {edge} {canvasTransform} />
+                    <EdgePath {edge} {canvasTransform} bind:zoomed bind:moved />
                 {/each}
                 {#if pendingEdge}
                     <PendingEdgePath {pendingEdge} {canvasTransform} />

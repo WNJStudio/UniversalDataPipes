@@ -5,11 +5,21 @@
     /**
      * @typedef {Object} EdgePathProps
      * @prop {EdgeData} edge
+     * @prop {boolean} zoomed
+     * @prop {boolean} moved
      * @prop {Transform} canvasTransform
      */
     /** @type {EdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */
-    let { edge, canvasTransform, ...props } = $props();
+    let {
+        edge,
+        canvasTransform,
+        zoomed = $bindable(),
+        moved = $bindable(),
+        ...props
+    } = $props();
     const path = $derived.by(() => {
+        if (moved || zoomed) {
+        }
         const startHandle = document.querySelector(
             `[data-handle-id="${edge.start}"]`,
         );
@@ -39,6 +49,14 @@
             }
         }
         return "";
+    });
+    $effect(() => {
+        if (moved) {
+            moved = false;
+        }
+        if (zoomed) {
+            zoomed = false;
+        }
     });
 </script>
 
