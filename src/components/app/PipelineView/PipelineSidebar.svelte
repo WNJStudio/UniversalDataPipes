@@ -7,6 +7,7 @@
     Save,
     Trash2,
     Upload,
+    Search,
   } from "@lucide/svelte";
   import { slide } from "svelte/transition";
   import { Pipeline } from "../../../model/Pipeline.svelte";
@@ -27,6 +28,7 @@
   import DropdownMenuItem from "../../ui/DropdownMenu/DropdownMenuItem.svelte";
   import { getContext } from "svelte";
   import Tooltip from "../../ui/Tooltip/Tooltip.svelte";
+  import Input from "../../ui/Input/Input.svelte";
 
   /**
    * @typedef {Object} PipelineSidebarProps
@@ -59,6 +61,13 @@
 
   let deleteDialogOpen = $state(false);
   let actionCandidateName = $state();
+
+  let pattern = $state("");
+  let query = $derived(new RegExp(pattern, "i"));
+
+  let filteredPipelines = $derived(
+    savedPipelines.filter((p) => query.test(p.name)),
+  );
 
   const closeDialog = () => {
     actionCandidateName = undefined;
@@ -125,8 +134,6 @@
   };
 </script>
 
-<!-- TODO -->
-
 <FlyOut
   oncontextmenu={onContextMenu}
   {hidden}
@@ -164,10 +171,21 @@
       Save Current Pipeline
     </Button>
   </div>
-  <!-- TODO: Add a searchbox/filter -->
+  <div class="px-4 pb-4 border-b border-border/50">
+    <div class="relative">
+      <Search class="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+      <Input
+        type="search"
+        placeholder="Search pipelines..."
+        class="pl-8 h-9"
+        value={pattern}
+        onValueChange={(v) => (pattern = v)}
+      />
+    </div>
+  </div>
   <ScrollArea class="flex-1 min-h-0">
     <div class="p-4 space-y-4">
-      {#each savedPipelines as pipeline (pipeline.name)}
+      {#each filteredPipelines as pipeline (pipeline.name)}
         <div transition:slide={{ axis: "y" }}>
           <Card data-key={pipeline.name} class="overflow-hidden group">
             <div class="p-3 flex justify-between items-start">
@@ -215,20 +233,25 @@
         </div>
       {/each}
       <SlideOut
-        hidden={savedPipelines.length > 0}
+        hidden={filteredPipelines.length > 0}
         axis="y"
         class="text-center text-sm text-muted-foreground py-10"
       >
-        <p class="select-none">No saved pipelines yet.</p>
-        <Button
-          variant="outline"
-          size="sm"
-          class="mt-4 select-none"
-          onclick={() => onSave()}
-        >
-          <Plus class="mr-2 h-4 w-4" />
-          Save your first pipeline
-        </Button>
+        <p class="select-none">No saved pipelines found.</p>
+        {#if savedPipelines.length > 0 && pattern !== ""}
+          <p class="mt-2">Try searching for something else.</p>
+        {/if}
+        {#if savedPipelines.length === 0}
+          <Button
+            variant="outline"
+            size="sm"
+            class="mt-4 select-none"
+            onclick={() => onSave()}
+          >
+            <Plus class="mr-2 h-4 w-4" />
+            Save your first pipeline
+          </Button>
+        {/if}
       </SlideOut>
     </div>
   </ScrollArea>

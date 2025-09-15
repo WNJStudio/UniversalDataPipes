@@ -170,7 +170,6 @@
     });
 </script>
 
-<!-- transform: translate(54px, 131px); -->
 <FlyOut
     hidden={!isOpen}
     class={["fixed z-50 min-w-max inline-block text-left"]}
