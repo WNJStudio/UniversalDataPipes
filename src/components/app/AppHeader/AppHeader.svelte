@@ -1,9 +1,8 @@
 <script>
-    import { PanelLeft, PanelRight, Workflow } from "@lucide/svelte";
     import { DATAVIEW, PIPEVIEW } from "../../../constants";
-    import Button from "../../ui/Button/Button.svelte";
     import TabList from "../../ui/Tabs/TabList.svelte";
-    import SlideOut from "../../ui/Transitions/SlideOut.svelte";
+    import Logo from "./Logo.svelte";
+    import SidebarToggle from "./SidebarToggle.svelte";
 
     /**
      * @typedef {Object} AppHeaderProps
@@ -16,10 +15,6 @@
         isSidebarOpen = $bindable(),
         ...props
     } = $props();
-
-    const toggleSidebar = () => {
-        isSidebarOpen = !isSidebarOpen;
-    };
 </script>
 
 <header
@@ -29,31 +24,8 @@
     ]}
 >
     <div class="flex items-center gap-2">
-        <SlideOut hidden={currentView !== PIPEVIEW} delay={300}>
-            <Button
-                tooltipSide="bottom"
-                variant="ghost"
-                size="icon"
-                toggle
-                toggleStatus={isSidebarOpen}
-                onclick={toggleSidebar}
-                class="h-8 w-8"
-            >
-                {#snippet tooltip()}
-                    {isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
-                {/snippet}
-                {#snippet toggleOn()}
-                    <PanelLeft class="h-5 w-5" />
-                {/snippet}
-                {#snippet toggleOff()}
-                    <PanelRight class="h-5 w-5" />
-                {/snippet}
-            </Button>
-        </SlideOut>
-        <Workflow class="h-6 w-6 text-primary" />
-        <h1 class="text-xl font-bold text-foreground select-none">
-            Universal Data Pipes
-        </h1>
+        <SidebarToggle {currentView} bind:isSidebarOpen />
+        <Logo />
     </div>
     <TabList
         bind:currentView
