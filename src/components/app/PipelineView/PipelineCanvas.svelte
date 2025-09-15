@@ -102,8 +102,12 @@
                     if (canvasRect) {
                         const newNode = template
                             .create(
-                                e.clientX - canvasRect.x,
-                                e.clientY - canvasRect.y,
+                                (e.clientX - canvasRect.x) /
+                                    canvasTransform.scale -
+                                    canvasTransform.x,
+                                (e.clientY - canvasRect.y) /
+                                    canvasTransform.scale -
+                                    canvasTransform.y,
                             )
                             .reactive();
                         nodes[newNode.id] = newNode;
@@ -418,9 +422,11 @@
                         targetHandle.getAttribute("data-handle-id");
                     const handle = findHandle(targetHandleId);
                     if (handle) {
-                        if (connectStart.connect(handle)) {
-                            pendingEdge.end = targetHandleId;
-                            pendingEdge.endNode = targetHandleId;
+                        if (
+                            connectStart.connect(handle, Object.values(edges))
+                        ) {
+                            pendingEdge.end = handle.id;
+                            pendingEdge.endNode = handle.nodeId;
                             pendingEdge.tail = null;
                             edges[pendingEdge.id] = pendingEdge;
                         }
