@@ -100,8 +100,25 @@
 
         /**
          * @param {HandleData} end
+         * @param {EdgeData[]} edges
          */
-        connect(end) {
+        connect(end, edges) {
+            if (
+                edges.some(
+                    (edge) =>
+                        edge.start === this.start.id && edge.end === end.id,
+                )
+            ) {
+                return false;
+            }
+            if (
+                edges.some(
+                    (edge) =>
+                        edge.end === this.start.id && edge.start === end.id,
+                )
+            ) {
+                return false;
+            }
             if (this.start.id === end.id) {
                 return false;
             }
