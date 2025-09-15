@@ -1,16 +1,16 @@
 <script module>
     import {
-        Brackets,
+        Braces,
         Combine,
         FileText,
         FolderInput,
         Funnel,
     } from "@lucide/svelte";
+    import ObjectOutputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/ObjectOutputNode.svelte";
+    import TextFileInputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/TextFileInputNode.svelte";
     import { HandleData } from "./Handle.svelte";
     import { HandleDefinition } from "./HandleDefinition.svelte";
     import { DefaultNodeDef, NodeDefinition } from "./NodeDefinition.svelte";
-    import TextFileInputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/TextFileInputNode.svelte";
-    import ArrayOutputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/ArrayOutputNode.svelte";
 
     export class NodeCategory {
         /**
@@ -68,25 +68,18 @@
     };
 
     IO.addNode(
-        "Text File Input Node",
+        "Text File Input",
         [],
         [new HandleDefinition("Text Content", "string", "OUT", "#889922")],
         tfin,
         FileText,
     );
     IO.addNode(
-        "Object Array Output Node",
-        [
-            new HandleDefinition(
-                "Input array of objects or object",
-                "Object[]|Object",
-                "IN",
-                "#332299",
-            ),
-        ],
+        "Object Preview",
+        [new HandleDefinition("Input objects", "Object", "IN", "#332299")],
         [],
         ojout,
-        Brackets,
+        Braces,
     );
 </script>
 
@@ -94,5 +87,5 @@
     <TextFileInputNode {inputs} {outputs}></TextFileInputNode>
 {/snippet}
 {#snippet ojout({ inputs, outputs })}
-    <ArrayOutputNode {inputs} {outputs}></ArrayOutputNode>
+    <ObjectOutputNode {inputs} {outputs}></ObjectOutputNode>
 {/snippet}
