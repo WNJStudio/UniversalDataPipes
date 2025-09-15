@@ -6,7 +6,7 @@
         PIPELINE_DATA_SETTER,
         PIPELINE_EDGES,
     } from "../../../../../../constants";
-    import { EdgeData } from "../../../../../../model/Node.svelte";
+    import { EdgeData } from "../../../../../../model/Edge.svelte";
 
     /**
      * @type {(edgeId:string,data:any)=>any}

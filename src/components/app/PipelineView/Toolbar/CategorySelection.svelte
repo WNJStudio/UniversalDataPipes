@@ -1,5 +1,5 @@
 <script>
-    import { NodeDefs } from "../../../../model/Node.svelte";
+    import { NodeDefs } from "../../../../model/NodeCategory.svelte";
     import Button from "../../../ui/Button/Button.svelte";
 
     /**

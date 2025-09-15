@@ -1,5 +1,5 @@
 <script module>
-    import { HandleData } from "../../../../../model/Node.svelte";
+    import { HandleData } from "../../../../../model/Handle.svelte";
 
     /**
      * @typedef {Object} NodeProps

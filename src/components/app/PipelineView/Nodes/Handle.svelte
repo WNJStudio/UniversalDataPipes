@@ -1,5 +1,5 @@
 <script>
-    import { HandleData } from "../../../../model/Node.svelte";
+    import { HandleData } from "../../../../model/Handle.svelte";
     import Tooltip from "../../../ui/Tooltip/Tooltip.svelte";
     /**
      * @typedef {Object} HandleProps

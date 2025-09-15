@@ -1,12 +1,10 @@
 <script>
-    import {
-        EdgeData,
-        HandleConnection,
-        NodeData,
-        NodeDefs,
-        Position,
-    } from "../../../model/Node.svelte";
+    import { EdgeData } from "../../../model/Edge.svelte";
+    import { HandleConnection } from "../../../model/HandleConnection.svelte";
+    import { NodeData } from "../../../model/Node.svelte";
+    import { NodeDefs } from "../../../model/NodeCategory.svelte";
     import { Movement, Transform } from "../../../model/Pipeline.svelte";
+    import { Position } from "../../../model/Position.svelte";
     import { Rectangle } from "../../../model/Rectangle.svelte";
     import BlurOut from "../../ui/Transitions/BlurOut.svelte";
     import BaseNode from "./Nodes/BaseNode.svelte";

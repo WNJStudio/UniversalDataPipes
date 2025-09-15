@@ -1,5 +1,6 @@
 <script module>
-    import { EdgeData, NodeData } from "./Node.svelte";
+    import { EdgeData } from "./Edge.svelte";
+    import { NodeData } from "./Node.svelte";
     export class Transform {
         /**
          * @param {number} x

@@ -3,7 +3,7 @@
     import { getContext } from "svelte";
     import { PIPELINE_DATA, PIPELINE_EDGES } from "../../../../../../constants";
     import Button from "../../../../../ui/Button/Button.svelte";
-    import { EdgeData } from "../../../../../../model/Node.svelte";
+    import { EdgeData } from "../../../../../../model/Edge.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();

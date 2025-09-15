@@ -5,7 +5,7 @@
     import Input from "../../../ui/Input/Input.svelte";
     import { fade } from "svelte/transition";
     import Tooltip from "../../../ui/Tooltip/Tooltip.svelte";
-    import { NodeDefinition, NodeDefs } from "../../../../model/Node.svelte";
+    import { NodeDefs } from "../../../../model/NodeCategory.svelte";
 
     /**
      * @typedef {Object} NodeSelectionProps

@@ -1,11 +1,12 @@
 <script>
   import { setContext } from "svelte";
-  import { getDefinition, NodeData } from "../../../../model/Node.svelte";
+  import { NodeData } from "../../../../model/Node.svelte";
   import Card from "../../../ui/Card/Card.svelte";
   import CardHeader from "../../../ui/Card/CardHeader.svelte";
   import CardTitle from "../../../ui/Card/CardTitle.svelte";
   import Handle from "./Handle.svelte";
   import { NODE_HANDLES } from "../../../../constants";
+  import { getDefinition } from "../../../../model/NodeCategory.svelte";
 
   /**
    * @typedef {Object} BaseNodeProps

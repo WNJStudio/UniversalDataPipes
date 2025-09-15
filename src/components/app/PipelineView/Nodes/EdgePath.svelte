@@ -1,5 +1,5 @@
 <script>
-    import { EdgeData } from "../../../../model/Node.svelte";
+    import { EdgeData } from "../../../../model/Edge.svelte";
     import { Transform } from "../../../../model/Pipeline.svelte";
 
     /**
