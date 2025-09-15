@@ -26,15 +26,15 @@
     /**
      * @type {(id:string,s:import('svelte').Snippet<[{hidden:boolean}]>)=>any}
      */
-    const portalSubscriber = getContext("SubscribePortal");
+    const portalSubscriber = getContext("tooltip_portal_subscribe");
     /**
      * @type {(id:string)=>any}
      */
-    const portalUnsubscriber = getContext("UnsubscribePortal");
+    const portalUnsubscriber = getContext("tooltip_portal_unsubscribe");
     /**
      * @type {(id:string)=>any}
      */
-    const portalShow = getContext("ShowTip");
+    const portalShow = getContext("tooltip_display");
 
     $effect(() => {
         portalSubscriber(id, renderer);

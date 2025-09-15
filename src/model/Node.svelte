@@ -1,5 +1,11 @@
 <script module>
-    import { Combine, File, FolderInput, Funnel } from "@lucide/svelte";
+    import {
+        CircleQuestionMark,
+        Combine,
+        FileText,
+        FolderInput,
+        Funnel,
+    } from "@lucide/svelte";
     import { v4 } from "uuid";
     import { Reactive } from "./Reactive.svelte";
     import TextFileInputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/TextFileInputNode.svelte";
@@ -41,6 +47,26 @@
          */
         static create(start, startNode, end, endNode, tail) {
             return new EdgeData(v4(), start, startNode, end, endNode, tail);
+        }
+
+        /**
+         * @param {any} obj
+         * @returns {boolean}
+         */
+        static validate(obj) {
+            if (typeof obj !== "object") {
+                return false;
+            }
+            if (
+                !obj.id ||
+                !obj.start ||
+                !obj.startNode ||
+                !obj.end ||
+                !obj.endNode
+            ) {
+                return false;
+            }
+            return true;
         }
     }
 
@@ -95,6 +121,27 @@
             this.dir = dir;
             this.color = color;
         }
+
+        /**
+         * @param {any} obj
+         * @returns {boolean}
+         */
+        static validate(obj) {
+            if (typeof obj !== "object") {
+                return false;
+            }
+            if (
+                !obj.id ||
+                !obj.nodeId ||
+                !obj.name ||
+                !obj.type ||
+                !obj.dir ||
+                !obj.color
+            ) {
+                return false;
+            }
+            return true;
+        }
     }
     export class NodeData extends Reactive {
         /**
@@ -120,6 +167,42 @@
             this.position = position;
             this.inputs = inputs;
             this.outputs = outputs;
+        }
+
+        /**
+         * @param {any} obj
+         * @returns {boolean}
+         */
+        static validate(obj) {
+            if (typeof obj !== "object") {
+                return false;
+            }
+            if (!obj.id || !obj.category || !obj.name || !obj.position) {
+                return false;
+            }
+            if (typeof obj.position !== "object") {
+                return false;
+            }
+            if (isNaN(obj.position.x) || isNaN(obj.position.y)) {
+                return false;
+            }
+            if (obj.inputs) {
+                if (!(obj.inputs instanceof Array)) {
+                    return false;
+                }
+                if (obj.inputs.some((e) => !HandleData.validate(e))) {
+                    return false;
+                }
+            }
+            if (obj.outputs) {
+                if (!(obj.outputs instanceof Array)) {
+                    return false;
+                }
+                if (obj.outputs.some((n) => !HandleData.validate(n))) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
     export class HandleDefinition {
@@ -223,13 +306,22 @@
         [],
         [new HandleDefinition("Text Content", "string", "OUT", "#889922")],
         tfin,
-        File,
+        FileText,
     );
 
     /**
      * @type {{[x:string]:NodeCategory}}
      */
     export const NodeDefs = { IO, TEXT, OBJ };
+
+    const DefaultNodeDef = new NodeDefinition(
+        "default",
+        "default",
+        [],
+        [],
+        defaultNode,
+        CircleQuestionMark,
+    );
 
     /**
      *
@@ -238,10 +330,16 @@
      * @returns {NodeDefinition}
      */
     export const getDefinition = (category, name) => {
-        return NodeDefs[category]?.nodes?.find?.((n) => n.name === name);
+        return (
+            NodeDefs[category]?.nodes?.find?.((n) => n.name === name) ||
+            DefaultNodeDef
+        );
     };
 </script>
 
+{#snippet defaultNode({ inputs, outputs })}
+    <p class="text-muted-foreground text-2xl font-body">Default</p>
+{/snippet}
 {#snippet tfin({ inputs, outputs })}
     <TextFileInputNode {inputs} {outputs}></TextFileInputNode>
 {/snippet}

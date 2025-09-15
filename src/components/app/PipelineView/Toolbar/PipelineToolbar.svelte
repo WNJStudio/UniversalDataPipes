@@ -63,7 +63,7 @@
                   onmousedown={spawnNode}
                   class="flex flex-col items-center justify-center p-2 rounded-md cursor-grab hover:bg-accent hover:text-accent-foreground w-24 h-20 border border-transparent hover:border-primary transition-colors"
                 >
-                  <node.icon className="h-6 w-6 mb-1 text-primary" />
+                  <node.icon class="h-6 w-6 mb-1 text-primary" />
                 </div>
               {/snippet}
             </Tooltip>

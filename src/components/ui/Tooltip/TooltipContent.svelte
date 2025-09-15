@@ -40,9 +40,7 @@
         if (triggerRef && contentRef) {
             const triggerRect = triggerRef.getBoundingClientRect();
             const contentRect = contentRef.getBoundingClientRect();
-            /** @type {"top"|"bottom"|"left"|"right"}*/
             /**
-             *
              * @param {"top"|"bottom"|"left"|"right"} side
              */
             const calculatePosition = (side) => {

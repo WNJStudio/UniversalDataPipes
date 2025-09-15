@@ -123,7 +123,7 @@
             isDragging ? "border-primary bg-primary/10" : "border-border",
         ]}
     >
-        <CloudUpload className="h-8 w-8 text-muted-foreground mb-2" />
+        <CloudUpload class="h-8 w-8 text-muted-foreground mb-2" />
         <p class="text-sm text-muted-foreground mb-2">Drop a file or</p>
         <Button onclick={handleSelectFile} variant="outline" size="sm"
             >Select File</Button

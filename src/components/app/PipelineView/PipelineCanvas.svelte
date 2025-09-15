@@ -481,28 +481,30 @@
     const onWheel = (e) => {
         if (e.ctrlKey) {
             e.preventDefault();
+            const canvasRect = canvasRef?.getBoundingClientRect();
+            if (!canvasRect) {
+                return;
+            }
+            const delta = -e.deltaY * ZOOM_SENSITIVITY;
+            const newScale = Math.max(
+                MIN_ZOOM,
+                Math.min(MAX_ZOOM, canvasTransform.scale + delta),
+            );
+
+            const mouseX = e.clientX - canvasRect.left;
+            const mouseY = e.clientY - canvasRect.top;
+
+            const mousePointX =
+                mouseX / canvasTransform.scale - canvasTransform.x;
+            const mousePointY =
+                mouseY / canvasTransform.scale - canvasTransform.y;
+
+            const newX = mouseX / newScale - mousePointX;
+            const newY = mouseY / newScale - mousePointY;
+            canvasTransform.x = newX;
+            canvasTransform.y = newY;
+            canvasTransform.scale = newScale;
         }
-        const canvasRect = canvasRef?.getBoundingClientRect();
-        if (!canvasRect) {
-            return;
-        }
-        const delta = -e.deltaY * ZOOM_SENSITIVITY;
-        const newScale = Math.max(
-            MIN_ZOOM,
-            Math.min(MAX_ZOOM, canvasTransform.scale + delta),
-        );
-
-        const mouseX = e.clientX - canvasRect.left;
-        const mouseY = e.clientY - canvasRect.top;
-
-        const mousePointX = mouseX / canvasTransform.scale - canvasTransform.x;
-        const mousePointY = mouseY / canvasTransform.scale - canvasTransform.y;
-
-        const newX = mouseX / newScale - mousePointX;
-        const newY = mouseY / newScale - mousePointY;
-        canvasTransform.x = newX;
-        canvasTransform.y = newY;
-        canvasTransform.scale = newScale;
     };
 
     /**

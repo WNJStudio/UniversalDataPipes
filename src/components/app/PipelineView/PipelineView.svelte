@@ -1,5 +1,6 @@
 <script>
     import { Pipeline } from "../../../model/Pipeline.svelte";
+    import ImportExportDialog from "./ImportExportDialog.svelte";
     import PipelineCanvas from "./PipelineCanvas.svelte";
     import PipelineSidebar from "./PipelineSidebar.svelte";
     import SavePipelineDialog from "./SavePipelineDialog.svelte";
@@ -17,6 +18,13 @@
     let nodes = $state({});
     let edges = $state({});
     let saveName = $state();
+    /**
+     * @type {"import"|"export"}
+     */
+    let ieMode = $state();
+    let ieDialogOpen = $state(false);
+    let exportData = $state("");
+
     const onSave = (name) => {
         saveName = undefined;
         currentPipeline.name = name;
@@ -32,6 +40,17 @@
         nodes = currentPipeline.reactiveNodes;
         edges = currentPipeline.reactiveEdges;
     };
+    const onImportAll = () => {
+        exportData = "";
+        ieMode = "import";
+        ieDialogOpen = true;
+    };
+
+    const onExportAll = () => {
+        exportData = JSON.stringify(savedPipelines, null, 2);
+        ieDialogOpen = true;
+        ieMode = "export";
+    };
 
     const openSaveDialog = (name) => {
         if (name && name !== "") {
@@ -46,6 +65,24 @@
         return Pipeline.hasPipe(name);
     };
 
+    /**
+     * @param {any} c
+     * @returns {{success:number, failure:number}}
+     */
+    const handleOnImport = (c) => {
+        const result = Pipeline.import(c);
+        if (result.success > 0) {
+            savedPipelines = Pipeline.load();
+        }
+        return result;
+    };
+
+    const cleanUpIE = () => {
+        ieMode = null;
+        ieDialogOpen = false;
+        exportData = "";
+    };
+
     $effect(() => {
         savedPipelines = Pipeline.load();
     });
@@ -57,6 +94,8 @@
     onSave={openSaveDialog}
     {onDelete}
     {onLoad}
+    {onExportAll}
+    {onImportAll}
 />
 <PipelineCanvas {hidden} bind:edges bind:nodes />
 <SavePipelineDialog
@@ -64,4 +103,11 @@
     name={saveName}
     {checkName}
     {onSave}
+/>
+<ImportExportDialog
+    data={exportData}
+    bind:isOpen={ieDialogOpen}
+    mode={ieMode}
+    onImport={handleOnImport}
+    onClose={cleanUpIE}
 />

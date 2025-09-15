@@ -93,6 +93,7 @@
                 <Label for="name" class="text-right">Name</Label>
                 <Input
                     id="name"
+                    delay={150}
                     value={inname}
                     onValueChange={handleValueChange}
                     class="col-span-3"

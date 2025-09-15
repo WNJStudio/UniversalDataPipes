@@ -2,6 +2,7 @@
   import {
     Download,
     SquareArrowOutUpRight as Load,
+    EllipsisVertical,
     Plus,
     Save,
     Trash2,
@@ -22,6 +23,9 @@
   import DialogTitle from "../../ui/Dialog/DialogTitle.svelte";
   import DialogDescription from "../../ui/Dialog/DialogDescription.svelte";
   import AlertDialogCancel from "../../ui/Dialog/AlertDialogCancel.svelte";
+  import DropdownMenu from "../../ui/DropdownMenu/DropdownMenu.svelte";
+  import DropdownMenuItem from "../../ui/DropdownMenu/DropdownMenuItem.svelte";
+  import { getContext } from "svelte";
 
   /**
    * @typedef {Object} PipelineSidebarProps
@@ -30,9 +34,25 @@
    * @prop {(s?:string)=>any} onSave
    * @prop {(name:string)=>any} onDelete
    * @prop {(p:Pipeline)=>any} onLoad
+   * @prop {()=>any} onExportAll
+   * @prop {()=>any} onImportAll
    */
   /** @type {PipelineSidebarProps & import('svelte/elements').SvelteHTMLElements['div']} */
-  let { hidden, savedPipelines, onSave, onLoad, onDelete, ...props } = $props();
+  let {
+    hidden,
+    savedPipelines,
+    onSave,
+    onLoad,
+    onDelete,
+    onExportAll,
+    onImportAll,
+    ...props
+  } = $props();
+
+  /**
+   * @type {(name:string, x?:number, y?:number)=>any}
+   */
+  const portalShow = getContext("menu_display");
 
   let deleteDialogOpen = $state(false);
   let deleteCandidateName = $state();
@@ -51,54 +71,59 @@
     onDelete(deleteCandidateName);
     closeDialog();
   };
+
+  /**
+   * @param {MouseEvent} e
+   */
+  const onContextMenu = (e) => {
+    e.preventDefault();
+    if (e.target instanceof HTMLElement) {
+      if (e.target.closest("[data-key]")) {
+        return;
+      }
+      portalShow("pipelines_more", e.clientX, e.clientY);
+    }
+  };
 </script>
 
 <!-- TODO -->
 
 <FlyOut
+  oncontextmenu={onContextMenu}
   {hidden}
   x="-100%"
   class={["w-64 border-r border-border/50 flex flex-col h-full", props.class]}
 >
-  <div class="p-4 border-b border-border/50">
-    <h2 class="text-lg font-semibold select-none">Pipelines</h2>
-    <p class="text-sm text-muted-foreground select-none">
-      Save and load your pipeline configurations.
-    </p>
+  <div class="p-4 border-b border-border/50 flex justify-between items-center">
+    <div>
+      <h2 class="text-lg font-semibold select-none">Pipelines</h2>
+      <p class="text-sm text-muted-foreground select-none">
+        Save and load your pipeline configurations.
+      </p>
+    </div>
+    <DropdownMenu name="pipelines_more">
+      {#snippet trigger({ attach })}
+        <Button {attach} variant="ghost" size="icon">
+          <EllipsisVertical class="h-4 w-4" />
+        </Button>
+      {/snippet}
+      {#snippet content()}
+        <DropdownMenuItem onClick={onExportAll}>
+          <Download className="mr-2 h-4 w-4" />
+          <span>Export All Pipelines</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onImportAll}>
+          <Upload className="mr-2 h-4 w-4" />
+          <span>Import Pipelines</span>
+        </DropdownMenuItem>
+      {/snippet}
+    </DropdownMenu>
   </div>
   <div class="p-4">
-    <Card class="overflow-hidden group">
-      <Button onclick={() => onSave()} class="w-full rounded-none select-none">
-        <Save class="mr-2 h-4 w-4" />
-        Save Current Pipeline
-      </Button>
-      <div class="flex bg-muted/50 border-t">
-        <Button
-          tooltipSide="bottom"
-          variant="ghost"
-          size="sm"
-          class="flex-1 rounded-none"
-        >
-          {#snippet tooltip()}
-            {"Export JSON"}
-          {/snippet}
-          <!-- TODO: add onclick -->
-          <Download class="h-4 w-4" />
-        </Button>
-        <Button
-          tooltipSide="bottom"
-          variant="ghost"
-          size="sm"
-          class="flex-1 rounded-none"
-        >
-          {#snippet tooltip()}
-            {"Import JSON"}
-          {/snippet}
-          <!-- TODO: add onclick -->
-          <Upload class="h-4 w-4" />
-        </Button>
-      </div>
-    </Card>
+    <Button onclick={() => onSave()} class="w-full select-none">
+      <Save class="mr-2 h-4 w-4" />
+      Save Current Pipeline
+    </Button>
   </div>
   <!-- TODO: Add a searchbox/filter -->
   <ScrollArea class="flex-1 min-h-0">
@@ -117,19 +142,6 @@
                 tooltipSide="bottom"
                 variant="ghost"
                 size="sm"
-                class="flex-1 rounded-none text-primary hover:text-primary"
-                onclick={() => onSave(pipeline.name)}
-              >
-                {#snippet tooltip()}
-                  {"Overwrite"}
-                {/snippet}
-                <Save class="h-4 w-4" />
-              </Button>
-
-              <Button
-                tooltipSide="bottom"
-                variant="ghost"
-                size="sm"
                 class="flex-1 rounded-none"
                 onclick={() => onLoad(pipeline)}
               >
@@ -138,18 +150,7 @@
                 {/snippet}
                 <Load class="h-4 w-4" />
               </Button>
-              <Button
-                tooltipSide="bottom"
-                variant="ghost"
-                size="sm"
-                class="flex-1 rounded-none text-destructive hover:bg-destructive/30 hover:text-destructive"
-                onclick={() => openDeleteDialog(pipeline.name)}
-              >
-                {#snippet tooltip()}
-                  {"Delete Pipeline"}
-                {/snippet}
-                <Trash2 class="h-4 w-4" />
-              </Button>
+              <!-- onclick={() => openDeleteDialog(pipeline.name)} -->
             </div>
           </Card>
         </div>

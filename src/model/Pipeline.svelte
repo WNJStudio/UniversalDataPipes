@@ -73,6 +73,83 @@
         }
 
         /**
+         * @param {any} pipes
+         * @returns {{success:number,failure:number}}
+         */
+        static import(pipes) {
+            let success = 0;
+            let failure = 0;
+            if (typeof pipes === "object") {
+                if (pipes instanceof Array) {
+                    pipes.forEach((pipe) => {
+                        if (Pipeline.validate(pipe)) {
+                            Pipeline.cache[pipe.name] = {
+                                nodes: pipe.nodes,
+                                edges: pipe.edges,
+                                savedAt: new Date().toISOString(),
+                            };
+                            success += 1;
+                        } else {
+                            failure += 1;
+                        }
+                    });
+                } else {
+                    if (Pipeline.validate(pipes)) {
+                        Pipeline.cache[pipes.name] = {
+                            nodes: pipes.nodes,
+                            edges: pipes.edges,
+                            savedAt: new Date().toISOString(),
+                        };
+                        success += 1;
+                    } else {
+                        failure += 1;
+                    }
+                }
+                if (success > 0) {
+                    localStorage.setItem(
+                        "UDP_PIPELINES",
+                        JSON.stringify(Pipeline.cache),
+                    );
+                }
+            }
+            return { success, failure };
+        }
+
+        /**
+         * @param {any} obj
+         * @returns {boolean}
+         */
+        static validate(obj) {
+            if (typeof obj !== "object") {
+                return false;
+            }
+            if (!obj.name) {
+                return false;
+            }
+            if (obj.edges) {
+                if (typeof obj.edges !== "object") {
+                    return false;
+                }
+                if (
+                    Object.values(obj.edges).some((e) => !EdgeData.validate(e))
+                ) {
+                    return false;
+                }
+            }
+            if (obj.nodes) {
+                if (typeof obj.nodes !== "object") {
+                    return false;
+                }
+                if (
+                    Object.values(obj.nodes).some((n) => !NodeData.validate(n))
+                ) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
          * @param {string} name
          * @returns
          */
