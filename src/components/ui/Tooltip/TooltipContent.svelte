@@ -12,7 +12,6 @@
      * @prop {number} [sideOffset]
      * @prop {number} [duration]
      * @prop {boolean} isOpen
-     * @prop {boolean} [flyOpposite]
      * @prop {"start"|"center"|"end"} [align]
      * @prop {HTMLElement} [triggerRef]
      */
@@ -26,7 +25,6 @@
         align = "center",
         isOpen,
         duration,
-        flyOpposite = false,
         triggerRef,
         ...props
     } = $props();
@@ -134,22 +132,14 @@
 <FlyOut
     hidden={!isOpen}
     x={position.side === "left"
-        ? flyOpposite
-            ? "-50%"
-            : "50%"
+        ? "-50%"
         : position.side === "right"
-          ? flyOpposite
-              ? "50%"
-              : "-50%"
+          ? "50%"
           : undefined}
     y={position.side === "top"
-        ? flyOpposite
-            ? "-50%"
-            : "50%"
+        ? "-50%"
         : position.side === "bottom"
-          ? flyOpposite
-              ? "50%"
-              : "-50%"
+          ? "50%"
           : undefined}
     class={[
         "absolute z-50",

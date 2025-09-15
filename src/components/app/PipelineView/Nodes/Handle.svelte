@@ -13,7 +13,6 @@
 <Tooltip
     preferredSide={handle.dir === "IN" ? "left" : "right"}
     duration={100}
-    flyOpposite
     delay={500}
 >
     {#snippet content()}

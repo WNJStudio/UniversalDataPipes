@@ -91,6 +91,7 @@
     const handleCancel = () => {
         jsonData = "";
         errorMessage = "";
+        successMessage = "";
         if (fileInputRef) {
             fileInputRef.value = "";
         }

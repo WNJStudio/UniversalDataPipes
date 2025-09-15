@@ -51,6 +51,11 @@
         ieDialogOpen = true;
         ieMode = "export";
     };
+    const onExportSingle = (name) => {
+        exportData = JSON.stringify(Pipeline.cache[name], null, 2);
+        ieDialogOpen = true;
+        ieMode = "export";
+    };
 
     const openSaveDialog = (name) => {
         if (name && name !== "") {
@@ -96,6 +101,7 @@
     {onLoad}
     {onExportAll}
     {onImportAll}
+    {onExportSingle}
 />
 <PipelineCanvas {hidden} bind:edges bind:nodes />
 <SavePipelineDialog

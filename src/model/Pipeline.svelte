@@ -61,6 +61,7 @@
          */
         static save(pipe) {
             Pipeline.cache[pipe.name] = {
+                name: pipe.name,
                 nodes: pipe.nodes,
                 edges: pipe.edges,
                 savedAt: new Date().toISOString(),
@@ -84,6 +85,7 @@
                     pipes.forEach((pipe) => {
                         if (Pipeline.validate(pipe)) {
                             Pipeline.cache[pipe.name] = {
+                                name: pipe.name,
                                 nodes: pipe.nodes,
                                 edges: pipe.edges,
                                 savedAt: new Date().toISOString(),
@@ -96,6 +98,7 @@
                 } else {
                     if (Pipeline.validate(pipes)) {
                         Pipeline.cache[pipes.name] = {
+                            name: pipes.name,
                             nodes: pipes.nodes,
                             edges: pipes.edges,
                             savedAt: new Date().toISOString(),

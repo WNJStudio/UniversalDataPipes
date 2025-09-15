@@ -26,6 +26,7 @@
   import DropdownMenu from "../../ui/DropdownMenu/DropdownMenu.svelte";
   import DropdownMenuItem from "../../ui/DropdownMenu/DropdownMenuItem.svelte";
   import { getContext } from "svelte";
+  import Tooltip from "../../ui/Tooltip/Tooltip.svelte";
 
   /**
    * @typedef {Object} PipelineSidebarProps
@@ -36,6 +37,7 @@
    * @prop {(p:Pipeline)=>any} onLoad
    * @prop {()=>any} onExportAll
    * @prop {()=>any} onImportAll
+   * @prop {(name:string)=>any} onExportSingle
    */
   /** @type {PipelineSidebarProps & import('svelte/elements').SvelteHTMLElements['div']} */
   let {
@@ -46,6 +48,7 @@
     onDelete,
     onExportAll,
     onImportAll,
+    onExportSingle,
     ...props
   } = $props();
 
@@ -55,21 +58,51 @@
   const portalShow = getContext("menu_display");
 
   let deleteDialogOpen = $state(false);
-  let deleteCandidateName = $state();
+  let actionCandidateName = $state();
 
   const closeDialog = () => {
-    deleteCandidateName = undefined;
+    actionCandidateName = undefined;
     deleteDialogOpen = false;
   };
 
-  const openDeleteDialog = (deleting) => {
-    deleteDialogOpen = true;
-    deleteCandidateName = deleting;
+  /**
+   * @param {MouseEvent} e
+   */
+  const openDeleteDialog = (e) => {
+    if (actionCandidateName) {
+      deleteDialogOpen = true;
+    }
   };
 
   const handleDelete = () => {
-    onDelete(deleteCandidateName);
+    onDelete(actionCandidateName);
     closeDialog();
+  };
+
+  /**
+   * @param {MouseEvent} e
+   */
+  const handlePipelineMore = (e) => {
+    if (e.target instanceof HTMLElement) {
+      if (e.target.closest("[data-key]")) {
+        const targetPipelineEl = e.target.closest("[data-key]");
+        const pipeName = targetPipelineEl.getAttribute("data-key");
+        if (pipeName) {
+          actionCandidateName = pipeName;
+          portalShow("pipeline_more", e.clientX, e.clientY);
+        }
+      }
+    }
+  };
+
+  /**
+   * @param {MouseEvent} e
+   */
+  const handleExportSingle = (e) => {
+    if (actionCandidateName) {
+      onExportSingle(actionCandidateName);
+      actionCandidateName = undefined;
+    }
   };
 
   /**
@@ -79,6 +112,12 @@
     e.preventDefault();
     if (e.target instanceof HTMLElement) {
       if (e.target.closest("[data-key]")) {
+        const targetPipelineEl = e.target.closest("[data-key]");
+        const pipeName = targetPipelineEl.getAttribute("data-key");
+        if (pipeName) {
+          actionCandidateName = pipeName;
+          portalShow("pipeline_more", e.clientX, e.clientY);
+        }
         return;
       }
       portalShow("pipelines_more", e.clientX, e.clientY);
@@ -109,11 +148,11 @@
       {/snippet}
       {#snippet content()}
         <DropdownMenuItem onClick={onExportAll}>
-          <Download className="mr-2 h-4 w-4" />
+          <Download class="mr-2 h-4 w-4" />
           <span>Export All Pipelines</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onImportAll}>
-          <Upload className="mr-2 h-4 w-4" />
+          <Upload class="mr-2 h-4 w-4" />
           <span>Import Pipelines</span>
         </DropdownMenuItem>
       {/snippet}
@@ -131,11 +170,32 @@
       {#each savedPipelines as pipeline (pipeline.name)}
         <div transition:slide={{ axis: "y" }}>
           <Card data-key={pipeline.name} class="overflow-hidden group">
-            <div class="p-3">
-              <CardTitle class="text-base">{pipeline.name}</CardTitle>
-              <CardDescription class="text-xs mt-1">
-                Saved on {pipeline.saveLocalString}
-              </CardDescription>
+            <div class="p-3 flex justify-between items-start">
+              <div class="overflow-hidden">
+                <Tooltip delay={800} preferredSide="top">
+                  {#snippet content()}
+                    {pipeline.name}
+                  {/snippet}
+                  {#snippet trigger({ attach })}
+                    <CardTitle
+                      {attach}
+                      class="text-base overflow-ellipsis overflow-hidden"
+                      >{pipeline.name}</CardTitle
+                    >
+                  {/snippet}
+                </Tooltip>
+                <CardDescription class="text-xs mt-1">
+                  Saved on {pipeline.saveLocalString}
+                </CardDescription>
+              </div>
+              <Button
+                onclick={handlePipelineMore}
+                variant="ghost"
+                size="icon"
+                class="h-8 w-8 -mr-2 -mt-1"
+              >
+                <EllipsisVertical class="h-4 w-4" />
+              </Button>
             </div>
             <div class="flex bg-muted/50 border-t">
               <Button
@@ -150,7 +210,6 @@
                 {/snippet}
                 <Load class="h-4 w-4" />
               </Button>
-              <!-- onclick={() => openDeleteDialog(pipeline.name)} -->
             </div>
           </Card>
         </div>
@@ -175,6 +234,7 @@
   </ScrollArea>
 </FlyOut>
 <Dialog
+  isAlert
   bind:isOpen={deleteDialogOpen}
   onClose={closeDialog}
   onCancel={closeDialog}
@@ -185,7 +245,7 @@
       <DialogDescription>
         This action cannot be undone. This will permanently delete the pipeline
         file
-        <span class="font-semibold"> {deleteCandidateName}</span>.
+        <span class="font-semibold"> {actionCandidateName}</span>.
       </DialogDescription>
     </DialogHeader>
     <DialogFooter>
@@ -194,3 +254,18 @@
     </DialogFooter>
   {/snippet}
 </Dialog>
+<DropdownMenu name="pipeline_more">
+  {#snippet content()}
+    <DropdownMenuItem onClick={handleExportSingle}>
+      <Download class="mr-2 h-4 w-4" />
+      <span>Export</span>
+    </DropdownMenuItem>
+    <DropdownMenuItem
+      onClick={openDeleteDialog}
+      class="text-destructive focus:bg-destructive/10 focus:text-destructive hover:bg-destructive/10 hover:text-destructive"
+    >
+      <Trash2 class="mr-2 h-4 w-4" />
+      <span>Delete</span>
+    </DropdownMenuItem>
+  {/snippet}
+</DropdownMenu>

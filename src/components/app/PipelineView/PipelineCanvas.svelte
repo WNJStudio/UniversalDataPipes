@@ -468,9 +468,9 @@
                 }
             }
             onDelete();
-        } else if (e.key.toLowerCase() === "p") {
+        } else if (e.key?.toLowerCase() === "p") {
             panMode = true;
-        } else if (e.key.toLowerCase() === "v") {
+        } else if (e.key?.toLowerCase() === "v") {
             panMode = false;
         }
     };

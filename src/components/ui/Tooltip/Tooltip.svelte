@@ -13,7 +13,6 @@
      * @prop {number} [delay]
      * @prop {number} [duration]
      * @prop {boolean} [isOpen]
-     * @prop {boolean} [flyOpposite]
      * @prop {"start"|"center"|"end"} [align]
      */
     /** @type {TooltipProps & import('svelte/elements').SvelteHTMLElements['div']} */
