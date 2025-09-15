@@ -3,6 +3,7 @@
     import { getContext } from "svelte";
     import Button from "../../../../../ui/Button/Button.svelte";
     import {
+        PIPELINE_DATA_CLEANER,
         PIPELINE_DATA_SETTER,
         PIPELINE_EDGES,
     } from "../../../../../../constants";
@@ -13,7 +14,11 @@
      */
     const dataSetter = getContext(PIPELINE_DATA_SETTER);
     /**
-     * @type {{[edgeId:string]:EdgeData}}
+     * @type {(edgeId:string)=>any}
+     */
+    const dataCleaner = getContext(PIPELINE_DATA_CLEANER);
+    /**
+     * @type {()=>{[edgeId:string]:EdgeData}}
      */
     const edges = getContext(PIPELINE_EDGES);
 
@@ -26,13 +31,14 @@
     let isDragging = $state(false);
     let filename = $state();
     let filesize = $state();
+    let fileContent = $state();
 
     /**
      * @type {EdgeData[]}
      */
     let myEdges = $derived.by(() => {
-        if (edges) {
-            return Object.values(edges).filter(
+        if (edges()) {
+            return Object.values(edges()).filter(
                 (edge) =>
                     outputs?.[0]?.id?.includes?.(edge.start) ||
                     outputs?.[0]?.id?.includes?.(edge.end),
@@ -44,12 +50,21 @@
     const clearData = () => {
         filename = null;
         filesize = null;
+        fileContent = null;
         if (myEdges.length > 0) {
             myEdges.forEach((edge) => {
-                dataSetter?.(edge.id, null);
+                dataCleaner?.(edge.id);
             });
         }
     };
+
+    $effect(() => {
+        if (myEdges.length > 0 && fileContent) {
+            myEdges.forEach((edge) => {
+                dataSetter?.(edge.id, fileContent);
+            });
+        }
+    });
 
     /**
      * @param {File} file
@@ -58,12 +73,7 @@
         if (file) {
             filename = file.name;
             filesize = file.size;
-            const fileContent = await file.text();
-            if (myEdges.length > 0) {
-                myEdges.forEach((edge) => {
-                    dataSetter?.(edge.id, fileContent);
-                });
-            }
+            fileContent = await file.text();
         }
     };
 

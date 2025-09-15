@@ -8,6 +8,7 @@
         MENU_PORTAL_SUBSCRIBE,
         MENU_PORTAL_UNSUBSCRIBE,
         PIPELINE_DATA,
+        PIPELINE_DATA_CLEANER,
         PIPELINE_DATA_SETTER,
         PIPEVIEW,
         TOOLTIP_DISPLAY,
@@ -105,11 +106,12 @@
     /**
      * @param {string} edgeId
      */
-    const dataGetter = (edgeId) => {
-        return pipelineData[edgeId];
+    const dataCleaner = (edgeId) => {
+        delete pipelineData[edgeId];
     };
 
     setContext(PIPELINE_DATA_SETTER, dataSetter);
+    setContext(PIPELINE_DATA_CLEANER, dataCleaner);
     setContext(PIPELINE_DATA, pipelineData);
 
     // General mouse down

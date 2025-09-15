@@ -1,4 +1,6 @@
 <script>
+    import { getContext } from "svelte";
+    import { PIPELINE_DATA_CLEANER } from "../../../constants";
     import { EdgeData } from "../../../model/Edge.svelte";
     import { HandleConnection } from "../../../model/HandleConnection.svelte";
     import { NodeData } from "../../../model/Node.svelte";
@@ -17,15 +19,18 @@
      * @prop {{[id:string]:EdgeData}} edges
      * @prop {{[id:string]:NodeData}} nodes
      * @prop {boolean} hidden
+     * @prop {boolean} pipeChanged
      */
 
     /** @type {PipelineCanvasProps & import('svelte/elements').SvelteHTMLElements['div']} */
     let {
         edges = $bindable(),
         nodes = $bindable(),
+        pipeChanged = $bindable(),
         hidden,
         ...props
     } = $props();
+    const dataCleaner = getContext(PIPELINE_DATA_CLEANER);
     const ZOOM_SENSITIVITY = 0.001;
     const MIN_ZOOM = 0.001;
     const MAX_ZOOM = 20;
@@ -79,6 +84,13 @@
 
     let zoomed = $state(false);
     let moved = $state(false);
+
+    $effect(() => {
+        if (pipeChanged) {
+            pipeChanged = false;
+            moved = true;
+        }
+    });
 
     const findHandle = (handleId) => {
         return Object.values(nodes)
@@ -182,6 +194,7 @@
         });
         toRemove.forEach((id) => {
             delete edges[id];
+            dataCleaner?.(id);
         });
         selectedNodeIds = [];
     };

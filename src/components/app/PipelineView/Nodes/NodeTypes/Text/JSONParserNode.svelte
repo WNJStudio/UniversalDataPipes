@@ -19,7 +19,7 @@
      */
     const pipelineData = getContext(PIPELINE_DATA);
     /**
-     * @type {{[edgeId:string]:EdgeData}}
+     * @type {()=>{[edgeId:string]:EdgeData}}
      */
     const edges = getContext(PIPELINE_EDGES);
 
@@ -29,8 +29,8 @@
      * @type {EdgeData[]}
      */
     let myInputEdges = $derived.by(() => {
-        if (edges) {
-            return Object.values(edges).filter(
+        if (edges()) {
+            return Object.values(edges()).filter(
                 (edge) =>
                     inputs?.[0]?.id?.includes?.(edge.start) ||
                     inputs?.[0]?.id?.includes?.(edge.end),
@@ -43,8 +43,8 @@
      * @type {EdgeData[]}
      */
     let myOutputEdges = $derived.by(() => {
-        if (edges) {
-            return Object.values(edges).filter(
+        if (edges()) {
+            return Object.values(edges()).filter(
                 (edge) =>
                     outputs?.[0]?.id?.includes?.(edge.start) ||
                     outputs?.[0]?.id?.includes?.(edge.end),

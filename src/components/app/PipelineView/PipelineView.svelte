@@ -20,6 +20,9 @@
     let nodes = $state({});
     let edges = $state({});
     let saveName = $state();
+    let pipeChanged = $state(false);
+
+    setContext(PIPELINE_EDGES, () => edges);
     /**
      * @type {"import"|"export"}
      */
@@ -41,6 +44,7 @@
         currentPipeline = pipe;
         nodes = currentPipeline.reactiveNodes;
         edges = currentPipeline.reactiveEdges;
+        pipeChanged = true;
     };
     const onImportAll = () => {
         exportData = "";
@@ -92,7 +96,6 @@
 
     $effect(() => {
         savedPipelines = Pipeline.load();
-        setContext(PIPELINE_EDGES, edges);
     });
 </script>
 
@@ -106,7 +109,7 @@
     {onImportAll}
     {onExportSingle}
 />
-<PipelineCanvas {hidden} bind:edges bind:nodes />
+<PipelineCanvas {hidden} bind:edges bind:nodes bind:pipeChanged />
 <SavePipelineDialog
     bind:isOpen={saveDialogOpen}
     name={saveName}
