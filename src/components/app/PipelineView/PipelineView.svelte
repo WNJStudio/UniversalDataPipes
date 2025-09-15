@@ -3,7 +3,7 @@
     import { Pipeline } from "../../../model/Pipeline.svelte";
     import ImportExportDialog from "./ImportExportDialog.svelte";
     import PipelineCanvas from "./PipelineCanvas.svelte";
-    import PipelineSidebar from "./PipelineSidebar.svelte";
+    import PipelineSidebar from "./Sidebar/PipelineSidebar.svelte";
     import SavePipelineDialog from "./SavePipelineDialog.svelte";
     import { PIPELINE_EDGES } from "../../../constants";
 
