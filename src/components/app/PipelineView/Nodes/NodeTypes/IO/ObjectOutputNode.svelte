@@ -54,11 +54,11 @@
     };
 </script>
 
-<div class="text-left p-2 rounded-md">
+<div
+    class="text-left p-2 rounded-md max-w-3xs max-h-48 overflow-y-auto custom-scrollbar-2"
+>
     {#if preview}
-        <div
-            class="relative max-w-3xs max-h-48 overflow-y-auto custom-scrollbar"
-        >
+        <div class="relative">
             <pre
                 class="text-xs text-foreground/80 whitespace-pre-wrap font-mono">
 {JSON.stringify(preview, null, 2)}

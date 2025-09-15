@@ -11,6 +11,7 @@
     import { HandleData } from "./Handle.svelte";
     import { HandleDefinition } from "./HandleDefinition.svelte";
     import { DefaultNodeDef, NodeDefinition } from "./NodeDefinition.svelte";
+    import JsonParserNode from "../components/app/PipelineView/Nodes/NodeTypes/Text/JSONParserNode.svelte";
 
     export class NodeCategory {
         /**
@@ -76,9 +77,16 @@
     );
     IO.addNode(
         "Object Preview",
-        [new HandleDefinition("Input objects", "Object", "IN", "#332299")],
+        [new HandleDefinition("Input objects", "Object", "IN", "#366299")],
         [],
         ojout,
+        Braces,
+    );
+    TEXT.addNode(
+        "JSON Parser",
+        [new HandleDefinition("Input text", "string", "IN", "#889922")],
+        [new HandleDefinition("Output objects", "Object", "OUT", "#366299")],
+        jsonparser,
         Braces,
     );
 </script>
@@ -88,4 +96,7 @@
 {/snippet}
 {#snippet ojout({ inputs, outputs })}
     <ObjectOutputNode {inputs} {outputs}></ObjectOutputNode>
+{/snippet}
+{#snippet jsonparser({ inputs, outputs })}
+    <JsonParserNode {inputs} {outputs}></JsonParserNode>
 {/snippet}
