@@ -29,6 +29,7 @@
   import { getContext } from "svelte";
   import Tooltip from "../../ui/Tooltip/Tooltip.svelte";
   import Input from "../../ui/Input/Input.svelte";
+  import { MENU_DISPLAY } from "../../../constants";
 
   /**
    * @typedef {Object} PipelineSidebarProps
@@ -57,7 +58,7 @@
   /**
    * @type {(name:string, x?:number, y?:number)=>any}
    */
-  const portalShow = getContext("menu_display");
+  const portalShow = getContext(MENU_DISPLAY);
 
   let deleteDialogOpen = $state(false);
   let actionCandidateName = $state();

@@ -1,5 +1,6 @@
 <script module>
     import {
+        Brackets,
         CircleQuestionMark,
         Combine,
         FileText,
@@ -9,6 +10,7 @@
     import { v4 } from "uuid";
     import { Reactive } from "./Reactive.svelte";
     import TextFileInputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/TextFileInputNode.svelte";
+    import ArrayOutputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/ArrayOutputNode.svelte";
     export class Position extends Reactive {
         /**
          * @param {number} x
@@ -31,11 +33,29 @@
          */
         constructor(id, start, startNode, end, endNode, tail) {
             super();
+            /**
+             * @type {string} the id of the edge
+             */
             this.id = id;
+            /**
+             * @type {string} the id of the starting handle
+             */
             this.start = start;
+            /**
+             * @type {string} the id of the starting node
+             */
             this.startNode = startNode;
+            /**
+             * @type {string} the id of the ending handle
+             */
             this.end = end;
+            /**
+             * @type {string} the id of the ending node
+             */
             this.endNode = endNode;
+            /**
+             * @type {Position} transient tail to track pending edge
+             */
             this.tail = tail;
         }
         /**
@@ -308,6 +328,20 @@
         tfin,
         FileText,
     );
+    IO.addNode(
+        "Object Array Output Node",
+        [
+            new HandleDefinition(
+                "Input array or objects",
+                "any",
+                "IN",
+                "#3311AA",
+            ),
+        ],
+        [],
+        ojout,
+        Brackets,
+    );
 
     /**
      * @type {{[x:string]:NodeCategory}}
@@ -342,4 +376,7 @@
 {/snippet}
 {#snippet tfin({ inputs, outputs })}
     <TextFileInputNode {inputs} {outputs}></TextFileInputNode>
+{/snippet}
+{#snippet ojout({ inputs, outputs })}
+    <ArrayOutputNode {inputs} {outputs}></ArrayOutputNode>
 {/snippet}

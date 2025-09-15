@@ -1,16 +1,24 @@
 <script>
-    import { FileIcon, CloudUpload } from "@lucide/svelte";
-    import Button from "../../../../../ui/Button/Button.svelte";
+    import { CloudUpload, FileIcon } from "@lucide/svelte";
     import { getContext } from "svelte";
-    import { HandleData } from "../../../../../../model/Node.svelte";
+    import Button from "../../../../../ui/Button/Button.svelte";
+    import {
+        PIPELINE_DATA_SETTER,
+        PIPELINE_EDGES,
+    } from "../../../../../../constants";
+    import { EdgeData } from "../../../../../../model/Node.svelte";
 
     /**
-     * @type {(handleId:string,data:any)=>any}
+     * @type {(edgeId:string,data:any)=>any}
      */
-    const dataSetter = getContext("pipeline_data_setter");
+    const dataSetter = getContext(PIPELINE_DATA_SETTER);
+    /**
+     * @type {{[edgeId:string]:EdgeData}}
+     */
+    const edges = getContext(PIPELINE_EDGES);
 
     /**
-     * @type {{inputs:HandleData[], outputs:HandleData[]}}
+     * @type {import('../NodeProps.svelte').NodeProps}
      */
     let { inputs, outputs } = $props();
 
@@ -19,30 +27,43 @@
     let filename = $state();
     let filesize = $state();
 
+    /**
+     * @type {EdgeData[]}
+     */
+    let myEdges = $derived.by(() => {
+        if (edges) {
+            return Object.values(edges).filter(
+                (edge) =>
+                    outputs?.[0]?.id?.includes?.(edge.start) ||
+                    outputs?.[0]?.id?.includes?.(edge.end),
+            );
+        }
+        return [];
+    });
+
     const clearData = () => {
         filename = null;
         filesize = null;
-        const handleId = outputs?.find((h) => (h.name = "Text Content"))?.id;
-        if (handleId) {
-            dataSetter?.(handleId, null);
+        if (myEdges.length > 0) {
+            myEdges.forEach((edge) => {
+                dataSetter?.(edge.id, null);
+            });
         }
     };
 
     /**
      * @param {File} file
      */
-    const handleFileChange = (file) => {
+    const handleFileChange = async (file) => {
         if (file) {
             filename = file.name;
             filesize = file.size;
-            const handleId = outputs?.find(
-                (h) => (h.name = "Text Content"),
-            )?.id;
-            file.text().then((v) => {
-                if (handleId) {
-                    dataSetter?.(handleId, v);
-                }
-            });
+            const fileContent = await file.text();
+            if (myEdges.length > 0) {
+                myEdges.forEach((edge) => {
+                    dataSetter?.(edge.id, fileContent);
+                });
+            }
         }
     };
 

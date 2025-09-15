@@ -1,9 +1,11 @@
 <script>
+    import { setContext } from "svelte";
     import { Pipeline } from "../../../model/Pipeline.svelte";
     import ImportExportDialog from "./ImportExportDialog.svelte";
     import PipelineCanvas from "./PipelineCanvas.svelte";
     import PipelineSidebar from "./PipelineSidebar.svelte";
     import SavePipelineDialog from "./SavePipelineDialog.svelte";
+    import { PIPELINE_EDGES } from "../../../constants";
 
     /**
      * @typedef {Object} PipelineViewProps
@@ -90,6 +92,7 @@
 
     $effect(() => {
         savedPipelines = Pipeline.load();
+        setContext(PIPELINE_EDGES, edges);
     });
 </script>
 

@@ -1,6 +1,11 @@
 <script>
     import { getContext } from "svelte";
     import DropdownMenuContent from "./DropdownMenuContent.svelte";
+    import {
+        MENU_DISPLAY,
+        MENU_PORTAL_SUBSCRIBE,
+        MENU_PORTAL_UNSUBSCRIBE,
+    } from "../../../constants";
     /**
      * @typedef {Object} DropdownMenuProps
      * @prop {import('svelte').Snippet<[{attach:import('svelte/attachments').Attachment}]>} [trigger]
@@ -15,16 +20,16 @@
     /**
      * @type {(id:string,s:import('svelte').Snippet<[{hidden:boolean, x?:number, y?:number}]>)=>any}
      */
-    const portalSubscriber = getContext("menu_portal_subscribe");
+    const portalSubscriber = getContext(MENU_PORTAL_SUBSCRIBE);
     /**
      * @type {(name:string)=>any}
      */
-    const portalUnsubscriber = getContext("menu_portal_unsubscribe");
+    const portalUnsubscriber = getContext(MENU_PORTAL_UNSUBSCRIBE);
 
     /**
      * @type {(name:string, x?:number, y?:number)=>any}
      */
-    const portalShow = getContext("menu_display");
+    const portalShow = getContext(MENU_DISPLAY);
 
     $effect(() => {
         portalSubscriber(name, renderer);

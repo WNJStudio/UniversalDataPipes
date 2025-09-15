@@ -5,6 +5,7 @@
   import CardHeader from "../../../ui/Card/CardHeader.svelte";
   import CardTitle from "../../../ui/Card/CardTitle.svelte";
   import Handle from "./Handle.svelte";
+  import { NODE_HANDLES } from "../../../../constants";
 
   /**
    * @typedef {Object} BaseNodeProps
@@ -19,7 +20,7 @@
 
   const Icon = $derived(definition ? definition.icon : undefined);
 
-  setContext("node_handles", [...node.inputs, ...node.outputs]);
+  setContext(NODE_HANDLES, [...node.inputs, ...node.outputs]);
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->

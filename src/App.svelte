@@ -3,7 +3,17 @@
     import AppHeader from "./components/app/AppHeader/AppHeader.svelte";
     import DataView from "./components/app/DataView/DataView.svelte";
     import PipelineView from "./components/app/PipelineView/PipelineView.svelte";
-    import { PIPEVIEW } from "./constants";
+    import {
+        MENU_DISPLAY,
+        MENU_PORTAL_SUBSCRIBE,
+        MENU_PORTAL_UNSUBSCRIBE,
+        PIPELINE_DATA,
+        PIPELINE_DATA_SETTER,
+        PIPEVIEW,
+        TOOLTIP_DISPLAY,
+        TOOLTIP_PORTAL_SUBSCRIBE,
+        TOOLTIP_PORTAL_UNSUBSCRIBE,
+    } from "./constants";
 
     /** @type {PIPEVIEW|import('./constants').DATAVIEW}*/
     let currentView = $state(PIPEVIEW);
@@ -33,9 +43,9 @@
         delete tooltipPortal[id];
     };
 
-    setContext("tooltip_portal_subscribe", addTooltip);
-    setContext("tooltip_portal_unsubscribe", removeTooltip);
-    setContext("tooltip_display", (t) => (showtip = t));
+    setContext(TOOLTIP_PORTAL_SUBSCRIBE, addTooltip);
+    setContext(TOOLTIP_PORTAL_UNSUBSCRIBE, removeTooltip);
+    setContext(TOOLTIP_DISPLAY, (t) => (showtip = t));
 
     /////////////////////////////
     ////        MENUS        ////
@@ -74,33 +84,33 @@
         showMenu = { name, x, y };
     };
 
-    setContext("menu_portal_subscribe", addMenu);
-    setContext("menu_portal_unsubscribe", removeMenu);
-    setContext("menu_display", displayMenu);
+    setContext(MENU_PORTAL_SUBSCRIBE, addMenu);
+    setContext(MENU_PORTAL_UNSUBSCRIBE, removeMenu);
+    setContext(MENU_DISPLAY, displayMenu);
 
     /////////////////////////////
     ////   PIPILINE DATA     ////
     /////////////////////////////
     /**
-     * @type {{[handleId:string]:any}}
+     * @type {{[edgeId:string]:any}}
      */
     let pipelineData = $state({});
     /**
-     * @param {string} handleId
+     * @param {string} edgeId
      * @param {any} data
      */
-    const dataSetter = (handleId, data) => {
-        pipelineData[handleId] = data;
+    const dataSetter = (edgeId, data) => {
+        pipelineData[edgeId] = data;
     };
     /**
-     * @param {string} handleId
+     * @param {string} edgeId
      */
-    const dataGetter = (handleId) => {
-        return pipelineData[handleId];
+    const dataGetter = (edgeId) => {
+        return pipelineData[edgeId];
     };
 
-    setContext("pipeline_data_setter", dataSetter);
-    setContext("pipeline_data_getter", dataGetter);
+    setContext(PIPELINE_DATA_SETTER, dataSetter);
+    setContext(PIPELINE_DATA, pipelineData);
 
     // General mouse down
     /**

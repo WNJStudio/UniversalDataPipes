@@ -30,7 +30,7 @@
             class={[
                 "handle",
                 "relative h-3.5 w-3.5 rounded-full border-2 border-background cursor-pointer",
-                handle.dir === "IN" ? "-left-1.5" : "-right-1.5",
+                handle.dir === "IN" ? "-left-3" : "-right-1.5",
                 props.class,
             ]}
             style={`background-color: ${handle.color};`}

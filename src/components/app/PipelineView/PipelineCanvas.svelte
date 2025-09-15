@@ -409,7 +409,6 @@
         dragCore = undefined;
         draggingPositions = undefined;
         isDragging = false;
-        // Dragging stops
         isPanning = false;
         if (connectStart && pendingEdge) {
             if (e.target instanceof HTMLElement) {
