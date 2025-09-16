@@ -1,25 +1,18 @@
 <script>
     import { CloudUpload, FileIcon } from "@lucide/svelte";
     import { getContext } from "svelte";
-    import Button from "../../../../../ui/Button/Button.svelte";
+    import { PIPELINE_EDGES } from "../../../../../../constants";
     import {
-        PIPELINE_DATA_CLEANER,
-        PIPELINE_DATA_SETTER,
-        PIPELINE_EDGES,
-    } from "../../../../../../constants";
+        getDataContextCleaner,
+        getDataContextSetter,
+    } from "../../../../../../context/DataContext.svelte";
     import { EdgeData } from "../../../../../../model/Edge.svelte";
+    import Button from "../../../../../ui/Button/Button.svelte";
 
-    /**
-     * @type {(edgeId:string,data:any)=>any}
-     */
-    const dataSetter = getContext(PIPELINE_DATA_SETTER);
-    /**
-     * @type {(edgeId:string)=>any}
-     */
-    const dataCleaner = getContext(PIPELINE_DATA_CLEANER);
-    /**
-     * @type {()=>{[edgeId:string]:EdgeData}}
-     */
+    const dataSetter = getDataContextSetter();
+
+    const dataCleaner = getDataContextCleaner();
+
     const edges = getContext(PIPELINE_EDGES);
 
     /**

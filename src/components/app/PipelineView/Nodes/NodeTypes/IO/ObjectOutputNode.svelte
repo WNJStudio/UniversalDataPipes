@@ -1,17 +1,15 @@
 <script>
     import { RefreshCw } from "@lucide/svelte";
     import { getContext } from "svelte";
-    import { PIPELINE_DATA, PIPELINE_EDGES } from "../../../../../../constants";
-    import Button from "../../../../../ui/Button/Button.svelte";
+    import { PIPELINE_EDGES } from "../../../../../../constants";
+    import { getDataContext } from "../../../../../../context/DataContext.svelte";
     import { EdgeData } from "../../../../../../model/Edge.svelte";
+    import Button from "../../../../../ui/Button/Button.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();
 
-    /**
-     * @type {{[edgeId:string]:any}}
-     */
-    const pipelineData = getContext(PIPELINE_DATA);
+    const pipelineData = getDataContext();
     /**
      * @type {()=>{[edgeId:string]:EdgeData}}
      */

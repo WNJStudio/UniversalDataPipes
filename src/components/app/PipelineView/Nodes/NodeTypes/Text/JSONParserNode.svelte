@@ -1,23 +1,18 @@
 <script>
     import { getContext } from "svelte";
+    import { PIPELINE_EDGES } from "../../../../../../constants";
     import {
-        PIPELINE_DATA,
-        PIPELINE_DATA_SETTER,
-        PIPELINE_EDGES,
-    } from "../../../../../../constants";
+        getDataContext,
+        getDataContextSetter,
+    } from "../../../../../../context/DataContext.svelte";
     import { EdgeData } from "../../../../../../model/Edge.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();
 
-    /**
-     * @type {(edgeId:string,data:any)=>any}
-     */
-    const dataSetter = getContext(PIPELINE_DATA_SETTER);
-    /**
-     * @type {{[edgeId:string]:any}}
-     */
-    const pipelineData = getContext(PIPELINE_DATA);
+    const dataSetter = getDataContextSetter();
+
+    const pipelineData = getDataContext();
     /**
      * @type {()=>{[edgeId:string]:EdgeData}}
      */

@@ -1,6 +1,5 @@
 <script>
-    import { getContext } from "svelte";
-    import { PIPELINE_DATA_CLEANER } from "../../../constants";
+    import { getDataContextCleaner } from "../../../context/DataContext.svelte";
     import { EdgeData } from "../../../model/Edge.svelte";
     import { HandleConnection } from "../../../model/HandleConnection.svelte";
     import { NodeData } from "../../../model/Node.svelte";
@@ -30,7 +29,7 @@
         hidden,
         ...props
     } = $props();
-    const dataCleaner = getContext(PIPELINE_DATA_CLEANER);
+    const dataCleaner = getDataContextCleaner();
     const ZOOM_SENSITIVITY = 0.001;
     const EDGE_DETECTION_SENSITIVITY = 10;
     const MIN_ZOOM = 0.001;
@@ -39,6 +38,14 @@
      * @type {HTMLElement}
      */
     let canvasRef = $state();
+    /**
+     * @type {HTMLElement}
+     */
+    let canvasViewport = $state();
+    /**
+     * @type {SVGElement}
+     */
+    let canvasEdgeport = $state();
     /**
      * @type {Transform}
      */
@@ -292,8 +299,8 @@
         }
         if (
             e.target !== e.currentTarget &&
-            e.target !== canvasRef?.querySelector("[data-canvas-view]") &&
-            e.target !== canvasRef?.querySelector("[data-edge-view]")
+            e.target !== canvasViewport &&
+            e.target !== canvasEdgeport
         ) {
             return;
         }
@@ -617,6 +624,7 @@
         onmouseup={handleMouseUp}
     >
         <div
+            bind:this={canvasViewport}
             data-canvas-view="true"
             class="w-full h-full relative"
             style={`transform: translate(${canvasTransform.x * canvasTransform.scale}px, ${canvasTransform.y * canvasTransform.scale}px) scale(${canvasTransform.scale});transform-origin: top left;`}
@@ -625,6 +633,7 @@
                 <SelectionRect rect={selectionRect} />
             {/if}
             <svg
+                bind:this={canvasEdgeport}
                 data-edge-view="true"
                 class="absolute w-full h-full transform-[scale(1)] left-0 top-0 overflow-visible"
             >
