@@ -651,12 +651,17 @@
                         isSelected={selectedEdgeIds.includes(id)}
                         {onEdgeClick}
                         {canvasTransform}
+                        canvasView={canvasViewport}
                         bind:zoomed
                         bind:moved
                     />
                 {/each}
                 {#if pendingEdge}
-                    <PendingEdgePath {pendingEdge} {canvasTransform} />
+                    <PendingEdgePath
+                        {pendingEdge}
+                        canvasView={canvasViewport}
+                        {canvasTransform}
+                    />
                 {/if}
             </svg>
             {#each Object.entries(nodes) as [id, node] (id)}

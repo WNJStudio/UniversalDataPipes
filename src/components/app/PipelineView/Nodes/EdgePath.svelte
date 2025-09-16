@@ -10,11 +10,13 @@
      * @prop {boolean} isSelected
      * @prop {(e:MouseEvent, id:string)=>any} onEdgeClick
      * @prop {Transform} canvasTransform
+     * @prop {HTMLElement} canvasView
      */
     /** @type {EdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */
     let {
         edge,
         canvasTransform,
+        canvasView,
         zoomed = $bindable(),
         moved = $bindable(),
         onEdgeClick,
@@ -31,7 +33,6 @@
             `[data-handle-id="${edge.end}"]`,
         );
         if (startHandle && endHandle) {
-            const canvasView = startHandle.closest('[data-canvas-view="true"]');
             if (canvasView) {
                 const startRect = startHandle.getBoundingClientRect();
                 const endRect = endHandle.getBoundingClientRect();

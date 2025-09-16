@@ -6,16 +6,16 @@
      * @typedef {Object} PendingEdgePathProps
      * @prop {EdgeData} pendingEdge
      * @prop {Transform} canvasTransform
+     * @prop {HTMLElement} canvasView
      */
     /** @type {PendingEdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */
-    let { pendingEdge, canvasTransform, ...props } = $props();
+    let { pendingEdge, canvasTransform, canvasView, ...props } = $props();
 
     const path = $derived.by(() => {
         const startHandle = document.querySelector(
             `[data-handle-id="${pendingEdge.start}"]`,
         );
         if (startHandle) {
-            const canvasView = startHandle.closest('[data-canvas-view="true"]');
             if (canvasView) {
                 const startRect = startHandle.getBoundingClientRect();
                 const viewRect = canvasView.getBoundingClientRect();
