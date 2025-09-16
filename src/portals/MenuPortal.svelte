@@ -1,12 +1,7 @@
 <script module>
-    import { getContext, setContext } from "svelte";
-
     /////////////////////////////
     ////        MENUS        ////
     /////////////////////////////
-    const MENU_PORTAL_SUBSCRIBE = "menu_portal_subscribe";
-    const MENU_PORTAL_UNSUBSCRIBE = "menu_portal_unsubscribe";
-    const MENU_DISPLAY = "menu_display";
 
     /**
      * @typedef {{name?:string, x?:number, y?:number}} ShowMenu
@@ -46,29 +41,25 @@
     const displayMenu = (name, x, y) => {
         showMenu = { name, x, y };
     };
-    export const createMenuContext = () => {
-        setContext(MENU_PORTAL_SUBSCRIBE, subscriber);
-        setContext(MENU_PORTAL_UNSUBSCRIBE, unsubscriber);
-        setContext(MENU_DISPLAY, displayMenu);
-    };
+
     /**
      * @returns {(id:string, renderer:MenuSnippet)=>void}
      */
     export const getMenuSubscriber = () => {
-        return getContext(MENU_PORTAL_SUBSCRIBE);
+        return subscriber;
     };
     /**
      * @returns {(name:string)=>void}
      */
     export const getMenuUnubscriber = () => {
-        return getContext(MENU_PORTAL_UNSUBSCRIBE);
+        return unsubscriber;
     };
 
     /**
      * @returns {(name?:string, x?:number, y?:number)=>void}
      */
     export const getMenuDisplayer = () => {
-        return getContext(MENU_DISPLAY);
+        return displayMenu;
     };
     // General mouse down
     /**

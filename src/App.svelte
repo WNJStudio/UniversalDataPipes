@@ -4,19 +4,13 @@
     import PipelineView from "./components/app/PipelineView/PipelineView.svelte";
     import { PIPEVIEW } from "./constants";
     import { createDataContext } from "./context/DataContext.svelte";
-    import {
-        createMenuContext,
-        menus,
-        mouseDownOutsideMenu,
-    } from "./portals/MenuPortal.svelte";
+    import { menus, mouseDownOutsideMenu } from "./portals/MenuPortal.svelte";
     import {
         createTooltipContext,
         tooltips,
     } from "./portals/TooltipPortal.svelte";
 
     createTooltipContext();
-
-    createMenuContext();
 
     createDataContext();
 
