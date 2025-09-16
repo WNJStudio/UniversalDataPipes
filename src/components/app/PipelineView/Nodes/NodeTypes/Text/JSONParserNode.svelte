@@ -89,8 +89,10 @@
         <p class="text-sm text-center text-muted-foreground">Connect input</p>
     {:else if myOutputEdges.length === 0}
         <p class="text-sm text-center text-muted-foreground">Connect output</p>
+    {:else if inputData.length === 0}
+        <p class="text-sm text-center text-muted-foreground">No input data</p>
     {:else}
-        <p class="text-sm text-center text-muted-foreground">
+        <p class="text-sm text-center text-primary">
             Data processed successfully
         </p>
     {/if}
