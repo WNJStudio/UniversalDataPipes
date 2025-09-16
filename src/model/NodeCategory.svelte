@@ -71,21 +71,49 @@
     IO.addNode(
         "Text File Input",
         [],
-        [new HandleDefinition("Text Content", "string", "OUT", "#889922")],
+        [
+            new HandleDefinition(
+                "Text Content",
+                "string",
+                "OUT",
+                "var(--color-chart-2)",
+            ),
+        ],
         tfin,
         FileText,
     );
     IO.addNode(
         "Object Preview",
-        [new HandleDefinition("Input objects", "Object", "IN", "#366299")],
+        [
+            new HandleDefinition(
+                "Input objects",
+                "Object",
+                "IN",
+                "var(--color-chart-1)",
+            ),
+        ],
         [],
         ojout,
         Braces,
     );
     TEXT.addNode(
         "JSON Parser",
-        [new HandleDefinition("Input text", "string", "IN", "#889922")],
-        [new HandleDefinition("Output objects", "Object", "OUT", "#366299")],
+        [
+            new HandleDefinition(
+                "Input text",
+                "string",
+                "IN",
+                "var(--color-chart-2)",
+            ),
+        ],
+        [
+            new HandleDefinition(
+                "Output objects",
+                "Object",
+                "OUT",
+                "var(--color-chart-1)",
+            ),
+        ],
         jsonparser,
         Braces,
     );

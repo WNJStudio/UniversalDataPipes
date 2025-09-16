@@ -32,6 +32,7 @@
     } = $props();
     const dataCleaner = getContext(PIPELINE_DATA_CLEANER);
     const ZOOM_SENSITIVITY = 0.001;
+    const EDGE_DETECTION_SENSITIVITY = 10;
     const MIN_ZOOM = 0.001;
     const MAX_ZOOM = 20;
     /**
@@ -73,6 +74,10 @@
      * @type {string[]}
      */
     let selectedNodeIds = $state([]);
+    /**
+     * @type {string[]}
+     */
+    let selectedEdgeIds = $state([]);
     /**
      * @type {{[x:string]:Position}}
      */
@@ -183,6 +188,10 @@
         selectedNodeIds.forEach((id) => {
             delete nodes[id];
         });
+        selectedEdgeIds.forEach((id) => {
+            delete edges[id];
+            dataCleaner?.(id);
+        });
         const toRemove = [];
         Object.entries(edges).forEach(([id, edge]) => {
             if (
@@ -197,6 +206,7 @@
             dataCleaner?.(id);
         });
         selectedNodeIds = [];
+        selectedEdgeIds = [];
     };
     /**
      * @param {MouseEvent} e
@@ -269,11 +279,6 @@
                 }
                 return;
             }
-            if (e.target.closest("[data-edge-id]")) {
-                // TODO: edge selection
-                console.log("hitting an edge");
-                return;
-            }
         }
         if (e.button === 1 || panMode) {
             isPanning = true;
@@ -287,12 +292,14 @@
         }
         if (
             e.target !== e.currentTarget &&
-            e.target !== canvasRef?.querySelector("[data-canvas-view]")
+            e.target !== canvasRef?.querySelector("[data-canvas-view]") &&
+            e.target !== canvasRef?.querySelector("[data-edge-view]")
         ) {
             return;
         }
 
         selectedNodeIds = [];
+        selectedEdgeIds = [];
         const canvasRect = canvasRef?.getBoundingClientRect();
         if (canvasRect) {
             const x =
@@ -396,7 +403,7 @@
                 const selTop = selectionRect.y;
                 const selRight = selLeft + selectionRect.width;
                 const selBottom = selTop + selectionRect.height;
-                const selected = Object.values(nodes)
+                const selectedN = Object.values(nodes)
                     .filter((node) => {
                         const nodeRect = document
                             .getElementById(node.id)
@@ -418,7 +425,33 @@
                         );
                     })
                     .map((n) => n.id);
-                selectedNodeIds = selected;
+                const selectedE = Object.values(edges)
+                    .filter((edge) => {
+                        const edgePath = document.getElementById(edge.id);
+                        if (!edgePath) return false;
+                        if (edgePath instanceof SVGPathElement) {
+                            const tl = edgePath.getTotalLength();
+                            for (
+                                let cl = 0, p = edgePath.getPointAtLength(cl);
+                                cl < tl;
+                                cl += EDGE_DETECTION_SENSITIVITY,
+                                    p = edgePath.getPointAtLength(cl)
+                            ) {
+                                if (
+                                    p.x < selRight &&
+                                    p.x > selLeft &&
+                                    p.y < selBottom &&
+                                    p.y > selTop
+                                ) {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
+                    })
+                    .map((e) => e.id);
+                selectedNodeIds = selectedN;
+                selectedEdgeIds = selectedE;
             }
         }
     };
@@ -475,6 +508,25 @@
             }
         } else {
             selectedNodeIds = [id];
+        }
+    };
+    /**
+     * @param {MouseEvent} e
+     * @param {string} id
+     */
+    const onEdgeClick = (e, id) => {
+        e.stopPropagation();
+        if (panMode) {
+            return;
+        }
+        if (e.shiftKey) {
+            if (selectedEdgeIds.includes(id)) {
+                selectedEdgeIds = selectedEdgeIds.filter((ii) => ii !== id);
+            } else {
+                selectedEdgeIds.push(id);
+            }
+        } else {
+            selectedEdgeIds = [id];
         }
     };
 
@@ -573,10 +625,18 @@
                 <SelectionRect rect={selectionRect} />
             {/if}
             <svg
-                class="absolute w-full h-full pointer-events-none transform-[scale(1)] left-0 top-0 overflow-visible"
+                data-edge-view="true"
+                class="absolute w-full h-full transform-[scale(1)] left-0 top-0 overflow-visible"
             >
                 {#each Object.entries(edges) as [id, edge] (id)}
-                    <EdgePath {edge} {canvasTransform} bind:zoomed bind:moved />
+                    <EdgePath
+                        {edge}
+                        isSelected={selectedEdgeIds.includes(id)}
+                        {onEdgeClick}
+                        {canvasTransform}
+                        bind:zoomed
+                        bind:moved
+                    />
                 {/each}
                 {#if pendingEdge}
                     <PendingEdgePath {pendingEdge} {canvasTransform} />
@@ -597,7 +657,7 @@
 <PipelineToolbar
     {hidden}
     bind:panMode
-    hasSelection={selectedNodeIds.length > 0}
+    hasSelection={selectedNodeIds.length > 0 || selectedEdgeIds.length > 0}
     currentZoom={canvasTransform.scale}
     {onToolbarDrag}
     {onZoomIn}

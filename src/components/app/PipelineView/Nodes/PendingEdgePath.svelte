@@ -37,5 +37,5 @@
 
 <path
     d={path}
-    class="stroke-primary [stroke-dasharray:5,5] stroke-2 fill-none"
+    class="stroke-primary [stroke-dasharray:0,24] [stroke-linecap:round] stroke-[12] fill-none"
 />

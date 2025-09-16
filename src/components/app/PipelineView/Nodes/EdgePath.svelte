@@ -7,6 +7,8 @@
      * @prop {EdgeData} edge
      * @prop {boolean} zoomed
      * @prop {boolean} moved
+     * @prop {boolean} isSelected
+     * @prop {(e:MouseEvent, id:string)=>any} onEdgeClick
      * @prop {Transform} canvasTransform
      */
     /** @type {EdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */
@@ -15,6 +17,8 @@
         canvasTransform,
         zoomed = $bindable(),
         moved = $bindable(),
+        onEdgeClick,
+        isSelected = false,
         ...props
     } = $props();
     const path = $derived.by(() => {
@@ -60,4 +64,16 @@
     });
 </script>
 
-<path d={path} class="stroke-primary stroke-2 fill-none" />
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<path
+    onclick={(e) => onEdgeClick(e, edge.id)}
+    data-edge-id={edge.id}
+    id={edge.id}
+    d={path}
+    class={[
+        "stroke-primary/50 stroke-[12] [stroke-linecap:round] fill-none",
+        "transition-[filter] hover:brightness-150",
+        isSelected ? "brightness-125" : "",
+    ]}
+/>
