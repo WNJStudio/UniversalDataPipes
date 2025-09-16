@@ -1,5 +1,10 @@
 <script>
     import { getDataContextCleaner } from "../../../context/DataContext.svelte";
+    import {
+        getEdgeData,
+        getEdgeDataAdder,
+        getEdgeDataRemover,
+    } from "../../../context/EdgeContext.svelte";
     import { EdgeData } from "../../../model/Edge.svelte";
     import { HandleConnection } from "../../../model/HandleConnection.svelte";
     import { NodeData } from "../../../model/Node.svelte";
@@ -15,7 +20,6 @@
     import PipelineToolbar from "./Toolbar/PipelineToolbar.svelte";
     /**
      * @typedef {Object} PipelineCanvasProps
-     * @prop {{[id:string]:EdgeData}} edges
      * @prop {{[id:string]:NodeData}} nodes
      * @prop {boolean} hidden
      * @prop {boolean} pipeChanged
@@ -23,17 +27,21 @@
 
     /** @type {PipelineCanvasProps & import('svelte/elements').SvelteHTMLElements['div']} */
     let {
-        edges = $bindable(),
         nodes = $bindable(),
         pipeChanged = $bindable(),
         hidden,
         ...props
     } = $props();
     const dataCleaner = getDataContextCleaner();
+    const edges = getEdgeData();
+    const edgeRemover = getEdgeDataRemover();
+    const edgeAdder = getEdgeDataAdder();
+
     const ZOOM_SENSITIVITY = 0.001;
     const EDGE_DETECTION_SENSITIVITY = 10;
     const MIN_ZOOM = 0.001;
     const MAX_ZOOM = 20;
+
     /**
      * @type {HTMLElement}
      */
@@ -196,8 +204,8 @@
             delete nodes[id];
         });
         selectedEdgeIds.forEach((id) => {
-            delete edges[id];
-            dataCleaner?.(id);
+            edgeRemover(id);
+            dataCleaner(id);
         });
         const toRemove = [];
         Object.entries(edges).forEach(([id, edge]) => {
@@ -209,8 +217,8 @@
             }
         });
         toRemove.forEach((id) => {
-            delete edges[id];
-            dataCleaner?.(id);
+            edgeRemover(id);
+            dataCleaner(id);
         });
         selectedNodeIds = [];
         selectedEdgeIds = [];
@@ -485,7 +493,7 @@
                             pendingEdge.end = handle.id;
                             pendingEdge.endNode = handle.nodeId;
                             pendingEdge.tail = null;
-                            edges[pendingEdge.id] = pendingEdge;
+                            edgeAdder(pendingEdge.id, pendingEdge);
                         }
                     }
                 }

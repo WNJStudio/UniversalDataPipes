@@ -1,8 +1,7 @@
 <script>
     import { RefreshCw } from "@lucide/svelte";
-    import { getContext } from "svelte";
-    import { PIPELINE_EDGES } from "../../../../../../constants";
     import { getDataContext } from "../../../../../../context/DataContext.svelte";
+    import { getEdgeData } from "../../../../../../context/EdgeContext.svelte";
     import { EdgeData } from "../../../../../../model/Edge.svelte";
     import Button from "../../../../../ui/Button/Button.svelte";
 
@@ -10,17 +9,15 @@
     let { inputs, outputs } = $props();
 
     const pipelineData = getDataContext();
-    /**
-     * @type {()=>{[edgeId:string]:EdgeData}}
-     */
-    const edges = getContext(PIPELINE_EDGES);
+
+    const edges = getEdgeData();
 
     /**
      * @type {EdgeData[]}
      */
     let myEdges = $derived.by(() => {
-        if (edges()) {
-            return Object.values(edges()).filter(
+        if (edges) {
+            return Object.values(edges).filter(
                 (edge) =>
                     inputs?.[0]?.id?.includes?.(edge.start) ||
                     inputs?.[0]?.id?.includes?.(edge.end),

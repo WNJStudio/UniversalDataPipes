@@ -1,11 +1,13 @@
 <script>
-    import { setContext } from "svelte";
+    import {
+        getEdgeData,
+        getEdgeDataSetter,
+    } from "../../../context/EdgeContext.svelte";
     import { Pipeline } from "../../../model/Pipeline.svelte";
     import ImportExportDialog from "./ImportExportDialog.svelte";
     import PipelineCanvas from "./PipelineCanvas.svelte";
-    import PipelineSidebar from "./Sidebar/PipelineSidebar.svelte";
     import SavePipelineDialog from "./SavePipelineDialog.svelte";
-    import { PIPELINE_EDGES } from "../../../constants";
+    import PipelineSidebar from "./Sidebar/PipelineSidebar.svelte";
 
     /**
      * @typedef {Object} PipelineViewProps
@@ -14,15 +16,17 @@
      */
     /** @type {PipelineViewProps} */
     let { isSidebarOpen, hidden } = $props();
+
+    const edgeSetter = getEdgeDataSetter();
+    const edges = getEdgeData();
+
     let saveDialogOpen = $state(false);
     let savedPipelines = $state([]);
     let currentPipeline = $state(new Pipeline());
     let nodes = $state({});
-    let edges = $state({});
     let saveName = $state();
     let pipeChanged = $state(false);
 
-    setContext(PIPELINE_EDGES, () => edges);
     /**
      * @type {"import"|"export"}
      */
@@ -43,7 +47,7 @@
     const onLoad = (pipe) => {
         currentPipeline = pipe;
         nodes = currentPipeline.reactiveNodes;
-        edges = currentPipeline.reactiveEdges;
+        edgeSetter(currentPipeline.reactiveEdges);
         pipeChanged = true;
     };
     const onImportAll = () => {
@@ -109,7 +113,7 @@
     {onImportAll}
     {onExportSingle}
 />
-<PipelineCanvas {hidden} bind:edges bind:nodes bind:pipeChanged />
+<PipelineCanvas {hidden} bind:nodes bind:pipeChanged />
 <SavePipelineDialog
     bind:isOpen={saveDialogOpen}
     name={saveName}

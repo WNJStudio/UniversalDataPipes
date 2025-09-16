@@ -1,22 +1,21 @@
 <script>
-    import { getContext } from "svelte";
-    import { PIPELINE_EDGES } from "../../../../../../constants";
     import {
         getDataContext,
+        getDataContextCleaner,
         getDataContextSetter,
     } from "../../../../../../context/DataContext.svelte";
+    import { getEdgeData } from "../../../../../../context/EdgeContext.svelte";
     import { EdgeData } from "../../../../../../model/Edge.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();
 
     const dataSetter = getDataContextSetter();
+    const dataCleaner = getDataContextCleaner();
 
     const pipelineData = getDataContext();
-    /**
-     * @type {()=>{[edgeId:string]:EdgeData}}
-     */
-    const edges = getContext(PIPELINE_EDGES);
+
+    const edges = getEdgeData();
 
     let errorMessage = $state("");
 
@@ -24,8 +23,8 @@
      * @type {EdgeData[]}
      */
     let myInputEdges = $derived.by(() => {
-        if (edges()) {
-            return Object.values(edges()).filter(
+        if (edges) {
+            return Object.values(edges).filter(
                 (edge) =>
                     inputs?.[0]?.id?.includes?.(edge.start) ||
                     inputs?.[0]?.id?.includes?.(edge.end),
@@ -38,8 +37,8 @@
      * @type {EdgeData[]}
      */
     let myOutputEdges = $derived.by(() => {
-        if (edges()) {
-            return Object.values(edges()).filter(
+        if (edges) {
+            return Object.values(edges).filter(
                 (edge) =>
                     outputs?.[0]?.id?.includes?.(edge.start) ||
                     outputs?.[0]?.id?.includes?.(edge.end),
@@ -64,12 +63,18 @@
                 try {
                     const outputData = inputData.map((i) => JSON.parse(i));
                     myOutputEdges.forEach((edge) => {
-                        dataSetter?.(edge.id, outputData);
+                        dataSetter(edge.id, outputData);
                     });
                     errorMessage = "";
                 } catch (error) {
                     errorMessage = `${error}`;
                 }
+            }
+        } else {
+            if (myOutputEdges.length > 0) {
+                myOutputEdges.forEach((edge) => {
+                    dataCleaner(edge.id);
+                });
             }
         }
     });

@@ -1,11 +1,10 @@
 <script>
     import { CloudUpload, FileIcon } from "@lucide/svelte";
-    import { getContext } from "svelte";
-    import { PIPELINE_EDGES } from "../../../../../../constants";
     import {
         getDataContextCleaner,
         getDataContextSetter,
     } from "../../../../../../context/DataContext.svelte";
+    import { getEdgeData } from "../../../../../../context/EdgeContext.svelte";
     import { EdgeData } from "../../../../../../model/Edge.svelte";
     import Button from "../../../../../ui/Button/Button.svelte";
 
@@ -13,7 +12,7 @@
 
     const dataCleaner = getDataContextCleaner();
 
-    const edges = getContext(PIPELINE_EDGES);
+    const edges = getEdgeData();
 
     /**
      * @type {import('../NodeProps.svelte').NodeProps}
@@ -30,8 +29,8 @@
      * @type {EdgeData[]}
      */
     let myEdges = $derived.by(() => {
-        if (edges()) {
-            return Object.values(edges()).filter(
+        if (edges) {
+            return Object.values(edges).filter(
                 (edge) =>
                     outputs?.[0]?.id?.includes?.(edge.start) ||
                     outputs?.[0]?.id?.includes?.(edge.end),
@@ -46,7 +45,7 @@
         fileContent = null;
         if (myEdges.length > 0) {
             myEdges.forEach((edge) => {
-                dataCleaner?.(edge.id);
+                dataCleaner(edge.id);
             });
         }
     };
@@ -54,7 +53,7 @@
     $effect(() => {
         if (myEdges.length > 0 && fileContent) {
             myEdges.forEach((edge) => {
-                dataSetter?.(edge.id, fileContent);
+                dataSetter(edge.id, fileContent);
             });
         }
     });
