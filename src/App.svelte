@@ -11,42 +11,13 @@
         PIPELINE_DATA_CLEANER,
         PIPELINE_DATA_SETTER,
         PIPEVIEW,
-        TOOLTIP_DISPLAY,
-        TOOLTIP_PORTAL_SUBSCRIBE,
-        TOOLTIP_PORTAL_UNSUBSCRIBE,
     } from "./constants";
+    import {
+        createTooltipContext,
+        tooltips,
+    } from "./portals/TooltipPortal.svelte";
 
-    /** @type {PIPEVIEW|import('./constants').DATAVIEW}*/
-    let currentView = $state(PIPEVIEW);
-
-    let isSidebarOpen = $state(true);
-    /////////////////////////////
-    ////      TOOLTIP        ////
-    /////////////////////////////
-    /**
-     * @type {{[x:string]:import('svelte').Snippet<[{hidden:boolean}]>}}
-     */
-    let tooltipPortal = $state({});
-    let showtip = $state();
-
-    /**
-     * @param {string} id
-     * @param {import('svelte').Snippet<[{hidden:boolean}]>} renderer
-     */
-    const addTooltip = (id, renderer) => {
-        tooltipPortal[id] = renderer;
-    };
-
-    /**
-     * @param {string} id
-     */
-    const removeTooltip = (id) => {
-        delete tooltipPortal[id];
-    };
-
-    setContext(TOOLTIP_PORTAL_SUBSCRIBE, addTooltip);
-    setContext(TOOLTIP_PORTAL_UNSUBSCRIBE, removeTooltip);
-    setContext(TOOLTIP_DISPLAY, (t) => (showtip = t));
+    createTooltipContext();
 
     /////////////////////////////
     ////        MENUS        ////
@@ -129,6 +100,12 @@
             showMenu = {};
         }
     };
+
+    // OTHER STUFF
+    /** @type {PIPEVIEW|import('./constants').DATAVIEW}*/
+    let currentView = $state(PIPEVIEW);
+
+    let isSidebarOpen = $state(true);
 </script>
 
 <main class={["h-screen w-screen overflow-hidden bg-background"]}>
@@ -138,9 +115,7 @@
             <PipelineView {isSidebarOpen} hidden={currentView !== PIPEVIEW} />
             <DataView hidden={currentView === PIPEVIEW} />
         </div>
-        {#each Object.entries(tooltipPortal) as [id, tooltip] (id)}
-            {@render tooltip({ hidden: id === showtip })}
-        {/each}
+        {@render tooltips()}
         {#each Object.entries(menuPortal) as [name, menu] (name)}
             {@render menu({
                 hidden: name === showMenu.name,

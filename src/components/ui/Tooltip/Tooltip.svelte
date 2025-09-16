@@ -4,10 +4,10 @@
 
     import TooltipContent from "./TooltipContent.svelte";
     import {
-        TOOLTIP_DISPLAY,
-        TOOLTIP_PORTAL_SUBSCRIBE,
-        TOOLTIP_PORTAL_UNSUBSCRIBE,
-    } from "../../../constants";
+        getTooltipDisplayer,
+        getTooltipSubscriber,
+        getTooltipUnubscriber,
+    } from "../../../portals/TooltipPortal.svelte";
 
     /**
      * @typedef {Object} TooltipProps
@@ -27,18 +27,12 @@
     let isOpen = $state(false);
     let triggerRef = $state();
     let id = $state(v4());
-    /**
-     * @type {(id:string,s:import('svelte').Snippet<[{hidden:boolean}]>)=>any}
-     */
-    const portalSubscriber = getContext(TOOLTIP_PORTAL_SUBSCRIBE);
-    /**
-     * @type {(id:string)=>any}
-     */
-    const portalUnsubscriber = getContext(TOOLTIP_PORTAL_UNSUBSCRIBE);
-    /**
-     * @type {(id:string)=>any}
-     */
-    const portalShow = getContext(TOOLTIP_DISPLAY);
+
+    const portalSubscriber = getTooltipSubscriber();
+
+    const portalUnsubscriber = getTooltipUnubscriber();
+
+    const portalShow = getTooltipDisplayer();
 
     $effect(() => {
         portalSubscriber(id, renderer);
