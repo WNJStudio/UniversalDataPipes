@@ -121,7 +121,10 @@
   oncontextmenu={onContextMenu}
   {hidden}
   x="-100%"
-  class={["w-64 border-r border-border/50 flex flex-col h-full", props.class]}
+  class={[
+    "absolute z-50 bg-sidebar/75 w-64 border-r border-border/50 flex flex-col h-full",
+    props.class,
+  ]}
 >
   <div class="p-4 border-b border-border/50 flex justify-between items-center">
     <div>
