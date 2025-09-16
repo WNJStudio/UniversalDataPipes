@@ -1,12 +1,10 @@
 <script>
-  import { setContext } from "svelte";
   import { NodeData } from "../../../../model/Node.svelte";
+  import { getDefinition } from "../../../../model/NodeCategory.svelte";
   import Card from "../../../ui/Card/Card.svelte";
   import CardHeader from "../../../ui/Card/CardHeader.svelte";
   import CardTitle from "../../../ui/Card/CardTitle.svelte";
   import Handle from "./Handle.svelte";
-  import { NODE_HANDLES } from "../../../../constants";
-  import { getDefinition } from "../../../../model/NodeCategory.svelte";
 
   /**
    * @typedef {Object} BaseNodeProps
@@ -20,8 +18,6 @@
   let definition = $derived(getDefinition(node.category, node.name));
 
   const Icon = $derived(definition ? definition.icon : undefined);
-
-  setContext(NODE_HANDLES, [...node.inputs, ...node.outputs]);
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
