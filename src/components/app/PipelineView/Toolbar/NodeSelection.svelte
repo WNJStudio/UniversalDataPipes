@@ -52,25 +52,18 @@
                     {/if}
                     {#each filteredNodes as node (node.name)}
                         <div transition:fade>
-                            <Tooltip>
-                                {#snippet content()}
-                                    <p>{node.name}</p>
-                                {/snippet}
-                                {#snippet trigger({ attach })}
-                                    <!-- svelte-ignore a11y_no_static_element_interactions -->
-                                    <div
-                                        {@attach attach}
-                                        data-template-category={activeCategory}
-                                        data-template-name={node.name}
-                                        onmousedown={spawnNode}
-                                        class="flex flex-col items-center justify-center p-2 rounded-md cursor-grab hover:bg-accent hover:text-accent-foreground w-24 h-20 border border-transparent hover:border-primary transition-colors"
-                                    >
-                                        <node.icon
-                                            class="h-6 w-6 mb-1 text-primary"
-                                        />
-                                    </div>
-                                {/snippet}
-                            </Tooltip>
+                            <!-- svelte-ignore a11y_no_static_element_interactions -->
+                            <div
+                                data-template-category={activeCategory}
+                                data-template-name={node.name}
+                                onmousedown={spawnNode}
+                                class="flex flex-col items-center justify-center p-2 rounded-md cursor-grab hover:bg-accent text-muted-foreground hover:text-accent-foreground w-24 h-20 border border-transparent hover:border-primary transition-colors"
+                            >
+                                <node.icon class="h-6 w-6 mb-1 text-primary" />
+                                <p class="text-xs text-center">
+                                    {node.name}
+                                </p>
+                            </div>
                         </div>
                     {/each}
                 </div>
