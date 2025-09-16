@@ -1,8 +1,4 @@
 <script module>
-    import { getContext, setContext } from "svelte";
-    const TOOLTIP_PORTAL_SUBSCRIBE = "tooltip_portal_subscribe";
-    const TOOLTIP_PORTAL_UNSUBSCRIBE = "tooltip_portal_unsubscribe";
-    const TOOLTIP_DISPLAY = "tooltip_display";
     /////////////////////////////
     ////      TOOLTIP        ////
     /////////////////////////////
@@ -29,33 +25,23 @@
         delete tooltipPortal[id];
     };
 
-    export const createTooltipContext = () => {
-        setContext(TOOLTIP_PORTAL_SUBSCRIBE, subscriber);
-        setContext(TOOLTIP_PORTAL_UNSUBSCRIBE, unsubscriber);
-        setContext(
-            TOOLTIP_DISPLAY,
-            (/** @type {string} */ id) => (showtip = id),
-        );
+    const displayTooltip = (id) => {
+        showtip = id;
     };
+
     /**
      * @returns {(id:string, renderer:import('svelte').Snippet<[{hidden:boolean}]>)=>void}
      */
-    export const getTooltipSubscriber = () => {
-        return getContext(TOOLTIP_PORTAL_SUBSCRIBE);
-    };
+    export const getTooltipSubscriber = () => subscriber;
     /**
      * @returns {(id:string)=>void}
      */
-    export const getTooltipUnubscriber = () => {
-        return getContext(TOOLTIP_PORTAL_UNSUBSCRIBE);
-    };
+    export const getTooltipUnubscriber = () => unsubscriber;
 
     /**
      * @returns {(id:string)=>void}
      */
-    export const getTooltipDisplayer = () => {
-        return getContext(TOOLTIP_DISPLAY);
-    };
+    export const getTooltipDisplayer = () => displayTooltip;
 
     export { tooltips };
 </script>

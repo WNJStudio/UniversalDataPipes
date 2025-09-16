@@ -5,12 +5,7 @@
     import { PIPEVIEW } from "./constants";
     import { createDataContext } from "./context/DataContext.svelte";
     import { menus, mouseDownOutsideMenu } from "./portals/MenuPortal.svelte";
-    import {
-        createTooltipContext,
-        tooltips,
-    } from "./portals/TooltipPortal.svelte";
-
-    createTooltipContext();
+    import { tooltips } from "./portals/TooltipPortal.svelte";
 
     createDataContext();
 
