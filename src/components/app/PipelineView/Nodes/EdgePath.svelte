@@ -37,19 +37,23 @@
                 const startRect = startHandle.getBoundingClientRect();
                 const endRect = endHandle.getBoundingClientRect();
                 const viewRect = canvasView.getBoundingClientRect();
-                const startX =
+                let startX =
                     (startRect.left + startRect.width / 2 - viewRect.left) /
                     canvasTransform.scale;
-                const startY =
+                let startY =
                     (startRect.top + startRect.height / 2 - viewRect.top) /
                     canvasTransform.scale;
-                const endX =
+                let endX =
                     (endRect.left + endRect.width / 2 - viewRect.left) /
                     canvasTransform.scale;
-                const endY =
+                let endY =
                     (endRect.top + endRect.height / 2 - viewRect.top) /
                     canvasTransform.scale;
-
+                if (startX > endX) {
+                    [endX, startX] = [startX, endX];
+                    [endY, startY] = [startY, endY];
+                }
+                // TODO: should thing of more extreme cases and make the curve look better
                 return `M ${startX},${startY} C ${startX + 50},${startY} ${endX - 50},${endY} ${endX},${endY}`;
             }
         }
