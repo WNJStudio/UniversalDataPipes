@@ -1,8 +1,7 @@
 <script>
   import { Save } from "@lucide/svelte";
-  import { getContext } from "svelte";
-  import { MENU_DISPLAY } from "../../../../constants";
   import { Pipeline } from "../../../../model/Pipeline.svelte";
+  import { getMenuDisplayer } from "../../../../portals/MenuPortal.svelte";
   import Button from "../../../ui/Button/Button.svelte";
   import ScrollArea from "../../../ui/ScrollArea/ScrollArea.svelte";
   import FlyOut from "../../../ui/Transitions/FlyOut.svelte";
@@ -37,10 +36,7 @@
     ...props
   } = $props();
 
-  /**
-   * @type {(name:string, x?:number, y?:number)=>any}
-   */
-  const portalShow = getContext(MENU_DISPLAY);
+  const portalShow = getMenuDisplayer();
 
   let deleteDialogOpen = $state(false);
   let actionCandidateName = $state();

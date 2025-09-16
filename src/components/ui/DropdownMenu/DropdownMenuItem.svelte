@@ -1,6 +1,5 @@
 <script>
-    import { getContext } from "svelte";
-    import { MENU_DISPLAY } from "../../../constants";
+    import { getMenuDisplayer } from "../../../portals/MenuPortal.svelte";
 
     /**
      * @typedef {Object} DropdownMenuItemProps
@@ -10,10 +9,7 @@
     /** @type {DropdownMenuItemProps & import('svelte/elements').SvelteHTMLElements['div']} */
     let { onClick, inset = false, ...props } = $props();
 
-    /**
-     * @type {(name?:string, x?:number, y?:number)=>any}
-     */
-    const portalShow = getContext(MENU_DISPLAY);
+    const portalShow = getMenuDisplayer();
 
     /**
      *

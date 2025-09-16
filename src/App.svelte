@@ -4,14 +4,16 @@
     import DataView from "./components/app/DataView/DataView.svelte";
     import PipelineView from "./components/app/PipelineView/PipelineView.svelte";
     import {
-        MENU_DISPLAY,
-        MENU_PORTAL_SUBSCRIBE,
-        MENU_PORTAL_UNSUBSCRIBE,
         PIPELINE_DATA,
         PIPELINE_DATA_CLEANER,
         PIPELINE_DATA_SETTER,
         PIPEVIEW,
     } from "./constants";
+    import {
+        createMenuContext,
+        menus,
+        mouseDownOutsideMenu,
+    } from "./portals/MenuPortal.svelte";
     import {
         createTooltipContext,
         tooltips,
@@ -19,46 +21,7 @@
 
     createTooltipContext();
 
-    /////////////////////////////
-    ////        MENUS        ////
-    /////////////////////////////
-    /**
-     * @type {{[x:string]:import('svelte').Snippet<[{hidden:boolean, x?:number, y?:number}]>}}
-     */
-    let menuPortal = $state({});
-    /**
-     * @type {{name?:string, x?:number, y?:number}}
-     */
-    let showMenu = $state({});
-
-    /**
-     * @param {string} name
-     * @param {import('svelte').Snippet<[{hidden:boolean, x?:number, y?:number}]>} renderer
-     */
-    const addMenu = (name, renderer) => {
-        menuPortal[name] = renderer;
-    };
-
-    /**
-     * @param {string} name
-     */
-    const removeMenu = (name) => {
-        delete menuPortal[name];
-    };
-
-    /**
-     *
-     * @param {string} name
-     * @param {number} [x]
-     * @param {number} [y]
-     */
-    const displayMenu = (name, x, y) => {
-        showMenu = { name, x, y };
-    };
-
-    setContext(MENU_PORTAL_SUBSCRIBE, addMenu);
-    setContext(MENU_PORTAL_UNSUBSCRIBE, removeMenu);
-    setContext(MENU_DISPLAY, displayMenu);
+    createMenuContext();
 
     /////////////////////////////
     ////   PIPILINE DATA     ////
@@ -85,22 +48,6 @@
     setContext(PIPELINE_DATA_CLEANER, dataCleaner);
     setContext(PIPELINE_DATA, pipelineData);
 
-    // General mouse down
-    /**
-     * @param {MouseEvent} e
-     */
-    const handleDocumentMouseDown = (e) => {
-        if (!showMenu.name) {
-            return;
-        }
-        if (e.target instanceof HTMLElement) {
-            if (e.target.closest("[data-menu]")) {
-                return;
-            }
-            showMenu = {};
-        }
-    };
-
     // OTHER STUFF
     /** @type {PIPEVIEW|import('./constants').DATAVIEW}*/
     let currentView = $state(PIPEVIEW);
@@ -116,14 +63,8 @@
             <DataView hidden={currentView === PIPEVIEW} />
         </div>
         {@render tooltips()}
-        {#each Object.entries(menuPortal) as [name, menu] (name)}
-            {@render menu({
-                hidden: name === showMenu.name,
-                x: showMenu.x,
-                y: showMenu.y,
-            })}
-        {/each}
+        {@render menus()}
     </div>
 </main>
 
-<svelte:document onmousedown={handleDocumentMouseDown} />
+<svelte:document onmousedown={mouseDownOutsideMenu} />
