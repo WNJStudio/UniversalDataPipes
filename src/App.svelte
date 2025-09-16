@@ -3,11 +3,8 @@
     import DataView from "./components/app/DataView/DataView.svelte";
     import PipelineView from "./components/app/PipelineView/PipelineView.svelte";
     import { PIPEVIEW } from "./constants";
-    import { createDataContext } from "./context/DataContext.svelte";
     import { menus, mouseDownOutsideMenu } from "./portals/MenuPortal.svelte";
     import { tooltips } from "./portals/TooltipPortal.svelte";
-
-    createDataContext();
 
     /** @type {PIPEVIEW|import('./constants').DATAVIEW}*/
     let currentView = $state(PIPEVIEW);
