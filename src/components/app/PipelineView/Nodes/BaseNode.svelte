@@ -1,5 +1,5 @@
 <script>
-  import { bounceIn, cubicOut, elasticOut } from "svelte/easing";
+  import { cubicOut, elasticOut } from "svelte/easing";
   import { NodeData } from "../../../../model/Node.svelte";
   import { getDefinition } from "../../../../model/NodeCategory.svelte";
   import Card from "../../../ui/Card/Card.svelte";

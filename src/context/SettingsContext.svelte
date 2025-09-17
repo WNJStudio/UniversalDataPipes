@@ -26,7 +26,7 @@
      * @param {number} size
      */
     const changeGridSize = (size) => {
-        gridSize = Math.min(200, Math.max(0, size));
+        gridSize = Math.min(200, Math.max(1, size));
     };
 
     export const getViewChanger = () => changeView;

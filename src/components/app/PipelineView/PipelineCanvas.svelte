@@ -7,6 +7,7 @@
     } from "../../../context/EdgeContext.svelte";
     import {
         getCurrentView,
+        getGridSize,
         getSidebarToggler,
         getSnapToGrid,
         PIPEVIEW,
@@ -39,6 +40,7 @@
     const isSnapToGrid = getSnapToGrid();
     const sidebarToggler = getSidebarToggler();
     const currentView = getCurrentView();
+    const gridSize = getGridSize();
 
     const ZOOM_SENSITIVITY = 0.001;
     const EDGE_DETECTION_SENSITIVITY = 10;
@@ -46,8 +48,6 @@
     const MAX_ZOOM = 20;
 
     let hidden = $derived(currentView() !== PIPEVIEW);
-
-    let gridSize = $state(20);
 
     /**
      * @type {HTMLElement}
@@ -367,11 +367,13 @@
                             let newY = origin.y + deltaY;
                             if (isSnapToGrid()) {
                                 newX =
-                                    Math.round((origin.x + deltaX) / gridSize) *
-                                    gridSize;
+                                    Math.round(
+                                        (origin.x + deltaX) / gridSize(),
+                                    ) * gridSize();
                                 newY =
-                                    Math.round((origin.y + deltaY) / gridSize) *
-                                    gridSize;
+                                    Math.round(
+                                        (origin.y + deltaY) / gridSize(),
+                                    ) * gridSize();
                             }
                             cn.position.x = newX;
                             cn.position.y = newY;
@@ -647,8 +649,8 @@
             panMode || isPanning ? "cursor-grab" : "",
         ]}
         style={`background-image: radial-gradient(circle, hsl(var(--border)/0.5) 1px, transparent 1px);
-        background-size: ${20 * canvasTransform.scale}px ${20 * canvasTransform.scale}px;
-        background-position: ${canvasTransform.x * canvasTransform.scale}px ${canvasTransform.y * canvasTransform.scale}px;
+        background-size: ${gridSize() * canvasTransform.scale}px ${gridSize() * canvasTransform.scale}px;
+        background-position: ${canvasTransform.x * canvasTransform.scale + gridSize() / 2}px ${canvasTransform.y * canvasTransform.scale + gridSize() / 2}px;
         `}
         oncontextmenu={(e) => e.preventDefault()}
         onmousedown={handleMouseDown}
