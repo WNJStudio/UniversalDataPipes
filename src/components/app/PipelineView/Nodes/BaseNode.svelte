@@ -67,7 +67,7 @@
 >
   <Card
     class={[
-      "shadow-2xl shadow-black/50 transition-[filter] flex",
+      "shadow-2xl! shadow-black/50 transition-[filter] flex",
       "[&:not(:has(.handle:hover))]:hover:brightness-150",
       isSelected
         ? "ring-2 ring-primary ring-offset-2 ring-offset-background brightness-125"
