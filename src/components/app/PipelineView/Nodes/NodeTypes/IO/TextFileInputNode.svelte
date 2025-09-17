@@ -29,8 +29,8 @@
      * @type {EdgeData[]}
      */
     let myEdges = $derived.by(() => {
-        if (edges) {
-            return Object.values(edges).filter(
+        if (edges()) {
+            return Object.values(edges()).filter(
                 (edge) =>
                     outputs?.[0]?.id?.includes?.(edge.start) ||
                     outputs?.[0]?.id?.includes?.(edge.end),

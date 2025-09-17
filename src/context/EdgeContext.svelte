@@ -31,8 +31,5 @@
     export const getEdgeDataRemover = () => removeEdge;
     export const getEdgeDataAdder = () => addEdge;
 
-    /**
-     * @returns {{[id:string]:EdgeData}}
-     */
-    export const getEdgeData = () => edges;
+    export const getEdgeData = () => () => edges;
 </script>

@@ -23,8 +23,8 @@
      * @type {EdgeData[]}
      */
     let myInputEdges = $derived.by(() => {
-        if (edges) {
-            return Object.values(edges).filter(
+        if (edges()) {
+            return Object.values(edges()).filter(
                 (edge) =>
                     inputs?.[0]?.id?.includes?.(edge.start) ||
                     inputs?.[0]?.id?.includes?.(edge.end),
@@ -37,8 +37,8 @@
      * @type {EdgeData[]}
      */
     let myOutputEdges = $derived.by(() => {
-        if (edges) {
-            return Object.values(edges).filter(
+        if (edges()) {
+            return Object.values(edges()).filter(
                 (edge) =>
                     outputs?.[0]?.id?.includes?.(edge.start) ||
                     outputs?.[0]?.id?.includes?.(edge.end),
@@ -51,8 +51,10 @@
      * @type {string[]}
      */
     let inputData = $derived.by(() => {
-        if (myInputEdges.length > 0 && pipelineData) {
-            return myInputEdges.flatMap((edge) => pipelineData[edge.id] || []);
+        if (myInputEdges.length > 0 && pipelineData()) {
+            return myInputEdges.flatMap(
+                (edge) => pipelineData()[edge.id] || [],
+            );
         }
         return [];
     });

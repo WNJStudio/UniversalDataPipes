@@ -20,18 +20,9 @@
         delete pipelineData[edgeId];
     };
 
-    /**
-     * @returns {(edgeId:string, data:any)=>void}
-     */
     export const getDataContextSetter = () => dataSetter;
 
-    /**
-     * @returns {(edgeId:string)=>void}
-     */
     export const getDataContextCleaner = () => dataCleaner;
 
-    /**
-     * @returns {{[edgeId:string]:any}}
-     */
-    export const getDataContext = () => pipelineData;
+    export const getDataContext = () => () => pipelineData;
 </script>

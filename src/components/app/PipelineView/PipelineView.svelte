@@ -38,7 +38,7 @@
         saveName = undefined;
         currentPipeline.name = name;
         currentPipeline.nodes = nodes;
-        currentPipeline.edges = edges;
+        currentPipeline.edges = edges();
         savedPipelines = Pipeline.save(currentPipeline);
     };
     const onDelete = (name) => {

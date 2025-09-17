@@ -210,7 +210,7 @@
             dataCleaner(id);
         });
         const toRemove = [];
-        Object.entries(edges).forEach(([id, edge]) => {
+        Object.entries(edges()).forEach(([id, edge]) => {
             if (
                 selectedNodeIds.includes(edge.endNode) ||
                 selectedNodeIds.includes(edge.startNode)
@@ -442,7 +442,7 @@
                         );
                     })
                     .map((n) => n.id);
-                const selectedE = Object.values(edges)
+                const selectedE = Object.values(edges())
                     .filter((edge) => {
                         const edgePath = document.getElementById(edge.id);
                         if (!edgePath) return false;
@@ -490,7 +490,7 @@
                     const handle = findHandle(targetHandleId);
                     if (handle) {
                         if (
-                            connectStart.connect(handle, Object.values(edges))
+                            connectStart.connect(handle, Object.values(edges()))
                         ) {
                             pendingEdge.end = handle.id;
                             pendingEdge.endNode = handle.nodeId;
@@ -649,7 +649,7 @@
                 data-edge-view="true"
                 class="absolute w-full h-full transform-[scale(1)] left-0 top-0 overflow-visible"
             >
-                {#each Object.entries(edges) as [id, edge] (id)}
+                {#each Object.entries(edges()) as [id, edge] (id)}
                     <EdgePath
                         {edge}
                         isSelected={selectedEdgeIds.includes(id)}

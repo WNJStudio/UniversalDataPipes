@@ -42,25 +42,11 @@
         showMenu = { name, x, y };
     };
 
-    /**
-     * @returns {(id:string, renderer:MenuSnippet)=>void}
-     */
-    export const getMenuSubscriber = () => {
-        return subscriber;
-    };
-    /**
-     * @returns {(name:string)=>void}
-     */
-    export const getMenuUnubscriber = () => {
-        return unsubscriber;
-    };
+    export const getMenuSubscriber = () => subscriber;
 
-    /**
-     * @returns {(name?:string, x?:number, y?:number)=>void}
-     */
-    export const getMenuDisplayer = () => {
-        return displayMenu;
-    };
+    export const getMenuUnubscriber = () => unsubscriber;
+
+    export const getMenuDisplayer = () => displayMenu;
     // General mouse down
     /**
      * @param {MouseEvent} e
