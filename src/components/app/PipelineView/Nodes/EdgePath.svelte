@@ -104,17 +104,12 @@
             delay,
             duration,
             css: (t, u) => {
-                const colorp = Math.min(
-                    totalLength,
-                    Math.max(0, circInOut(t) * 50),
-                );
                 const dash = Math.min(
                     totalLength,
                     Math.max(0, (circInOut(t) * totalLength) / 2),
                 );
                 const dotp = Math.min(dot, Math.max(0, circInOut(u) * dot));
-                return `stroke-dasharray:  ${dash} ${dotp};
-                stroke: color-mix(in oklab, var(--color-primary) ${100 - colorp}%, transparent);`;
+                return `stroke-dasharray:  ${dash} ${dotp};`;
             },
         };
     };
@@ -130,8 +125,8 @@
     id={edge.id}
     d={path}
     class={[
-        "stroke-primary/50 stroke-[12] [stroke-linecap:round] fill-none",
-        "transition-[filter] duration-500 brightness-100 hover:brightness-150",
+        "stroke-primary stroke-[12] [stroke-linecap:round] fill-none",
+        "transition-[filter] duration-500 drop-shadow-2xl drop-shadow-black/50 brightness-100 hover:brightness-150",
         isSelected ? "brightness-125" : "",
     ]}
 />
