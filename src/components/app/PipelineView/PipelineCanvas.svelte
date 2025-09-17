@@ -5,6 +5,12 @@
         getEdgeDataAdder,
         getEdgeDataRemover,
     } from "../../../context/EdgeContext.svelte";
+    import {
+        getCurrentView,
+        getSidebarToggler,
+        getSnapToGrid,
+        PIPEVIEW,
+    } from "../../../context/SettingsContext.svelte";
     import { EdgeData } from "../../../model/Edge.svelte";
     import { HandleConnection } from "../../../model/HandleConnection.svelte";
     import { NodeData } from "../../../model/Node.svelte";
@@ -21,28 +27,27 @@
     /**
      * @typedef {Object} PipelineCanvasProps
      * @prop {{[id:string]:NodeData}} nodes
-     * @prop {boolean} hidden
      * @prop {boolean} pipeChanged
-     * @prop {boolean} isSidebarOpen
      */
 
     /** @type {PipelineCanvasProps & import('svelte/elements').SvelteHTMLElements['div']} */
-    let {
-        nodes = $bindable(),
-        pipeChanged = $bindable(),
-        isSidebarOpen = $bindable(),
-        hidden,
-        ...props
-    } = $props();
+    let { nodes = $bindable(), pipeChanged = $bindable(), ...props } = $props();
     const dataCleaner = getDataContextCleaner();
     const edges = getEdgeData();
     const edgeRemover = getEdgeDataRemover();
     const edgeAdder = getEdgeDataAdder();
+    const isSnapToGrid = getSnapToGrid();
+    const sidebarToggler = getSidebarToggler();
+    const currentView = getCurrentView();
 
     const ZOOM_SENSITIVITY = 0.001;
     const EDGE_DETECTION_SENSITIVITY = 10;
     const MIN_ZOOM = 0.001;
     const MAX_ZOOM = 20;
+
+    let hidden = $derived(currentView() !== PIPEVIEW);
+
+    let gridSize = $state(20);
 
     /**
      * @type {HTMLElement}
@@ -358,8 +363,18 @@
                     if (origin) {
                         const cn = nodes[id];
                         if (cn) {
-                            cn.position.x = origin.x + deltaX;
-                            cn.position.y = origin.y + deltaY;
+                            let newX = origin.x + deltaX;
+                            let newY = origin.y + deltaY;
+                            if (isSnapToGrid()) {
+                                newX =
+                                    Math.round((origin.x + deltaX) / gridSize) *
+                                    gridSize;
+                                newY =
+                                    Math.round((origin.y + deltaY) / gridSize) *
+                                    gridSize;
+                            }
+                            cn.position.x = newX;
+                            cn.position.y = newY;
                         }
                     }
                 });
@@ -571,7 +586,7 @@
         } else if (e.key?.toLowerCase() === "v") {
             panMode = false;
         } else if (e.ctrlKey && e.key?.toLowerCase() === "b") {
-            isSidebarOpen = !isSidebarOpen;
+            sidebarToggler();
         }
     };
 

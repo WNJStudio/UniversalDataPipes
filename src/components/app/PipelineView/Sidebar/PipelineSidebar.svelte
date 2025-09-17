@@ -11,10 +11,14 @@
   import PipelineMenu from "./PipelineMenu.svelte";
   import SearchBar from "./SearchBar.svelte";
   import SidebarMenu from "./SidebarMenu.svelte";
+  import {
+    getCurrentView,
+    getSidebarStatus,
+    PIPEVIEW,
+  } from "../../../../context/SettingsContext.svelte";
 
   /**
    * @typedef {Object} PipelineSidebarProps
-   * @prop {boolean} hidden
    * @prop {Pipeline[]} savedPipelines
    * @prop {(s?:string)=>any} onSave
    * @prop {(name:string)=>any} onDelete
@@ -25,7 +29,6 @@
    */
   /** @type {PipelineSidebarProps & import('svelte/elements').SvelteHTMLElements['div']} */
   let {
-    hidden,
     savedPipelines,
     onSave,
     onLoad,
@@ -37,6 +40,10 @@
   } = $props();
 
   const portalShow = getMenuDisplayer();
+  const currentView = getCurrentView();
+  const sidebarStatus = getSidebarStatus();
+
+  let hidden = $derived(!sidebarStatus() || currentView() !== PIPEVIEW);
 
   let deleteDialogOpen = $state(false);
   let actionCandidateName = $state();

@@ -2,22 +2,16 @@
     import AppHeader from "./components/app/AppHeader/AppHeader.svelte";
     import DataView from "./components/app/DataView/DataView.svelte";
     import PipelineView from "./components/app/PipelineView/PipelineView.svelte";
-    import { PIPEVIEW } from "./constants";
     import { menus, mouseDownOutsideMenu } from "./portals/MenuPortal.svelte";
     import { tooltips } from "./portals/TooltipPortal.svelte";
-
-    /** @type {PIPEVIEW|import('./constants').DATAVIEW}*/
-    let currentView = $state(PIPEVIEW);
-
-    let isSidebarOpen = $state(true);
 </script>
 
 <main class={["h-screen w-screen overflow-hidden bg-background"]}>
     <div class="flex flex-col h-full w-full">
-        <AppHeader bind:currentView bind:isSidebarOpen />
+        <AppHeader />
         <div class="flex-1 relative flex overflow-hidden">
-            <PipelineView {isSidebarOpen} hidden={currentView !== PIPEVIEW} />
-            <DataView hidden={currentView === PIPEVIEW} />
+            <PipelineView />
+            <DataView />
         </div>
         {@render tooltips()}
         {@render menus()}

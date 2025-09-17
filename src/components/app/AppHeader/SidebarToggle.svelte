@@ -1,34 +1,32 @@
 <script>
     import { PanelLeft, PanelRight } from "@lucide/svelte";
-    import { PIPEVIEW, DATAVIEW } from "../../../constants";
     import Button from "../../ui/Button/Button.svelte";
     import SlideOut from "../../ui/Transitions/SlideOut.svelte";
 
-    /**
-     * @typedef {Object} SidebarToggleProps
-     * @prop {PIPEVIEW|DATAVIEW} currentView
-     * @prop {boolean} isSidebarOpen
-     */
-    /** @type {SidebarToggleProps} */
-    let { currentView, isSidebarOpen = $bindable() } = $props();
-    const toggleSidebar = () => {
-        isSidebarOpen = !isSidebarOpen;
-    };
+    import {
+        getSidebarToggler,
+        getSidebarStatus,
+        getCurrentView,
+        PIPEVIEW,
+    } from "../../../context/SettingsContext.svelte";
+    const sidebarToggler = getSidebarToggler();
+    const sidebarStatus = getSidebarStatus();
+    const currentView = getCurrentView();
 </script>
 
-<SlideOut hidden={currentView !== PIPEVIEW} delay={300}>
+<SlideOut hidden={currentView() !== PIPEVIEW} delay={300}>
     <Button
         tooltipSide="bottom"
         variant="ghost"
         size="icon"
         toggle
-        toggleStatus={isSidebarOpen}
-        onclick={toggleSidebar}
+        toggleStatus={sidebarStatus()}
+        onclick={() => sidebarToggler()}
         class="h-8 w-8"
     >
         {#snippet tooltip()}
             <span class="text-xs font-normal"
-                >{isSidebarOpen
+                >{sidebarStatus()
                     ? "Collapse Sidebar (CTRL + B)"
                     : "Expand Sidebar (CTRL + B)"}</span
             >

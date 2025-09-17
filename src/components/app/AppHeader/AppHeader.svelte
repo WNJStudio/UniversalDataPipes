@@ -1,20 +1,14 @@
 <script>
-    import { DATAVIEW, PIPEVIEW } from "../../../constants";
     import TabList from "../../ui/Tabs/TabList.svelte";
     import Logo from "./Logo.svelte";
     import SidebarToggle from "./SidebarToggle.svelte";
+    import {
+        PIPEVIEW,
+        DATAVIEW,
+    } from "../../../context/SettingsContext.svelte";
 
-    /**
-     * @typedef {Object} AppHeaderProps
-     * @prop {PIPEVIEW|DATAVIEW} currentView
-     * @prop {boolean} isSidebarOpen
-     */
-    /** @type {AppHeaderProps & import('svelte/elements').SvelteHTMLElements['header']} */
-    let {
-        currentView = $bindable(),
-        isSidebarOpen = $bindable(),
-        ...props
-    } = $props();
+    /** @type {import('svelte/elements').SvelteHTMLElements['header']} */
+    let { ...props } = $props();
 </script>
 
 <header
@@ -24,11 +18,10 @@
     ]}
 >
     <div class="flex items-center gap-2">
-        <SidebarToggle {currentView} bind:isSidebarOpen />
+        <SidebarToggle />
         <Logo />
     </div>
     <TabList
-        bind:currentView
         tabs={[
             { value: PIPEVIEW, label: "Pipeline" },
             { value: DATAVIEW, label: "Data" },

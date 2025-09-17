@@ -1,14 +1,20 @@
 <script>
-    import { DATAVIEW, PIPEVIEW } from "../../../constants";
+    import {
+        DATAVIEW,
+        getCurrentView,
+        getViewChanger,
+        PIPEVIEW,
+    } from "../../../context/SettingsContext.svelte";
     import TabTrigger from "./TabTrigger.svelte";
 
     /**
      * @typedef {Object} TabListProps
-     * @prop {PIPEVIEW|DATAVIEW} currentView
      * @prop {{value:PIPEVIEW|DATAVIEW, label:string}[]} tabs
      */
     /** @type {TabListProps & import('svelte/elements').SvelteHTMLElements['div']} */
-    let { currentView = $bindable(), tabs = [], ...props } = $props();
+    let { tabs = [], ...props } = $props();
+    const currentView = getCurrentView();
+    const viewChanger = getViewChanger();
 </script>
 
 <div
@@ -20,8 +26,8 @@
     {#each tabs as tab}
         <TabTrigger
             value={tab.value}
-            active={currentView === tab.value}
-            onclick={() => (currentView = tab.value)}>{tab.label}</TabTrigger
+            active={currentView() === tab.value}
+            onclick={() => viewChanger(tab.value)}>{tab.label}</TabTrigger
         >
     {/each}
     {@render props.children?.()}

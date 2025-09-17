@@ -9,14 +9,6 @@
     import SavePipelineDialog from "./SavePipelineDialog.svelte";
     import PipelineSidebar from "./Sidebar/PipelineSidebar.svelte";
 
-    /**
-     * @typedef {Object} PipelineViewProps
-     * @prop {boolean} isSidebarOpen
-     * @prop {boolean} hidden
-     */
-    /** @type {PipelineViewProps} */
-    let { isSidebarOpen, hidden } = $props();
-
     const edgeSetter = getEdgeDataSetter();
     const edges = getEdgeData();
 
@@ -104,7 +96,6 @@
 </script>
 
 <PipelineSidebar
-    hidden={!isSidebarOpen || hidden}
     {savedPipelines}
     onSave={openSaveDialog}
     {onDelete}
@@ -113,7 +104,7 @@
     {onImportAll}
     {onExportSingle}
 />
-<PipelineCanvas {hidden} bind:nodes bind:pipeChanged bind:isSidebarOpen />
+<PipelineCanvas bind:nodes bind:pipeChanged />
 <SavePipelineDialog
     bind:isOpen={saveDialogOpen}
     name={saveName}

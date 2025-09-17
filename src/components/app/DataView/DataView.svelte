@@ -1,16 +1,20 @@
 <script>
-    /**
-     * @typedef {Object} DataViewProps
-     * @prop {boolean} hidden
-     */
+    import {
+        DATAVIEW,
+        getCurrentView,
+    } from "../../../context/SettingsContext.svelte";
 
     import BlurOut from "../../ui/Transitions/BlurOut.svelte";
 
-    /** @type {DataViewProps & import('svelte/elements').SvelteHTMLElements['div']} */
-    let { hidden, ...props } = $props();
+    /** @type {import('svelte/elements').SvelteHTMLElements['div']} */
+    let { ...props } = $props();
+    const currentView = getCurrentView();
 </script>
 
 <!-- TODO -->
-<BlurOut class={["flex-1 relative", props.class]} {hidden}>
+<BlurOut
+    class={["flex-1 relative", props.class]}
+    hidden={currentView() !== DATAVIEW}
+>
     {@render props.children?.()}
 </BlurOut>
