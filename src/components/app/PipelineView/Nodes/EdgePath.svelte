@@ -74,7 +74,7 @@
      * @param {{delay?:number, duration?:number}} args
      * @returns {import('svelte/transition').TransitionConfig}
      */
-    const snap = (node, { delay = 0, duration = 500 }) => {
+    const snap = (node, { delay = 0, duration = 300 }) => {
         const totalLength = node.getTotalLength();
         return {
             delay,

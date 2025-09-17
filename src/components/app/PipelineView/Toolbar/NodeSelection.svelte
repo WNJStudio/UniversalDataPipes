@@ -23,7 +23,11 @@
     );
 </script>
 
-<FlyOut hidden={activeCategory === "" || !activeCategory} y="100%">
+<FlyOut
+    hidden={activeCategory === "" || !activeCategory}
+    y="100%"
+    duration={150}
+>
     <Card class="bg-card/90 backdrop-blur-xs w-full max-w-[50vw]">
         <div class="p-2">
             <div class="flex items-center gap-2 my-2 px-2">

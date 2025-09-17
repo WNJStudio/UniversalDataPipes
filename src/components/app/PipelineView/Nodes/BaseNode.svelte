@@ -1,4 +1,5 @@
 <script>
+  import { bounceIn, cubicOut, elasticOut } from "svelte/easing";
   import { NodeData } from "../../../../model/Node.svelte";
   import { getDefinition } from "../../../../model/NodeCategory.svelte";
   import Card from "../../../ui/Card/Card.svelte";
@@ -18,11 +19,45 @@
   let definition = $derived(getDefinition(node.category, node.name));
 
   const Icon = $derived(definition ? definition.icon : undefined);
+
+  /**
+   * @param {HTMLElement} node
+   * @param {{delay?:number, duration?:number}} args
+   * @returns {import('svelte/transition').TransitionConfig}
+   */
+  const plop = (node, { delay = 150, duration = 800 }) => {
+    return {
+      delay,
+      duration,
+      css: (t, u) => {
+        const v = elasticOut(t);
+        return `transform-origin: top; transform: scaleY(${v});`;
+      },
+    };
+  };
+
+  /**
+   * @param {HTMLElement} node
+   * @param {{delay?:number, duration?:number}} args
+   * @returns {import('svelte/transition').TransitionConfig}
+   */
+  const puff = (node, { delay = 300, duration = 300 }) => {
+    return {
+      delay,
+      duration,
+      css: (t, u) => {
+        const v = cubicOut(t);
+        return `transform: scale(${v});`;
+      },
+    };
+  };
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <div
+  in:plop={{}}
+  out:puff={{}}
   role="definition"
   data-node-id={node.id}
   id={node.id}
@@ -39,7 +74,9 @@
         : "",
     ]}
   >
-    <div class="flex flex-col gap-2 w-2 bg-card-foreground/5 py-3">
+    <div
+      class="flex flex-col gap-2 w-2 bg-card-foreground/5 py-3 justify-center"
+    >
       {#each node.inputs as input (input.id)}
         <Handle handle={input} />
       {/each}
@@ -68,7 +105,9 @@
       </div>
       <div class="bg-card-foreground/5 h-2"></div>
     </div>
-    <div class="flex flex-col gap-2 w-2 bg-card-foreground/5 py-3">
+    <div
+      class="flex flex-col gap-2 w-2 bg-card-foreground/5 py-3 justify-center"
+    >
       {#each node.outputs as output (output.id)}
         <Handle handle={output} />
       {/each}
