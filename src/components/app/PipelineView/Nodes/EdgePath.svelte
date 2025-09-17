@@ -1,4 +1,5 @@
 <script>
+    import { circInOut } from "svelte/easing";
     import { EdgeData } from "../../../../model/Edge.svelte";
     import { Transform } from "../../../../model/Pipeline.svelte";
 
@@ -67,18 +68,70 @@
             zoomed = false;
         }
     });
+
+    /**
+     * @param {SVGPathElement} node
+     * @param {{delay?:number, duration?:number}} args
+     * @returns {import('svelte/transition').TransitionConfig}
+     */
+    const snap = (node, { delay = 0, duration = 500 }) => {
+        const totalLength = node.getTotalLength();
+        return {
+            delay,
+            duration,
+            css: (t, u) => {
+                const dash = Math.min(
+                    totalLength,
+                    Math.max(0, (circInOut(t) * totalLength) / 2),
+                );
+                const dot = Math.min(
+                    totalLength * 2,
+                    Math.max(0, circInOut(u) * totalLength),
+                );
+                return `stroke-dasharray: ${dash} ${dot};`;
+            },
+        };
+    };
+
+    /**
+     * @param {SVGPathElement} node
+     * @param {{delay?:number, duration?:number, dot?:number}} args
+     * @returns {import('svelte/transition').TransitionConfig}
+     */
+    const dashJoin = (node, { delay = 0, duration = 800, dot = 24 }) => {
+        const totalLength = node.getTotalLength();
+        return {
+            delay,
+            duration,
+            css: (t, u) => {
+                const colorp = Math.min(
+                    totalLength,
+                    Math.max(0, circInOut(t) * 50),
+                );
+                const dash = Math.min(
+                    totalLength,
+                    Math.max(0, (circInOut(t) * totalLength) / 2),
+                );
+                const dotp = Math.min(dot, Math.max(0, circInOut(u) * dot));
+                return `stroke-dasharray:  ${dash} ${dotp};
+                stroke: color-mix(in oklab, var(--color-primary) ${100 - colorp}%, transparent);`;
+            },
+        };
+    };
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <path
+    in:dashJoin={{}}
+    out:snap={{}}
     onclick={(e) => onEdgeClick(e, edge.id)}
     data-edge-id={edge.id}
     id={edge.id}
     d={path}
     class={[
         "stroke-primary/50 stroke-[12] [stroke-linecap:round] fill-none",
-        "transition-[filter] hover:brightness-150",
+        "transition-[filter] duration-500 brightness-100 hover:brightness-150",
         isSelected ? "brightness-125" : "",
     ]}
 />
