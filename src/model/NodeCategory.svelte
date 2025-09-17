@@ -8,7 +8,7 @@
     } from "@lucide/svelte";
     import ObjectOutputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/ObjectOutputNode.svelte";
     import TextFileInputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/TextFileInputNode.svelte";
-    import { HandleData } from "./Handle.svelte";
+    import { HandleData, HandleTypes } from "./Handle.svelte";
     import { HandleDefinition } from "./HandleDefinition.svelte";
     import { DefaultNodeDef, NodeDefinition } from "./NodeDefinition.svelte";
     import JsonParserNode from "../components/app/PipelineView/Nodes/NodeTypes/Text/JSONParserNode.svelte";
@@ -71,49 +71,21 @@
     IO.addNode(
         "Text File Input",
         [],
-        [
-            new HandleDefinition(
-                "Text Content",
-                "string",
-                "OUT",
-                "var(--color-chart-2)",
-            ),
-        ],
+        [new HandleDefinition("Text Content", HandleTypes.string, "OUT")],
         tfin,
         FileText,
     );
     IO.addNode(
         "Object Preview",
-        [
-            new HandleDefinition(
-                "Input objects",
-                "Object",
-                "IN",
-                "var(--color-chart-1)",
-            ),
-        ],
+        [new HandleDefinition("Input objects", HandleTypes.object, "IN")],
         [],
         ojout,
         Braces,
     );
     TEXT.addNode(
         "JSON Parser",
-        [
-            new HandleDefinition(
-                "Input text",
-                "string",
-                "IN",
-                "var(--color-chart-2)",
-            ),
-        ],
-        [
-            new HandleDefinition(
-                "Output objects",
-                "Object",
-                "OUT",
-                "var(--color-chart-1)",
-            ),
-        ],
+        [new HandleDefinition("Input text", HandleTypes.string, "IN")],
+        [new HandleDefinition("Output objects", HandleTypes.object, "OUT")],
         jsonparser,
         Braces,
     );

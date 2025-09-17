@@ -1,7 +1,31 @@
 <script module>
-    import { v4 } from "uuid";
-    import { EdgeData } from "./Edge.svelte";
     import { Reactive } from "./Reactive.svelte";
+    /**
+     * @typedef {{type:string,color:string}} HandleType
+     */
+
+    export const HandleTypes = {
+        object: {
+            type: "object",
+            color: "bg-yellow-500",
+        },
+        number: {
+            type: "number",
+            color: "bg-green-500",
+        },
+        string: {
+            type: "string",
+            color: "bg-blue-500",
+        },
+        boolean: {
+            type: "boolean",
+            color: "bg-purple-500",
+        },
+        any: {
+            type: "any",
+            color: "bg-gray-400",
+        },
+    };
 
     export class HandleData extends Reactive {
         /**
@@ -9,18 +33,31 @@
          * @param {string} id
          * @param {string} name
          * @param {string} nodeId
-         * @param {string} type
-         * @param {string} color
+         * @param {HandleType} type
          * @param {"IN"|"OUT"} dir
          */
-        constructor(id, nodeId, name, type, dir, color) {
+        constructor(id, nodeId, name, type, dir) {
             super();
+            /**
+             * @type {string}
+             */
             this.id = id;
+            /**
+             * @type {string}
+             */
             this.nodeId = nodeId;
+            /**
+             * @type {string}
+             */
             this.name = name;
+            /**
+             * @type {HandleType}
+             */
             this.type = type;
+            /**
+             * @type {"IN"|"OUT"}
+             */
             this.dir = dir;
-            this.color = color;
         }
 
         /**
@@ -31,14 +68,13 @@
             if (typeof obj !== "object") {
                 return false;
             }
-            if (
-                !obj.id ||
-                !obj.nodeId ||
-                !obj.name ||
-                !obj.type ||
-                !obj.dir ||
-                !obj.color
-            ) {
+            if (!obj.id || !obj.nodeId || !obj.name || !obj.type || !obj.dir) {
+                return false;
+            }
+            if (obj.dir !== "IN" && obj.dir !== "OUT") {
+                return false;
+            }
+            if (!obj.type.type || !obj.type.color) {
                 return false;
             }
             return true;

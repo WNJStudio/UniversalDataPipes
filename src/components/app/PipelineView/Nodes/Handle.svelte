@@ -17,7 +17,7 @@
 >
     {#snippet content()}
         <p>{handle.name}</p>
-        <p class="text-muted-foreground">{handle.dir}: {handle.type}</p>
+        <p class="text-muted-foreground">{handle.dir}: {handle.type.type}</p>
     {/snippet}
     {#snippet trigger({ attach })}
         <div
@@ -25,15 +25,15 @@
             {...props}
             data-handle-id={handle.id}
             data-handle-node-id={handle.nodeId}
-            data-handle-type={handle.type}
+            data-handle-type={handle.type.type}
             data-handle-dir={handle.dir}
             class={[
                 "handle",
                 "relative h-3.5 w-3.5 rounded-full border-2 border-background cursor-pointer",
                 handle.dir === "IN" ? "-left-3" : "-right-1.5",
+                handle.type.color,
                 props.class,
             ]}
-            style={`background-color: ${handle.color};`}
         >
             {@render props.children?.()}
         </div>

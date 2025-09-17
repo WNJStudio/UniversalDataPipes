@@ -35,9 +35,9 @@
                 return false;
             }
             if (
-                this.start.type !== "any" &&
-                end.type !== "any" &&
-                this.start.type !== end.type
+                this.start.type.type !== "any" &&
+                end.type.type !== "any" &&
+                this.start.type.type !== end.type.type
             ) {
                 return false;
             }
