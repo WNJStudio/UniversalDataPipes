@@ -27,7 +27,11 @@
         class="h-8 w-8"
     >
         {#snippet tooltip()}
-            {isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+            <span class="text-xs font-normal"
+                >{isSidebarOpen
+                    ? "Collapse Sidebar (CTRL + B)"
+                    : "Expand Sidebar (CTRL + B)"}</span
+            >
         {/snippet}
         {#snippet toggleOn()}
             <PanelLeft class="h-5 w-5" />

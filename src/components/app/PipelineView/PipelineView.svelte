@@ -113,7 +113,7 @@
     {onImportAll}
     {onExportSingle}
 />
-<PipelineCanvas {hidden} bind:nodes bind:pipeChanged />
+<PipelineCanvas {hidden} bind:nodes bind:pipeChanged bind:isSidebarOpen />
 <SavePipelineDialog
     bind:isOpen={saveDialogOpen}
     name={saveName}

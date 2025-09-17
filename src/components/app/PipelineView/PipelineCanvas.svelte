@@ -23,12 +23,14 @@
      * @prop {{[id:string]:NodeData}} nodes
      * @prop {boolean} hidden
      * @prop {boolean} pipeChanged
+     * @prop {boolean} isSidebarOpen
      */
 
     /** @type {PipelineCanvasProps & import('svelte/elements').SvelteHTMLElements['div']} */
     let {
         nodes = $bindable(),
         pipeChanged = $bindable(),
+        isSidebarOpen = $bindable(),
         hidden,
         ...props
     } = $props();
@@ -563,6 +565,8 @@
             panMode = true;
         } else if (e.key?.toLowerCase() === "v") {
             panMode = false;
+        } else if (e.ctrlKey && e.key?.toLowerCase() === "b") {
+            isSidebarOpen = !isSidebarOpen;
         }
     };
 
