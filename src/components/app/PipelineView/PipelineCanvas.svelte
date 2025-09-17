@@ -448,19 +448,24 @@
                         if (!edgePath) return false;
                         if (edgePath instanceof SVGPathElement) {
                             const tl = edgePath.getTotalLength();
-                            for (
-                                let cl = 0, p = edgePath.getPointAtLength(cl);
-                                cl < tl;
-                                cl += EDGE_DETECTION_SENSITIVITY,
-                                    p = edgePath.getPointAtLength(cl)
-                            ) {
-                                if (
-                                    p.x < selRight &&
-                                    p.x > selLeft &&
-                                    p.y < selBottom &&
-                                    p.y > selTop
+                            if (tl === 0) {
+                                moved = true;
+                            } else {
+                                for (
+                                    let cl = 0,
+                                        p = edgePath.getPointAtLength(cl);
+                                    cl < tl;
+                                    cl += EDGE_DETECTION_SENSITIVITY,
+                                        p = edgePath.getPointAtLength(cl)
                                 ) {
-                                    return true;
+                                    if (
+                                        p.x < selRight &&
+                                        p.x > selLeft &&
+                                        p.y < selBottom &&
+                                        p.y > selTop
+                                    ) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
