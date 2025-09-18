@@ -82,7 +82,9 @@
     });
 </script>
 
-<div class="text-left p-2 rounded-md">
+<div
+    class="text-left flex-1 flex flex-col justify-center items-center p-2 rounded-md"
+>
     {#if errorMessage !== ""}
         <p class="text-sm text-center text-destructive">
             {errorMessage}

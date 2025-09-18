@@ -2,13 +2,16 @@
     import { HandleData } from "./Handle.svelte";
     import { Position } from "./Position.svelte";
     import { Reactive } from "./Reactive.svelte";
+    import { Size } from "./Size.svelte";
 
     export class NodeData extends Reactive {
         /**
          * @param {string} id
          * @param {string} category
          * @param {string} name
-         * @param {Position}position
+         * @param {Position} position
+         * @param {Size} size
+         * @param {Size} minSize
          * @param {HandleData[]} inputs
          * @param {HandleData[]} outputs
          */
@@ -17,15 +20,43 @@
             category,
             name,
             position = new Position(0, 0),
+            size = undefined,
+            minSize = undefined,
             inputs = [],
             outputs = [],
         ) {
             super();
+            /**
+             * @type {string}
+             */
             this.id = id;
+            /**
+             * @type {string}
+             */
             this.category = category;
+            /**
+             * @type {string}
+             */
             this.name = name;
+            /**
+             * @type {Position}
+             */
             this.position = position;
+            /**
+             * @type {Size}
+             */
+            this.size = size;
+            /**
+             * @type {Size}
+             */
+            this.minSize = minSize;
+            /**
+             * @type {HandleData[]}
+             */
             this.inputs = inputs;
+            /**
+             * @type {HandleData[]}
+             */
             this.outputs = outputs;
         }
 

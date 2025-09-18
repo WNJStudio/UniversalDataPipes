@@ -28,7 +28,6 @@
             data-handle-type={handle.type.type}
             data-handle-dir={handle.dir}
             class={[
-                "handle",
                 "relative h-3.5 w-3.5 rounded-full border-2 border-background cursor-pointer",
                 handle.dir === "IN" ? "-left-3" : "-right-1.5",
                 handle.type.color,

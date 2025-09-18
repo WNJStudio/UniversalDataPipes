@@ -91,6 +91,11 @@
     const handleDragLeave = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (e.target instanceof Element) {
+            if (e.target.closest("[data-node-file-input]")) {
+                return;
+            }
+        }
         isDragging = false;
     };
     /**
@@ -118,7 +123,7 @@
 </script>
 
 {#if filename}
-    <div class="flex items-center space-x-2 p-2 bg-muted rounded-md">
+    <div class="flex flex-1 items-center space-x-2 p-2 bg-muted rounded-md">
         <FileIcon class="h-5 w-5 text-foreground" />
         <div class="flex-1 text-sm truncate">
             <p class="font-medium">{filename}</p>
@@ -137,12 +142,13 @@
     />
     <div
         role="directory"
+        data-node-file-input="true"
         ondragenter={handleDragEnter}
         ondragleave={handleDragLeave}
         ondragover={handleDragOver}
         ondrop={handleDrop}
         class={[
-            "flex flex-col items-center justify-center p-4 border-2 border-dashed rounded-md text-center",
+            "flex flex-col flex-1 items-center justify-center p-4 border-2 border-dashed rounded-md text-center",
             isDragging ? "border-primary bg-primary/10" : "border-border",
         ]}
     >

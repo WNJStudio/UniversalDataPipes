@@ -20,12 +20,15 @@
 
   const Icon = $derived(definition ? definition.icon : undefined);
 
+  let width = $derived(node.size?.width);
+  let height = $derived(node.size?.height);
+
   /**
-   * @param {HTMLElement} node
+   * @param {HTMLElement} _el
    * @param {{delay?:number, duration?:number}} args
    * @returns {import('svelte/transition').TransitionConfig}
    */
-  const plop = (node, { delay = 150, duration = 800 }) => {
+  const plop = (_el, { delay = 150, duration = 800 }) => {
     return {
       delay,
       duration,
@@ -37,11 +40,11 @@
   };
 
   /**
-   * @param {HTMLElement} node
+   * @param {HTMLElement} _el
    * @param {{delay?:number, duration?:number}} args
    * @returns {import('svelte/transition').TransitionConfig}
    */
-  const puff = (node, { delay = 300, duration = 300 }) => {
+  const puff = (_el, { delay = 300, duration = 300 }) => {
     return {
       delay,
       duration,
@@ -63,12 +66,12 @@
   id={node.id}
   onclick={(e) => onClick(e, node.id)}
   class={["absolute min-w-3xs", isDragging ? "opacity-50" : "", props.class]}
-  style={`left: ${node.position.x}px; top: ${node.position.y}px;`}
+  style={`left: ${node.position.x}px; top: ${node.position.y}px;${width ? ` width: ${width}px;` : ""}${height ? ` height: ${height}px;` : ""}`}
 >
   <Card
     class={[
-      "shadow-2xl! shadow-black/50 transition-[filter] flex",
-      "[&:not(:has(.handle:hover))]:hover:brightness-150",
+      "shadow-2xl! shadow-black/50 transition-[filter] flex h-full",
+      "[&:not(:has([data-handle-id]:hover)):not(:has([data-resize-handle]:hover))]:hover:brightness-150",
       isSelected
         ? "ring-2 ring-primary ring-offset-2 ring-offset-background brightness-125"
         : "",
@@ -96,7 +99,7 @@
         data-node-content="true"
         class="bg-card-foreground/5 flex-1 flex flex-col items-center justify-between relative"
       >
-        <div class="p-3 flex-1 w-full rounded-lg bg-secondary">
+        <div class="p-3 flex-1 flex flex-col w-full rounded-lg bg-secondary">
           {@render definition?.render?.({
             inputs: node.inputs,
             outputs: node.outputs,
@@ -113,4 +116,12 @@
       {/each}
     </div>
   </Card>
+  <div
+    data-resize-handle="true"
+    class="absolute h-3 w-3 bottom-0 right-0 cursor-nwse-resize group"
+  >
+    <div
+      class="absolute bottom-0 right-0 w-3 h-3 rounded-tl-lg rounded-br-lg bg-primary/75 group-hover:brightness-150"
+    ></div>
+  </div>
 </div>

@@ -5,6 +5,7 @@
     import { Position } from "./Position.svelte";
     import { CircleQuestionMark } from "@lucide/svelte";
     import { HandleData } from "./Handle.svelte";
+    import { Size } from "./Size.svelte";
 
     export class NodeDefinition {
         /**
@@ -31,6 +32,8 @@
                 this.category,
                 this.name,
                 new Position(x, y),
+                new Size(),
+                new Size(),
                 this.inputs.map((i) => i.create(nodeId)),
                 this.outputs.map((o) => o.create(nodeId)),
             );

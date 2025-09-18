@@ -50,7 +50,7 @@
 </script>
 
 <div
-    class="text-left p-2 rounded-md max-w-3xs max-h-48 overflow-y-auto custom-scrollbar-2"
+    class="text-left p-2 rounded-md flex-[1_1_0] overflow-y-scroll custom-scrollbar-2"
 >
     {#if preview}
         <div class="relative">

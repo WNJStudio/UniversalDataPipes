@@ -110,6 +110,10 @@
      * @type {string}
      */
     let dragCore = $state();
+    /**
+     * @type {string}
+     */
+    let resizingNode = $state();
 
     let zoomed = $state(false);
     let moved = $state(false);
@@ -237,7 +241,7 @@
      */
     const handleMouseDown = (e) => {
         e.preventDefault();
-        if (e.target instanceof HTMLElement) {
+        if (e.target instanceof HTMLElement && !panMode) {
             if (e.target.closest("[data-handle-id]")) {
                 const targetHandle = e.target.closest("[data-handle-id]");
                 const targetHandleId =
@@ -267,6 +271,11 @@
                         ).reactive();
                     }
                 }
+                return;
+            }
+            if (e.target.closest("[data-resize-handle]")) {
+                const targetHandle = e.target.closest("[data-resize-handle]");
+                resizingNode = targetHandle.parentElement.id;
                 return;
             }
             if (
@@ -382,6 +391,54 @@
                         }
                     }
                 });
+                moved = true;
+            }
+            return;
+        }
+        if (resizingNode) {
+            const node = document.getElementById(resizingNode);
+            const cn = nodes[resizingNode];
+            if (node && cn) {
+                const nodeRect = node.getBoundingClientRect();
+                const deltaX =
+                    (e.clientX - nodeRect.x - nodeRect.width) /
+                    canvasTransform.scale;
+                const deltaY =
+                    (e.clientY - nodeRect.y - nodeRect.height) /
+                    canvasTransform.scale;
+                if (!cn.minSize.height) {
+                    cn.minSize.height = nodeRect.height;
+                    cn.size.height = nodeRect.height;
+                }
+                if (!cn.minSize.width) {
+                    cn.minSize.width = nodeRect.width;
+                    cn.size.width = nodeRect.width;
+                }
+                let newW = cn.size.width
+                    ? cn.size.width + deltaX
+                    : nodeRect.width + deltaX;
+                let newH = cn.size.height
+                    ? cn.size.height + deltaY
+                    : nodeRect.height + deltaY;
+                if (isSnapToGrid()) {
+                    const minWGrid =
+                        Math.round(cn.minSize.width / gridSize()) * gridSize();
+                    const minHGrid =
+                        Math.round(cn.minSize.height / gridSize()) * gridSize();
+                    newW = Math.max(
+                        minWGrid,
+                        Math.round(newW / gridSize()) * gridSize(),
+                    );
+                    newH = Math.max(
+                        minHGrid,
+                        Math.round(newH / gridSize()) * gridSize(),
+                    );
+                } else {
+                    newW = Math.max(cn.minSize.width, newW);
+                    newH = Math.max(cn.minSize.height, newH);
+                }
+                cn.size.width = newW;
+                cn.size.height = newH;
                 moved = true;
             }
             return;
@@ -505,6 +562,7 @@
         draggingPositions = undefined;
         isDragging = false;
         isPanning = false;
+        resizingNode = undefined;
         if (connectStart && pendingEdge) {
             if (e.target instanceof HTMLElement) {
                 const targetHandle = e.target.closest("[data-handle-id]");
