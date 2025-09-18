@@ -47,21 +47,7 @@
     export const getMenuUnubscriber = () => unsubscriber;
 
     export const getMenuDisplayer = () => displayMenu;
-    // General mouse down
-    /**
-     * @param {MouseEvent} e
-     */
-    export const mouseDownOutsideMenu = (e) => {
-        if (!showMenu.name) {
-            return;
-        }
-        if (e.target instanceof HTMLElement) {
-            if (e.target.closest("[data-menu]")) {
-                return;
-            }
-            showMenu = {};
-        }
-    };
+
     export { menus };
 </script>
 

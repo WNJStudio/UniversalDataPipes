@@ -1,4 +1,5 @@
 <script module>
+    import { PersistedState } from "runed";
     import { EdgeData } from "./Edge.svelte";
     import { NodeData } from "./Node.svelte";
     export class Transform {
@@ -34,44 +35,19 @@
         }
     }
 
-    export class Pipeline {
-        static cache = {};
-        /**
-         * @type {Pipeline[]}
-         */
-        static cacheArray = [];
+    /**
+     * @type {PersistedState<{[id:string]:Pipeline}>}
+     */
+    export const pipelineStorage = new PersistedState("UDP_PIPELINES", {});
 
+    export class Pipeline {
         /**
-         * @returns
+         * @returns {Pipeline[]}
          */
         static load() {
-            const ps = localStorage.getItem("UDP_PIPELINES") || "{}";
-            try {
-                const pj = JSON.parse(ps);
-                Pipeline.cache = pj;
-                return Pipeline.refreshCache();
-            } catch (e) {
-                console.error("Parse error: clean up the cache", e);
-            }
-            return Pipeline.cacheArray;
-        }
-
-        /**
-         * @param {Pipeline} pipe
-         * @returns
-         */
-        static save(pipe) {
-            Pipeline.cache[pipe.name] = {
-                name: pipe.name,
-                nodes: pipe.nodes,
-                edges: pipe.edges,
-                savedAt: new Date().toISOString(),
-            };
-            localStorage.setItem(
-                "UDP_PIPELINES",
-                JSON.stringify(Pipeline.cache),
-            );
-            return Pipeline.load();
+            const temp = Object.values(pipelineStorage.current);
+            temp.sort((a, b) => b.saveTime - a.saveTime);
+            return temp;
         }
 
         /**
@@ -85,12 +61,13 @@
                 if (pipes instanceof Array) {
                     pipes.forEach((pipe) => {
                         if (Pipeline.validate(pipe)) {
-                            Pipeline.cache[pipe.name] = {
-                                name: pipe.name,
-                                nodes: pipe.nodes,
-                                edges: pipe.edges,
-                                savedAt: new Date().toISOString(),
-                            };
+                            const pipeO = new Pipeline(
+                                pipe.nodes,
+                                pipe.edges,
+                                pipe.name,
+                                new Date().toISOString(),
+                            );
+                            pipelineStorage.current[pipe.name] = pipeO;
                             success += 1;
                         } else {
                             failure += 1;
@@ -98,22 +75,17 @@
                     });
                 } else {
                     if (Pipeline.validate(pipes)) {
-                        Pipeline.cache[pipes.name] = {
-                            name: pipes.name,
-                            nodes: pipes.nodes,
-                            edges: pipes.edges,
-                            savedAt: new Date().toISOString(),
-                        };
+                        const pipeO = new Pipeline(
+                            pipes.nodes,
+                            pipes.edges,
+                            pipes.name,
+                            new Date().toISOString(),
+                        );
+                        pipelineStorage.current[pipes.name] = pipeO;
                         success += 1;
                     } else {
                         failure += 1;
                     }
-                }
-                if (success > 0) {
-                    localStorage.setItem(
-                        "UDP_PIPELINES",
-                        JSON.stringify(Pipeline.cache),
-                    );
                 }
             }
             return { success, failure };
@@ -151,47 +123,6 @@
                 }
             }
             return true;
-        }
-
-        /**
-         * @param {string} name
-         * @returns
-         */
-        static delete(name) {
-            delete Pipeline.cache[name];
-            localStorage.setItem(
-                "UDP_PIPELINES",
-                JSON.stringify(Pipeline.cache),
-            );
-            return Pipeline.load();
-        }
-
-        /**
-         * @param {string} name
-         * @returns
-         */
-        static hasPipe(name) {
-            if (!name || name === "") {
-                return false;
-            }
-            return Pipeline.cache[name] ? true : false;
-        }
-
-        /**
-         * @returns
-         */
-        static refreshCache() {
-            const temp = Object.entries(Pipeline.cache).map((entry) => {
-                return new Pipeline(
-                    entry[1].nodes,
-                    entry[1].edges,
-                    entry[0],
-                    entry[1].savedAt,
-                );
-            });
-            temp.sort((a, b) => b.saveTime - a.saveTime);
-            Pipeline.cacheArray = temp;
-            return Pipeline.cacheArray;
         }
 
         /**

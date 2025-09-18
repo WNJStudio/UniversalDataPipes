@@ -2,7 +2,7 @@
     import AppHeader from "./components/app/AppHeader/AppHeader.svelte";
     import DataView from "./components/app/DataView/DataView.svelte";
     import PipelineView from "./components/app/PipelineView/PipelineView.svelte";
-    import { menus, mouseDownOutsideMenu } from "./portals/MenuPortal.svelte";
+    import { menus } from "./portals/MenuPortal.svelte";
     import { tooltips } from "./portals/TooltipPortal.svelte";
 </script>
 
@@ -17,5 +17,3 @@
         {@render menus()}
     </div>
 </main>
-
-<svelte:document onmousedown={mouseDownOutsideMenu} />

@@ -1,4 +1,5 @@
 <script module>
+    import { PersistedState } from "runed";
     import { getTimeDiff } from "../utils/TimeUtils";
 
     export const PIPEVIEW = "pipeline";
@@ -7,84 +8,60 @@
     export const CROSSES = "crosses";
     export const LINES = "lines";
 
-    const settings = JSON.parse(localStorage.getItem("UDP_SETTINGS") || "{}");
     /**
-     * @type {PIPEVIEW|DATAVIEW}
+     * @typedef {Object} Settings
+     * @prop {PIPEVIEW|DATAVIEW} currentView
+     * @prop {boolean} isSidebarOpen
+     * @prop {boolean} isSnapToGrid
+     * @prop {number} gridSize
+     * @prop {DOTS|CROSSES|LINES} currentPattern
+     * @prop {number} [lastSave]
+     *
      */
-    let currentView = $state(settings.currentView || PIPEVIEW);
-    let isSidebarOpen = $state(
-        settings.isSidebarOpen !== undefined ? settings.isSidebarOpen : true,
-    );
-    let isSnapToGrid = $state(
-        settings.isSnapToGrid !== undefined ? settings.isSnapToGrid : true,
-    );
-    let gridSize = $state(settings.gridSize || 20);
-    let lastSave = $state(settings.lastSave || undefined);
 
     /**
-     * @type {DOTS|CROSSES|LINES}
+     * @type {PersistedState<Settings>}
      */
-    let currentPattern = $state(settings.currentPattern || DOTS);
-
-    let lastChange = $state(Date.now());
-    let delayCheck = $state();
-
-    const delayedSave = () => {
-        lastChange = Date.now();
-        if (delayCheck) {
-            clearTimeout(delayCheck);
-            delayCheck = undefined;
-        }
-        delayCheck = setTimeout(() => {
-            if (Date.now() - lastChange > 500) {
-                lastSave = Date.now();
-                localStorage.setItem(
-                    "UDP_SETTINGS",
-                    JSON.stringify({
-                        currentView,
-                        isSidebarOpen,
-                        isSnapToGrid,
-                        gridSize,
-                        lastSave,
-                        currentPattern,
-                    }),
-                );
-            }
-        }, 500);
-    };
+    const settings = new PersistedState("UDP_SETTINGS", {
+        currentView: PIPEVIEW,
+        currentPattern: DOTS,
+        gridSize: 20,
+        isSidebarOpen: true,
+        isSnapToGrid: true,
+    });
 
     /**
      * @param {PIPEVIEW|DATAVIEW} view
      */
     const changeView = (view) => {
-        currentView = view;
-        delayedSave();
+        settings.current.currentView = view;
+        settings.current.lastSave = Date.now();
     };
 
     const toggleSidebar = () => {
-        isSidebarOpen = !isSidebarOpen;
-        delayedSave();
+        settings.current.isSidebarOpen = !settings.current.isSidebarOpen;
+        settings.current.lastSave = Date.now();
     };
 
     const toggleSnapToGrid = () => {
-        isSnapToGrid = !isSnapToGrid;
-        delayedSave();
+        settings.current.isSnapToGrid = !settings.current.isSnapToGrid;
+        settings.current.lastSave = Date.now();
     };
 
     /**
      * @param {number} size
      */
     const changeGridSize = (size) => {
-        gridSize = Math.min(200, Math.max(1, size));
-        delayedSave();
+        settings.current.gridSize = Math.min(200, Math.max(1, size));
+        settings.current.lastSave = Date.now();
     };
 
     /**
      * @param {DOTS|CROSSES|LINES} pattern
      */
     const changePatterm = (pattern) => {
-        currentPattern = pattern;
-        delayedSave();
+        settings.current.currentPattern = pattern;
+        settings.current.lastSave = Date.now();
     };
 
     export const getViewChanger = () => changeView;
@@ -93,28 +70,29 @@
     export const getGridChanger = () => changeGridSize;
     export const getPatternChanger = () => changePatterm;
 
-    export const getCurrentView = () => () => currentView;
-    export const getSidebarStatus = () => () => isSidebarOpen;
-    export const getSnapToGrid = () => () => isSnapToGrid;
-    export const getGridSize = () => () => gridSize;
+    export const getCurrentView = () => () => settings.current.currentView;
+    export const getSidebarStatus = () => () => settings.current.isSidebarOpen;
+    export const getSnapToGrid = () => () => settings.current.isSnapToGrid;
+    export const getGridSize = () => () => settings.current.gridSize;
     export const getLastSavedSince = () => () => {
-        if (!lastSave) {
+        if (!settings.current.lastSave) {
             return "";
         }
-        const timediff = getTimeDiff(lastSave, Date.now());
+        const timediff = getTimeDiff(settings.current.lastSave, Date.now());
         if (timediff.trim() === "") {
             return "Just saved.";
         }
 
         return `Last saved ${timediff} ago.`;
     };
-    export const getCurrentPattern = () => () => currentPattern;
+    export const getCurrentPattern = () => () =>
+        settings.current.currentPattern;
 
     /**
      * @param {number} scale
      */
     export const getPattern = (scale) => {
-        const size = gridSize * scale;
+        const size = settings.current.gridSize * scale;
         const size10 = size * 10;
         const color = "hsl(var(--border) / 0.5)";
         const colorLight = "hsl(var(--border) / 0.75)";
@@ -124,7 +102,7 @@
         const line10Width = 0.5;
         const gap = 15;
 
-        switch (currentPattern) {
+        switch (settings.current.currentPattern) {
             case "lines":
                 const vDashes = [];
                 let coeff = lineWidth * 3;
@@ -160,14 +138,14 @@
      * @param {import("../model/Pipeline.svelte").Transform} t transform
      */
     export const getPatternOffset = (t) => {
-        let offsetRadial = (gridSize * t.scale) / 2;
-        let offsetLinear = gridSize * t.scale * 0.025;
+        let offsetRadial = (settings.current.gridSize * t.scale) / 2;
+        let offsetLinear = settings.current.gridSize * t.scale * 0.025;
         const posX = t.x * t.scale;
         const posY = t.y * t.scale;
 
         let vertical = `${posX}px ${posY - offsetLinear}px`;
         let horizontal = `${posX - offsetLinear}px ${posY}px`;
-        switch (currentPattern) {
+        switch (settings.current.currentPattern) {
             case "lines":
                 return `background-position: ${vertical}, ${horizontal}, ${vertical}, ${horizontal}, ${vertical}, ${horizontal}`;
             case "crosses":

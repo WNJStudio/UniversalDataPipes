@@ -1,6 +1,6 @@
 <script>
   import { Save } from "@lucide/svelte";
-  import { Pipeline } from "../../../../model/Pipeline.svelte";
+  import { Pipeline, pipelineStorage } from "../../../../model/Pipeline.svelte";
   import { getMenuDisplayer } from "../../../../portals/MenuPortal.svelte";
   import Button from "../../../ui/Button/Button.svelte";
   import ScrollArea from "../../../ui/ScrollArea/ScrollArea.svelte";
@@ -19,7 +19,6 @@
 
   /**
    * @typedef {Object} PipelineSidebarProps
-   * @prop {Pipeline[]} savedPipelines
    * @prop {(s?:string)=>any} onSave
    * @prop {(name:string)=>any} onDelete
    * @prop {(p:Pipeline)=>any} onLoad
@@ -29,7 +28,6 @@
    */
   /** @type {PipelineSidebarProps & import('svelte/elements').SvelteHTMLElements['div']} */
   let {
-    savedPipelines,
     onSave,
     onLoad,
     onDelete,
@@ -52,7 +50,7 @@
   let query = $derived(new RegExp(pattern, "i"));
 
   let filteredPipelines = $derived(
-    savedPipelines.filter((p) => query.test(p.name)),
+    Object.values(pipelineStorage.current).filter((p) => query.test(p.name)),
   );
 
   const closeDialog = () => {
@@ -150,7 +148,7 @@
       {#each filteredPipelines as pipeline (pipeline.name)}
         <PipelineCard {pipeline} {handlePipelineMore} {onLoad} />
       {/each}
-      <NoPipelines {filteredPipelines} {savedPipelines} {onSave} {pattern} />
+      <NoPipelines {filteredPipelines} {onSave} {pattern} />
     </div>
   </ScrollArea>
 </FlyOut>

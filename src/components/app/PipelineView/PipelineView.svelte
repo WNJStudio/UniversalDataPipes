@@ -3,7 +3,7 @@
         getEdgeData,
         getEdgeDataSetter,
     } from "../../../context/EdgeContext.svelte";
-    import { Pipeline } from "../../../model/Pipeline.svelte";
+    import { Pipeline, pipelineStorage } from "../../../model/Pipeline.svelte";
     import ImportExportDialog from "./ImportExportDialog.svelte";
     import PipelineCanvas from "./PipelineCanvas.svelte";
     import SavePipelineDialog from "./SavePipelineDialog.svelte";
@@ -13,7 +13,6 @@
     const edges = getEdgeData();
 
     let saveDialogOpen = $state(false);
-    let savedPipelines = $state([]);
     let currentPipeline = $state(new Pipeline());
     let nodes = $state({});
     let saveName = $state();
@@ -31,10 +30,11 @@
         currentPipeline.name = name;
         currentPipeline.nodes = nodes;
         currentPipeline.edges = edges();
-        savedPipelines = Pipeline.save(currentPipeline);
+        currentPipeline.savedAt = new Date().toISOString();
+        pipelineStorage.current[currentPipeline.name] = currentPipeline;
     };
     const onDelete = (name) => {
-        savedPipelines = Pipeline.delete(name);
+        pipelineStorage.current[name] = undefined;
     };
     const onLoad = (pipe) => {
         currentPipeline = pipe;
@@ -49,12 +49,16 @@
     };
 
     const onExportAll = () => {
-        exportData = JSON.stringify(savedPipelines, null, 2);
+        exportData = JSON.stringify(
+            Object.values(pipelineStorage.current),
+            null,
+            2,
+        );
         ieDialogOpen = true;
         ieMode = "export";
     };
     const onExportSingle = (name) => {
-        exportData = JSON.stringify(Pipeline.cache[name], null, 2);
+        exportData = JSON.stringify(pipelineStorage.current[name], null, 2);
         ieDialogOpen = true;
         ieMode = "export";
     };
@@ -69,34 +73,26 @@
     };
 
     const checkName = (name) => {
-        return Pipeline.hasPipe(name);
+        if (!name || name === "") {
+            return false;
+        }
+        return pipelineStorage.current[name] ? true : false;
     };
 
     /**
      * @param {any} c
      * @returns {{success:number, failure:number}}
      */
-    const handleOnImport = (c) => {
-        const result = Pipeline.import(c);
-        if (result.success > 0) {
-            savedPipelines = Pipeline.load();
-        }
-        return result;
-    };
+    const handleOnImport = (c) => Pipeline.import(c);
 
     const cleanUpIE = () => {
         ieMode = null;
         ieDialogOpen = false;
         exportData = "";
     };
-
-    $effect(() => {
-        savedPipelines = Pipeline.load();
-    });
 </script>
 
 <PipelineSidebar
-    {savedPipelines}
     onSave={openSaveDialog}
     {onDelete}
     {onLoad}

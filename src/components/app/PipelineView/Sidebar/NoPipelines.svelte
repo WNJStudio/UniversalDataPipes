@@ -2,17 +2,19 @@
     import { Plus } from "@lucide/svelte";
     import Button from "../../../ui/Button/Button.svelte";
     import SlideOut from "../../../ui/Transitions/SlideOut.svelte";
-    import { Pipeline } from "../../../../model/Pipeline.svelte";
+    import {
+        Pipeline,
+        pipelineStorage,
+    } from "../../../../model/Pipeline.svelte";
 
     /**
      * @typedef {Object} NoPipelinesProps
      * @prop {string} pattern
      * @prop {Pipeline[]} filteredPipelines
-     * @prop {Pipeline[]} savedPipelines
      * @prop {()=>any} onSave
      */
     /** @type {NoPipelinesProps} */
-    let { filteredPipelines, savedPipelines, pattern, onSave } = $props();
+    let { filteredPipelines, pattern, onSave } = $props();
 </script>
 
 <SlideOut
@@ -21,10 +23,10 @@
     class="text-center text-sm text-muted-foreground py-10"
 >
     <p class="select-none">No saved pipelines found.</p>
-    {#if savedPipelines.length > 0 && pattern !== ""}
+    {#if Object.keys(pipelineStorage.current).length > 0 && pattern !== ""}
         <p class="mt-2">Try searching for something else.</p>
     {/if}
-    {#if savedPipelines.length === 0}
+    {#if Object.keys(pipelineStorage.current).length === 0}
         <Button
             variant="outline"
             size="sm"

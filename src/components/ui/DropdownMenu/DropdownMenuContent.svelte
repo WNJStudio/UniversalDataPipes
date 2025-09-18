@@ -1,4 +1,5 @@
 <script>
+    import { ElementRect, onClickOutside } from "runed";
     /** @type {{[x:string]:"top"|"bottom"|"left"|"right"}}*/
     const oppositeSide = {
         top: "bottom",
@@ -17,6 +18,7 @@
      */
 
     import FlyOut from "../Transitions/FlyOut.svelte";
+    import { getMenuDisplayer } from "../../../portals/MenuPortal.svelte";
 
     /** @type {DropdownMenuContentProps & import('svelte/elements').SvelteHTMLElements['div']} */
     let {
@@ -29,10 +31,21 @@
         ...props
     } = $props();
 
+    const showMenu = getMenuDisplayer();
+
     /**
      * @type {HTMLElement}
      */
     let contentRef = $state();
+
+    const contentRect = new ElementRect(() => contentRef);
+
+    onClickOutside(
+        () => contentRef,
+        () => {
+            showMenu(undefined);
+        },
+    );
 
     let position = $derived.by(() => {
         let left = 0;
@@ -42,7 +55,6 @@
          */
         let finalSide = "bottom";
         if (x !== undefined && y !== undefined && contentRef) {
-            const contentRect = contentRef.getBoundingClientRect();
             const triggerRect = { top: y, left: x, bottom: y, right: x };
             /**
              * @param {"top"|"bottom"|"left"|"right"} side
