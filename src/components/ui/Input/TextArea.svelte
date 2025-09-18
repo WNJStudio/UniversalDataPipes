@@ -11,26 +11,32 @@
      * @param {HTMLTextAreaElement} el
      */
     const changeValueDelayed = (el) => {
+        let delayCheck = undefined;
+        let lastValue = el.value;
         /**
-         *
          * @param {InputEvent} _
          */
         const onInput = (_) => {
             lastInput = Date.now();
+            if (delayCheck) {
+                clearTimeout(delayCheck);
+                delayCheck = undefined;
+            }
+            delayCheck = setTimeout(() => {
+                if (Date.now() - lastInput > delay && lastValue !== el.value) {
+                    onValueChange(el.value);
+                    lastValue = el.value;
+                }
+            }, delay);
         };
 
         el.addEventListener("input", onInput);
-        let lastValue = el.value;
-        const delayCheck = setInterval(() => {
-            if (Date.now() - lastInput > delay && lastValue !== el.value) {
-                onValueChange(el.value);
-                lastValue = el.value;
-            }
-        }, delay);
 
         return () => {
             el.removeEventListener("input", onInput);
-            clearInterval(delayCheck);
+            if (delayCheck) {
+                clearTimeout(delayCheck);
+            }
         };
     };
 </script>
