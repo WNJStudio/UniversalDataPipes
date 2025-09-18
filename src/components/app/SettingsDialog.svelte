@@ -87,9 +87,12 @@
                 </div>
             </div>
             <Separator />
-            <span class="text-xs font-normal leading-snug text-muted-foreground"
-                >{lastSavedSince()}</span
-            >
+            <div class="grid gap-4">
+                <span
+                    class="text-xs font-normal leading-snug text-muted-foreground"
+                    >{lastSavedSince()}</span
+                >
+            </div>
         </div>
     {/snippet}
 </Dialog>
