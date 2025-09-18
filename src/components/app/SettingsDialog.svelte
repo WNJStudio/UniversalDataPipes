@@ -2,6 +2,7 @@
     import {
         getGridChanger,
         getGridSize,
+        getLastSavedSince,
         getSnapToggler,
         getSnapToGrid,
     } from "../../context/SettingsContext.svelte";
@@ -25,6 +26,7 @@
     const snapToggler = getSnapToggler();
     const gridSize = getGridSize();
     const gridChanger = getGridChanger();
+    const lastSavedSince = getLastSavedSince();
 
     const handleCancel = () => {
         isOpen = false;
@@ -49,7 +51,7 @@
                 <Label for="snap-to-grid" class="flex flex-col space-y-1">
                     <span>Snap to Grid</span>
                     <span
-                        class="font-normal leading-snug text-muted-foreground"
+                        class="text-xs font-normal leading-snug text-muted-foreground"
                     >
                         Automatically align nodes to the grid.
                     </span>
@@ -84,6 +86,10 @@
                     </span>
                 </div>
             </div>
+            <Separator />
+            <span class="text-xs font-normal leading-snug text-muted-foreground"
+                >{lastSavedSince()}</span
+            >
         </div>
     {/snippet}
 </Dialog>

@@ -8,6 +8,7 @@
     import {
         getCurrentView,
         getGridSize,
+        getPattern,
         getSidebarToggler,
         getSnapToGrid,
         PIPEVIEW,
@@ -648,9 +649,7 @@
             "w-full h-full absolute top-0 left-0 overflow-hidden",
             panMode || isPanning ? "cursor-grab" : "",
         ]}
-        style={`background-image: radial-gradient(circle, hsl(var(--border)/0.5) 1px, transparent 1px);
-        background-size: ${gridSize() * canvasTransform.scale}px ${gridSize() * canvasTransform.scale}px;
-        background-position: ${canvasTransform.x * canvasTransform.scale + gridSize() / 2}px ${canvasTransform.y * canvasTransform.scale + gridSize() / 2}px;
+        style={`${getPattern(canvasTransform.scale)};background-position: ${canvasTransform.x * canvasTransform.scale + gridSize() / 2}px ${canvasTransform.y * canvasTransform.scale + gridSize() / 2}px;
         `}
         oncontextmenu={(e) => e.preventDefault()}
         onmousedown={handleMouseDown}
