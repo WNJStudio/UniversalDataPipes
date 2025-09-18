@@ -1,19 +1,29 @@
 <script>
     import {
+        CROSSES,
+        DOTS,
+        getCurrentPattern,
         getGridChanger,
         getGridSize,
         getLastSavedSince,
+        getPatternChanger,
         getSnapToggler,
         getSnapToGrid,
+        LINES,
     } from "../../context/SettingsContext.svelte";
     import Dialog from "../ui/Dialog/Dialog.svelte";
     import DialogDescription from "../ui/Dialog/DialogDescription.svelte";
     import DialogHeader from "../ui/Dialog/DialogHeader.svelte";
     import DialogTitle from "../ui/Dialog/DialogTitle.svelte";
     import Label from "../ui/Label/Label.svelte";
+    import RadioGroup from "../ui/RadioGroup/RadioGroup.svelte";
+    import RadioGroupItem from "../ui/RadioGroup/RadioGroupItem.svelte";
     import Separator from "../ui/Separator/Separator.svelte";
     import Slider from "../ui/Slider/Slider.svelte";
     import Switch from "../ui/Switch/Switch.svelte";
+
+    const labelClasses =
+        "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary";
 
     /**
      * @typedef {Object} SettingsDialogProps
@@ -27,6 +37,8 @@
     const gridSize = getGridSize();
     const gridChanger = getGridChanger();
     const lastSavedSince = getLastSavedSince();
+    const currentPattern = getCurrentPattern();
+    const patternSetter = getPatternChanger();
 
     const handleCancel = () => {
         isOpen = false;
@@ -83,6 +95,50 @@
                         class="text-xs font-normal leading-snug text-muted-foreground"
                     >
                         Controls the snapping distance for nodes.
+                    </span>
+                </div>
+                <div class="grid gap-2">
+                    <Label>Grid Pattern</Label>
+                    <RadioGroup class="grid grid-cols-3 gap-2">
+                        <div>
+                            <RadioGroupItem
+                                value={DOTS}
+                                id={DOTS}
+                                currentValue={currentPattern()}
+                                valueSetter={patternSetter}
+                                class="peer sr-only"
+                            />
+                            <Label for={DOTS} class={labelClasses}>Dots</Label>
+                        </div>
+                        <div>
+                            <RadioGroupItem
+                                value={LINES}
+                                id={LINES}
+                                currentValue={currentPattern()}
+                                valueSetter={patternSetter}
+                                class="peer sr-only"
+                            />
+                            <Label for={LINES} class={labelClasses}>
+                                Lines
+                            </Label>
+                        </div>
+                        <div>
+                            <RadioGroupItem
+                                value={CROSSES}
+                                id={CROSSES}
+                                currentValue={currentPattern()}
+                                valueSetter={patternSetter}
+                                class="peer sr-only"
+                            />
+                            <Label for={CROSSES} class={labelClasses}>
+                                Crosses
+                            </Label>
+                        </div>
+                    </RadioGroup>
+                    <span
+                        class="text-xs font-normal leading-snug text-muted-foreground"
+                    >
+                        Choose the visual style of the background grid.
                     </span>
                 </div>
             </div>

@@ -9,6 +9,7 @@
         getCurrentView,
         getGridSize,
         getPattern,
+        getPatternOffset,
         getSidebarToggler,
         getSnapToGrid,
         PIPEVIEW,
@@ -649,8 +650,7 @@
             "w-full h-full absolute top-0 left-0 overflow-hidden",
             panMode || isPanning ? "cursor-grab" : "",
         ]}
-        style={`${getPattern(canvasTransform.scale)};background-position: ${canvasTransform.x * canvasTransform.scale + gridSize() / 2}px ${canvasTransform.y * canvasTransform.scale + gridSize() / 2}px;
-        `}
+        style={`${getPattern(canvasTransform.scale)};${getPatternOffset(canvasTransform)};`}
         oncontextmenu={(e) => e.preventDefault()}
         onmousedown={handleMouseDown}
         onmousemove={handleMouseMove}
