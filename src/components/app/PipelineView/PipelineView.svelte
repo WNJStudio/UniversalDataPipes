@@ -34,16 +34,7 @@
 
         pipelineStorage.current[pipeline.name] = pipeline.toJSON();
     };
-    const onDelete = (name) => {
-        pipelineStorage.current[name] = undefined;
-    };
 
-    /**
-     * @param {Pipeline} pipe
-     */
-    const onLoad = (pipe) => {
-        pipeline.shipOfTheseus(pipe);
-    };
     const onImportAll = () => {
         ieDialogState.data = "";
         ieDialogState.mode = "import";
@@ -96,8 +87,6 @@
 
 <PipelineSidebar
     onSave={openSaveDialog}
-    {onDelete}
-    {onLoad}
     {onExportAll}
     {onImportAll}
     {onExportSingle}

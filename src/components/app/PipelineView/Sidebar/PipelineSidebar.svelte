@@ -5,7 +5,7 @@
     getSidebarStatus,
     PIPEVIEW,
   } from "../../../../context/SettingsContext.svelte";
-  import { Pipeline } from "../../../../model/Pipeline.svelte";
+  import { Pipeline, pipelineStorage } from "../../../../model/Pipeline.svelte";
   import { getMenuDisplayer } from "../../../../portals/MenuPortal.svelte";
   import Button from "../../../ui/Button/Button.svelte";
   import ScrollArea from "../../../ui/ScrollArea/ScrollArea.svelte";
@@ -16,30 +16,22 @@
   import PipelineMenu from "./PipelineMenu.svelte";
   import SearchBar from "./SearchBar.svelte";
   import SidebarMenu from "./SidebarMenu.svelte";
+  import { pipelineContext } from "../../../../context/PipelineContext.svelte";
 
   /**
    * @typedef {Object} PipelineSidebarProps
    * @prop {(s?:string)=>any} onSave
-   * @prop {(name:string)=>any} onDelete
-   * @prop {(p:Pipeline)=>any} onLoad
    * @prop {()=>any} onExportAll
    * @prop {()=>any} onImportAll
    * @prop {(name:string)=>any} onExportSingle
    */
   /** @type {PipelineSidebarProps & import('svelte/elements').SvelteHTMLElements['div']} */
-  let {
-    onSave,
-    onLoad,
-    onDelete,
-    onExportAll,
-    onImportAll,
-    onExportSingle,
-    ...props
-  } = $props();
+  let { onSave, onExportAll, onImportAll, onExportSingle, ...props } = $props();
 
   const portalShow = getMenuDisplayer();
   const currentView = getCurrentView();
   const sidebarStatus = getSidebarStatus();
+  const pipeline = pipelineContext.get();
 
   let hidden = $derived(!sidebarStatus() || currentView() !== PIPEVIEW);
 
@@ -68,7 +60,7 @@
   };
 
   const handleDelete = () => {
-    onDelete(actionCandidateName);
+    pipelineStorage.current[actionCandidateName] = undefined;
     closeDialog();
   };
 
@@ -115,6 +107,13 @@
       }
       portalShow("pipelines_more", e.clientX, e.clientY);
     }
+  };
+
+  /**
+   * @param {Pipeline} pipe
+   */
+  const onLoad = (pipe) => {
+    pipeline.shipOfTheseus(pipe);
   };
 </script>
 
