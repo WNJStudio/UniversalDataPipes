@@ -1,6 +1,7 @@
 <script>
     import { ElementRect } from "runed";
     import { dataContext } from "../../../context/DataContext.svelte";
+    import { nodeRectContext } from "../../../context/NodeRectContext.svelte";
     import { pipelineContext } from "../../../context/PipelineContext.svelte";
     import {
         getCurrentView,
@@ -24,7 +25,6 @@
     import PendingEdgePath from "./Nodes/PendingEdgePath.svelte";
     import SelectionRect from "./SelectionRect.svelte";
     import PipelineToolbar from "./Toolbar/PipelineToolbar.svelte";
-    import { nodeRectContext } from "../../../context/NodeRectContext.svelte";
 
     const isSnapToGrid = getSnapToGrid();
     const sidebarToggler = getSidebarToggler();

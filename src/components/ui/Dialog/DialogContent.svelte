@@ -3,6 +3,7 @@
     import FadeOut from "../Transitions/FadeOut.svelte";
     import ScaleOut from "../Transitions/ScaleOut.svelte";
     import DialogOverlay from "./DialogOverlay.svelte";
+    import { PressedKeys } from "runed";
     /**
      * @typedef {Object} DialogContentProps
      * @prop {boolean} isOpen
@@ -20,6 +21,7 @@
         onCancel,
         ...props
     } = $props();
+    const keys = new PressedKeys();
 
     const tryClosing = () => {
         if (onCancel) {
@@ -31,14 +33,9 @@
         }
     };
 
-    /**
-     * @param {KeyboardEvent} e
-     */
-    const handleEscape = (e) => {
-        if (e.key === "Escape") {
-            tryClosing();
-        }
-    };
+    keys.onKeys("Escape", () => {
+        tryClosing();
+    });
 </script>
 
 <FadeOut
@@ -75,5 +72,3 @@
         </button>
     </ScaleOut>
 </FadeOut>
-
-<svelte:window onkeydown={handleEscape} />
