@@ -9,7 +9,7 @@
 
     export class NodeDefinition {
         /**
-         * @param {string} category
+         * @param {import('./NodeCategory.svelte').Categories} category
          * @param {string} name
          * @param {HandleDefinition[]} inputs
          * @param {HandleDefinition[]} outputs
@@ -17,14 +17,36 @@
          * @param {import('svelte').Component<import('@lucide/svelte').IconProps>} icon
          */
         constructor(category, name, inputs, outputs, render, icon) {
+            /**
+             * @type {import('./NodeCategory.svelte').Categories}
+             */
             this.category = category;
+            /**
+             * @type {string}
+             */
             this.name = name;
+            /**
+             * @type {HandleDefinition[]}
+             */
             this.inputs = inputs;
+            /**
+             * @type {HandleDefinition[]}
+             */
             this.outputs = outputs;
+            /**
+             * @type {import('svelte').Snippet<[{inputs:HandleData[], outputs:HandleData[]}]>}
+             */
             this.render = render;
+            /**
+             * @type {import('svelte').Component<import('@lucide/svelte').IconProps>}
+             */
             this.icon = icon;
         }
 
+        /**
+         * @param {number} x
+         * @param {number} y
+         */
         create(x, y) {
             const nodeId = v4();
             return new NodeData(
@@ -41,7 +63,7 @@
     }
 
     export const DefaultNodeDef = new NodeDefinition(
-        "default",
+        "IO",
         "default",
         [],
         [],

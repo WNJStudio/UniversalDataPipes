@@ -1,13 +1,23 @@
 <script module>
     import { EdgeData } from "./Edge.svelte";
     import { HandleData } from "./Handle.svelte";
-
+    /**
+     * Reactive
+     */
     export class HandleConnection {
         /**
+         * Reactive
          * @param {HandleData} start
          */
         constructor(start) {
-            this.start = start;
+            /**
+             * @type {HandleData}
+             */
+            this.start = $state(start);
+            /**
+             * @type {HandleData}
+             */
+            this.end = $state();
         }
 
         /**

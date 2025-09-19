@@ -9,7 +9,7 @@
      * @typedef {import('svelte').Snippet<[MenuArgs]>} MenuSnippet
      */
     /**
-     * @type {{[x:string]:MenuSnippet}}
+     * @type {Object<string,MenuSnippet>}
      */
     let menuPortal = $state({});
     /**

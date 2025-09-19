@@ -1,75 +1,74 @@
 <script>
-    import {
-        getEdgeData,
-        getEdgeDataSetter,
-    } from "../../../context/EdgeContext.svelte";
+    import { pipelineContext } from "../../../context/PipelineContext.svelte";
     import { Pipeline, pipelineStorage } from "../../../model/Pipeline.svelte";
     import ImportExportDialog from "./ImportExportDialog.svelte";
     import PipelineCanvas from "./PipelineCanvas.svelte";
     import SavePipelineDialog from "./SavePipelineDialog.svelte";
     import PipelineSidebar from "./Sidebar/PipelineSidebar.svelte";
 
-    const edgeSetter = getEdgeDataSetter();
-    const edges = getEdgeData();
-
-    let saveDialogOpen = $state(false);
-    let currentPipeline = $state(new Pipeline());
-    let nodes = $state({});
-    let saveName = $state();
-    let pipeChanged = $state(false);
+    let pipeline = $state(new Pipeline());
+    pipelineContext.set(pipeline);
 
     /**
-     * @type {"import"|"export"}
+     * @type {{open: boolean, name: string}}
      */
-    let ieMode = $state();
-    let ieDialogOpen = $state(false);
-    let exportData = $state("");
-
+    let saveDialogState = $state({
+        open: false,
+        name: undefined,
+    });
+    /**
+     * @type {{open: boolean, mode: "import"|"export", data: string}}
+     */
+    let ieDialogState = $state({
+        open: false,
+        mode: undefined,
+        data: "",
+    });
     const onSave = (name) => {
-        saveName = undefined;
-        currentPipeline.name = name;
-        currentPipeline.nodes = nodes;
-        currentPipeline.edges = edges();
-        currentPipeline.savedAt = new Date().toISOString();
-        pipelineStorage.current[currentPipeline.name] = currentPipeline;
+        saveDialogState.name = undefined;
+        pipeline.name = name;
+        pipeline.setSavedAt(new Date().toISOString());
+
+        pipelineStorage.current[pipeline.name] = pipeline.toJSON();
     };
     const onDelete = (name) => {
         pipelineStorage.current[name] = undefined;
     };
+
+    /**
+     * @param {Pipeline} pipe
+     */
     const onLoad = (pipe) => {
-        currentPipeline = pipe;
-        nodes = currentPipeline.reactiveNodes;
-        edgeSetter(currentPipeline.reactiveEdges);
-        pipeChanged = true;
+        pipeline.shipOfTheseus(pipe);
     };
     const onImportAll = () => {
-        exportData = "";
-        ieMode = "import";
-        ieDialogOpen = true;
+        ieDialogState.data = "";
+        ieDialogState.mode = "import";
+        ieDialogState.open = true;
     };
 
     const onExportAll = () => {
-        exportData = JSON.stringify(
-            Object.values(pipelineStorage.current),
+        ieDialogState.data = JSON.stringify(Pipeline.load(), null, 2);
+        ieDialogState.mode = "export";
+        ieDialogState.open = true;
+    };
+    const onExportSingle = (name) => {
+        ieDialogState.data = JSON.stringify(
+            pipelineStorage.current[name],
             null,
             2,
         );
-        ieDialogOpen = true;
-        ieMode = "export";
-    };
-    const onExportSingle = (name) => {
-        exportData = JSON.stringify(pipelineStorage.current[name], null, 2);
-        ieDialogOpen = true;
-        ieMode = "export";
+        ieDialogState.mode = "export";
+        ieDialogState.open = true;
     };
 
     const openSaveDialog = (name) => {
         if (name && name !== "") {
-            saveName = name;
+            saveDialogState.name = name;
         } else {
-            saveName = currentPipeline.name;
+            saveDialogState.name = pipeline.name;
         }
-        saveDialogOpen = true;
+        saveDialogState.open = true;
     };
 
     const checkName = (name) => {
@@ -86,9 +85,9 @@
     const handleOnImport = (c) => Pipeline.import(c);
 
     const cleanUpIE = () => {
-        ieMode = null;
-        ieDialogOpen = false;
-        exportData = "";
+        ieDialogState.data = "";
+        ieDialogState.mode = undefined;
+        ieDialogState.open = false;
     };
 </script>
 
@@ -100,17 +99,17 @@
     {onImportAll}
     {onExportSingle}
 />
-<PipelineCanvas bind:nodes bind:pipeChanged />
+<PipelineCanvas />
 <SavePipelineDialog
-    bind:isOpen={saveDialogOpen}
-    name={saveName}
+    bind:isOpen={saveDialogState.open}
+    name={saveDialogState.name}
     {checkName}
     {onSave}
 />
 <ImportExportDialog
-    data={exportData}
-    bind:isOpen={ieDialogOpen}
-    mode={ieMode}
+    data={ieDialogState.data}
+    bind:isOpen={ieDialogState.open}
+    mode={ieDialogState.mode}
     onImport={handleOnImport}
     onClose={cleanUpIE}
 />

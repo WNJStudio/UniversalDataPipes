@@ -4,8 +4,7 @@
         getDataContextCleaner,
         getDataContextSetter,
     } from "../../../../../../context/DataContext.svelte";
-    import { getEdgeData } from "../../../../../../context/EdgeContext.svelte";
-    import { EdgeData } from "../../../../../../model/Edge.svelte";
+    import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();
@@ -15,16 +14,16 @@
 
     const pipelineData = getDataContext();
 
-    const edges = getEdgeData();
+    const { edges } = pipelineContext.get();
 
     let errorMessage = $state("");
 
     /**
-     * @type {EdgeData[]}
+     * @type {import("../../../../../../model/Edge.svelte").EdgeData[]}
      */
     let myInputEdges = $derived.by(() => {
-        if (edges()) {
-            return Object.values(edges()).filter(
+        if (edges) {
+            return Object.values(edges).filter(
                 (edge) =>
                     inputs?.[0]?.id?.includes?.(edge.start) ||
                     inputs?.[0]?.id?.includes?.(edge.end),
@@ -34,11 +33,11 @@
     });
 
     /**
-     * @type {EdgeData[]}
+     * @type {import("../../../../../../model/Edge.svelte").EdgeData[]}
      */
     let myOutputEdges = $derived.by(() => {
-        if (edges()) {
-            return Object.values(edges()).filter(
+        if (edges) {
+            return Object.values(edges).filter(
                 (edge) =>
                     outputs?.[0]?.id?.includes?.(edge.start) ||
                     outputs?.[0]?.id?.includes?.(edge.end),

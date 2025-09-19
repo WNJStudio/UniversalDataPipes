@@ -66,7 +66,7 @@
   id={node.id}
   onclick={(e) => onClick(e, node.id)}
   class={["absolute min-w-3xs", isDragging ? "opacity-50" : "", props.class]}
-  style={`left: ${node.position.x}px; top: ${node.position.y}px;${width ? ` width: ${width}px;` : ""}${height ? ` height: ${height}px;` : ""}`}
+  style={`left: ${node.position?.x}px; top: ${node.position?.y}px;${width ? ` width: ${width}px;` : ""}${height ? ` height: ${height}px;` : ""}`}
 >
   <Card
     class={[

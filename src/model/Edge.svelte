@@ -1,10 +1,28 @@
 <script module>
     import { v4 } from "uuid";
     import { Position } from "./Position.svelte";
-    import { Reactive } from "./Reactive.svelte";
 
-    export class EdgeData extends Reactive {
+    /**
+     * @typedef {Object} EdgeObject
+     * @prop {string} id
+     * @prop {string} start start handleId
+     * @prop {string} startNode start nodeId
+     * @prop {string} endNode end NodeId
+     * @prop {string} end end handleId
+     */
+    /**
+     * @typedef {Object<string,EdgeData>} EdgeMap
+     */
+    /**
+     * @typedef {Object<string,EdgeObject>} EdgeOMap
+     */
+
+    /**
+     * Reactive
+     */
+    export class EdgeData {
         /**
+         * Reactive
          * @param {string} id
          * @param {string} start start handleId
          * @param {string} startNode start nodeId
@@ -13,41 +31,55 @@
          * @param {Position} tail
          */
         constructor(id, start, startNode, end, endNode, tail) {
-            super();
             /**
              * @type {string} the id of the edge
              */
-            this.id = id;
+            this.id = $state(id);
             /**
              * @type {string} the id of the starting handle
              */
-            this.start = start;
+            this.start = $state(start);
             /**
              * @type {string} the id of the starting node
              */
-            this.startNode = startNode;
+            this.startNode = $state(startNode);
             /**
              * @type {string} the id of the ending handle
              */
-            this.end = end;
+            this.end = $state(end);
             /**
              * @type {string} the id of the ending node
              */
-            this.endNode = endNode;
+            this.endNode = $state(endNode);
             /**
              * @type {Position} transient tail to track pending edge
              */
-            this.tail = tail;
+            this.tail = $state(tail);
         }
+
         /**
          * @param {string} start
          * @param {string} startNode
-         * @param {string} end
-         * @param {string} endNode
          * @param {Position} tail
          */
-        static create(start, startNode, end, endNode, tail) {
-            return new EdgeData(v4(), start, startNode, end, endNode, tail);
+        static createPending(start, startNode, tail) {
+            return new EdgeData(v4(), start, startNode, null, null, tail);
+        }
+        /**
+         * @param {any} obj
+         */
+        static create(obj) {
+            if (!EdgeData.validate(obj)) {
+                throw new Error("Object signature not matching EdgeData");
+            }
+            return new EdgeData(
+                obj.id,
+                obj.start,
+                obj.startNode,
+                obj.end,
+                obj.endNode,
+                null,
+            );
         }
 
         /**
@@ -68,6 +100,19 @@
                 return false;
             }
             return true;
+        }
+
+        /**
+         * @returns {EdgeObject}
+         */
+        toJSON() {
+            return {
+                id: this.id,
+                start: this.start,
+                startNode: this.startNode,
+                end: this.end,
+                endNode: this.endNode,
+            };
         }
     }
 </script>

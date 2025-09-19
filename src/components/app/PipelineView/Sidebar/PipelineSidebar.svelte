@@ -1,6 +1,11 @@
 <script>
   import { Save } from "@lucide/svelte";
-  import { Pipeline, pipelineStorage } from "../../../../model/Pipeline.svelte";
+  import {
+    getCurrentView,
+    getSidebarStatus,
+    PIPEVIEW,
+  } from "../../../../context/SettingsContext.svelte";
+  import { Pipeline } from "../../../../model/Pipeline.svelte";
   import { getMenuDisplayer } from "../../../../portals/MenuPortal.svelte";
   import Button from "../../../ui/Button/Button.svelte";
   import ScrollArea from "../../../ui/ScrollArea/ScrollArea.svelte";
@@ -11,11 +16,6 @@
   import PipelineMenu from "./PipelineMenu.svelte";
   import SearchBar from "./SearchBar.svelte";
   import SidebarMenu from "./SidebarMenu.svelte";
-  import {
-    getCurrentView,
-    getSidebarStatus,
-    PIPEVIEW,
-  } from "../../../../context/SettingsContext.svelte";
 
   /**
    * @typedef {Object} PipelineSidebarProps
@@ -50,7 +50,7 @@
   let query = $derived(new RegExp(pattern, "i"));
 
   let filteredPipelines = $derived(
-    Object.values(pipelineStorage.current).filter((p) => query.test(p.name)),
+    Pipeline.load().filter((p) => query.test(p.name)),
   );
 
   const closeDialog = () => {

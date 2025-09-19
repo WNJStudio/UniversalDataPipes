@@ -3,7 +3,7 @@
     ////   PIPILINE DATA     ////
     /////////////////////////////
     /**
-     * @type {{[edgeId:string]:any}}
+     * @type {Object<string, any>}
      */
     let pipelineData = $state({});
     /**

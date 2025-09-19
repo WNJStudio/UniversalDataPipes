@@ -1,11 +1,10 @@
 <script>
     import { EdgeData } from "../../../../model/Edge.svelte";
-    import { Transform } from "../../../../model/Pipeline.svelte";
 
     /**
      * @typedef {Object} PendingEdgePathProps
      * @prop {EdgeData} pendingEdge
-     * @prop {Transform} canvasTransform
+     * @prop {import('../../../../model/Transform.svelte').Transform} canvasTransform
      * @prop {HTMLElement} canvasView
      */
     /** @type {PendingEdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */

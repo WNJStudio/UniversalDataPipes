@@ -1,7 +1,14 @@
 <script module>
-    import { Reactive } from "./Reactive.svelte";
     /**
      * @typedef {{type:string,color:string}} HandleType
+     */
+    /**
+     * @typedef {Object} HandleObject
+     * @prop {string} id
+     * @prop {string} name
+     * @prop {string} nodeId
+     * @prop {HandleType} type
+     * @prop {"IN"|"OUT"} dir
      */
 
     export const HandleTypes = {
@@ -26,10 +33,12 @@
             color: "bg-gray-400",
         },
     };
-
-    export class HandleData extends Reactive {
+    /**
+     * Reactive
+     */
+    export class HandleData {
         /**
-         *
+         * Reactive
          * @param {string} id
          * @param {string} name
          * @param {string} nodeId
@@ -37,27 +46,42 @@
          * @param {"IN"|"OUT"} dir
          */
         constructor(id, nodeId, name, type, dir) {
-            super();
             /**
              * @type {string}
              */
-            this.id = id;
+            this.id = $state(id);
             /**
              * @type {string}
              */
-            this.nodeId = nodeId;
+            this.nodeId = $state(nodeId);
             /**
              * @type {string}
              */
-            this.name = name;
+            this.name = $state(name);
             /**
              * @type {HandleType}
              */
-            this.type = type;
+            this.type = $state(type);
             /**
              * @type {"IN"|"OUT"}
              */
-            this.dir = dir;
+            this.dir = $state(dir);
+        }
+
+        /**
+         * @param {any} obj
+         */
+        static create(obj) {
+            if (!HandleData.validate(obj)) {
+                throw new Error("Object signature not matching HandleData");
+            }
+            return new HandleData(
+                obj.id,
+                obj.nodeId,
+                obj.name,
+                obj.type,
+                obj.dir,
+            );
         }
 
         /**
@@ -78,6 +102,19 @@
                 return false;
             }
             return true;
+        }
+
+        /**
+         * @returns {HandleObject}
+         */
+        toJSON() {
+            return {
+                id: this.id,
+                dir: this.dir,
+                name: this.name,
+                nodeId: this.nodeId,
+                type: { ...this.type },
+            };
         }
     }
 </script>

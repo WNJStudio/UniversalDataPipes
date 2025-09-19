@@ -3,7 +3,10 @@
     ////      TOOLTIP        ////
     /////////////////////////////
     /**
-     * @type {{[x:string]:import('svelte').Snippet<[{hidden:boolean}]>}}
+     * @typedef {import('svelte').Snippet<[{hidden:boolean}]>} TooltipSnippet
+     */
+    /**
+     * @type {Object<string,TooltipSnippet>}
      */
     let tooltipPortal = $state({});
     /**
@@ -12,7 +15,7 @@
     let showtip = $state();
     /**
      * @param {string} id
-     * @param {import('svelte').Snippet<[{hidden:boolean}]>} renderer
+     * @param {TooltipSnippet} renderer
      */
     const subscriber = (id, renderer) => {
         tooltipPortal[id] = renderer;
@@ -30,7 +33,7 @@
     };
 
     /**
-     * @returns {(id:string, renderer:import('svelte').Snippet<[{hidden:boolean}]>)=>void}
+     * @returns {(id:string, renderer:TooltipSnippet)=>void}
      */
     export const getTooltipSubscriber = () => subscriber;
     /**

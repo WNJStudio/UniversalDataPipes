@@ -1,13 +1,33 @@
 <script module>
     import { HandleData } from "./Handle.svelte";
     import { Position } from "./Position.svelte";
-    import { Reactive } from "./Reactive.svelte";
     import { Size } from "./Size.svelte";
+    /**
+     * @typedef {Object} NodeObject
+     * @prop {string} id
+     * @prop {import('./NodeCategory.svelte').Categories} category
+     * @prop {string} name
+     * @prop {import('./Position.svelte').PositionObject} position
+     * @prop {import('./Size.svelte').SizeObject} [size]
+     * @prop {import('./Size.svelte').SizeObject} [minSize]
+     * @prop {import('./Handle.svelte').HandleObject[]} inputs
+     * @prop {import('./Handle.svelte').HandleObject[]} outputs
+     */
 
-    export class NodeData extends Reactive {
+    /**
+     * @typedef {Object<string,NodeData>} NodeMap
+     */
+    /**
+     * @typedef {Object<string,NodeObject>} NodeOMap
+     */
+    /**
+     * Reactive
+     */
+    export class NodeData {
         /**
+         * Reactive
          * @param {string} id
-         * @param {string} category
+         * @param {import('./NodeCategory.svelte').Categories} category
          * @param {string} name
          * @param {Position} position
          * @param {Size} size
@@ -25,39 +45,67 @@
             inputs = [],
             outputs = [],
         ) {
-            super();
             /**
              * @type {string}
              */
-            this.id = id;
+            this.id = $state(id);
+            /**
+             * @type {import('./NodeCategory.svelte').Categories}
+             */
+            this.category = $state(category);
             /**
              * @type {string}
              */
-            this.category = category;
-            /**
-             * @type {string}
-             */
-            this.name = name;
+            this.name = $state(name);
             /**
              * @type {Position}
              */
-            this.position = position;
+            this.position = $state(position);
             /**
              * @type {Size}
              */
-            this.size = size;
+            this.size = $state(size);
             /**
              * @type {Size}
              */
-            this.minSize = minSize;
+            this.minSize = $state(minSize);
             /**
              * @type {HandleData[]}
              */
-            this.inputs = inputs;
+            this.inputs = $state(inputs);
             /**
              * @type {HandleData[]}
              */
-            this.outputs = outputs;
+            this.outputs = $state(outputs);
+        }
+
+        /**
+         * @param {any} obj
+         */
+        static create(obj) {
+            if (!NodeData.validate(obj)) {
+                throw new Error("Object signature not matching NodeData");
+            }
+            const position = Position.create(obj.position);
+            const size = obj.size ? Size.create(obj.size) : new Size();
+            const minSize = obj.minSize ? Size.create(obj.minSize) : new Size();
+            const inputs = obj.inputs
+                ? obj.inputs.map((i) => HandleData.create(i))
+                : [];
+            const outputs = obj.outputs
+                ? obj.outputs.map((o) => HandleData.create(o))
+                : [];
+
+            return new NodeData(
+                obj.id,
+                obj.category,
+                obj.name,
+                position,
+                size,
+                minSize,
+                inputs,
+                outputs,
+            );
         }
 
         /**
@@ -74,14 +122,8 @@
             if (typeof obj.position !== "object") {
                 return false;
             }
-            if (isNaN(obj.position.x) || isNaN(obj.position.y)) {
-                return false;
-            }
             if (obj.inputs) {
                 if (!(obj.inputs instanceof Array)) {
-                    return false;
-                }
-                if (obj.inputs.some((e) => !HandleData.validate(e))) {
                     return false;
                 }
             }
@@ -89,11 +131,24 @@
                 if (!(obj.outputs instanceof Array)) {
                     return false;
                 }
-                if (obj.outputs.some((n) => !HandleData.validate(n))) {
-                    return false;
-                }
             }
             return true;
+        }
+
+        /**
+         * @returns {NodeObject}
+         */
+        toJSON() {
+            return {
+                id: this.id,
+                category: this.category,
+                name: this.name,
+                size: this.size?.toJSON(),
+                minSize: this.minSize?.toJSON(),
+                inputs: this.inputs.map((i) => i.toJSON()),
+                outputs: this.outputs.map((o) => o.toJSON()),
+                position: this.position.toJSON(),
+            };
         }
     }
 </script>

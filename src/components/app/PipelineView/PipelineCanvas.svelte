@@ -1,10 +1,7 @@
 <script>
+    import { ElementRect } from "runed";
     import { getDataContextCleaner } from "../../../context/DataContext.svelte";
-    import {
-        getEdgeData,
-        getEdgeDataAdder,
-        getEdgeDataRemover,
-    } from "../../../context/EdgeContext.svelte";
+    import { pipelineContext } from "../../../context/PipelineContext.svelte";
     import {
         getCurrentView,
         getGridSize,
@@ -16,33 +13,23 @@
     } from "../../../context/SettingsContext.svelte";
     import { EdgeData } from "../../../model/Edge.svelte";
     import { HandleConnection } from "../../../model/HandleConnection.svelte";
-    import { NodeData } from "../../../model/Node.svelte";
     import { NodeDefs } from "../../../model/NodeCategory.svelte";
-    import { Movement, Transform } from "../../../model/Pipeline.svelte";
     import { Position } from "../../../model/Position.svelte";
     import { Rectangle } from "../../../model/Rectangle.svelte";
+    import { Transform } from "../../../model/Transform.svelte";
     import BlurOut from "../../ui/Transitions/BlurOut.svelte";
     import BaseNode from "./Nodes/BaseNode.svelte";
     import EdgePath from "./Nodes/EdgePath.svelte";
     import PendingEdgePath from "./Nodes/PendingEdgePath.svelte";
     import SelectionRect from "./SelectionRect.svelte";
     import PipelineToolbar from "./Toolbar/PipelineToolbar.svelte";
-    /**
-     * @typedef {Object} PipelineCanvasProps
-     * @prop {{[id:string]:NodeData}} nodes
-     * @prop {boolean} pipeChanged
-     */
 
-    /** @type {PipelineCanvasProps & import('svelte/elements').SvelteHTMLElements['div']} */
-    let { nodes = $bindable(), pipeChanged = $bindable(), ...props } = $props();
     const dataCleaner = getDataContextCleaner();
-    const edges = getEdgeData();
-    const edgeRemover = getEdgeDataRemover();
-    const edgeAdder = getEdgeDataAdder();
     const isSnapToGrid = getSnapToGrid();
     const sidebarToggler = getSidebarToggler();
     const currentView = getCurrentView();
     const gridSize = getGridSize();
+    const pipeline = pipelineContext.get();
 
     const ZOOM_SENSITIVITY = 0.001;
     const EDGE_DETECTION_SENSITIVITY = 10;
@@ -55,6 +42,7 @@
      * @type {HTMLElement}
      */
     let canvasRef = $state();
+    let canvasRect = new ElementRect(() => canvasRef);
     /**
      * @type {HTMLElement}
      */
@@ -63,23 +51,21 @@
      * @type {SVGElement}
      */
     let canvasEdgeport = $state();
-    /**
-     * @type {Transform}
-     */
-    let canvasTransform = $state(new Transform(0, 0, 1).reactive());
+
+    let canvasTransform = $state(new Transform(0, 0, 1));
     let panMode = $state(false);
     let isPanning = $state(false);
     let isDragging = $state(false);
     /**
-     * @type {Movement}
+     * @type {{origin:Position, canvas:Position}}
      */
     let panStart = $state();
     /**
-     * @type {Movement}
+     * @type {Position}
      */
     let dragStart = $state();
     /**
-     * @type {Movement}
+     * @type {Position}
      */
     let selectStart = $state();
     /**
@@ -103,7 +89,7 @@
      */
     let selectedEdgeIds = $state([]);
     /**
-     * @type {{[x:string]:Position}}
+     * @type {Object<string,Position>}
      */
     let draggingPositions = $state({});
     /**
@@ -118,15 +104,8 @@
     let zoomed = $state(false);
     let moved = $state(false);
 
-    $effect(() => {
-        if (pipeChanged) {
-            pipeChanged = false;
-            moved = true;
-        }
-    });
-
     const findHandle = (handleId) => {
-        return Object.values(nodes)
+        return Object.values(pipeline.nodes)
             .flatMap((n) => [...n.inputs, ...n.outputs])
             .find((v) => v.id === handleId);
     };
@@ -144,33 +123,26 @@
                     (n) => n.name === name,
                 );
                 if (template) {
-                    const canvasRect = canvasRef?.getBoundingClientRect();
                     if (canvasRect) {
-                        const newNode = template
-                            .create(
-                                (e.clientX - canvasRect.x) /
-                                    canvasTransform.scale -
-                                    canvasTransform.x,
-                                (e.clientY - canvasRect.y) /
-                                    canvasTransform.scale -
-                                    canvasTransform.y,
-                            )
-                            .reactive();
-                        nodes[newNode.id] = newNode;
+                        const newNode = template.create(
+                            (e.clientX - canvasRect.x) / canvasTransform.scale -
+                                canvasTransform.x,
+                            (e.clientY - canvasRect.y) / canvasTransform.scale -
+                                canvasTransform.y,
+                        );
+                        pipeline.nodes[newNode.id] = newNode;
                         isDragging = true;
                         draggingPositions = {};
                         selectedNodeIds = [newNode.id];
                         draggingPositions[newNode.id] = newNode.position;
                         dragCore = newNode.id;
 
-                        dragStart = new Movement(
+                        dragStart = new Position(
                             e.clientX -
                                 newNode.position.x * canvasTransform.scale,
                             e.clientY -
                                 newNode.position.y * canvasTransform.scale,
-                            0,
-                            0,
-                        ).reactive();
+                        );
                     }
                 }
             }
@@ -181,7 +153,6 @@
      * @param {number} delta
      */
     const changeZoom = (delta) => {
-        const canvasRect = canvasRef?.getBoundingClientRect();
         if (!canvasRect) {
             return;
         }
@@ -214,14 +185,14 @@
 
     const onDelete = () => {
         selectedNodeIds.forEach((id) => {
-            delete nodes[id];
+            delete pipeline.nodes[id];
         });
         selectedEdgeIds.forEach((id) => {
-            edgeRemover(id);
+            delete pipeline.edges[id];
             dataCleaner(id);
         });
         const toRemove = [];
-        Object.entries(edges()).forEach(([id, edge]) => {
+        Object.entries(pipeline.edges).forEach(([id, edge]) => {
             if (
                 selectedNodeIds.includes(edge.endNode) ||
                 selectedNodeIds.includes(edge.startNode)
@@ -230,7 +201,7 @@
             }
         });
         toRemove.forEach((id) => {
-            edgeRemover(id);
+            delete pipeline.edges[id];
             dataCleaner(id);
         });
         selectedNodeIds = [];
@@ -249,7 +220,6 @@
                 const handle = findHandle(targetHandleId);
                 if (handle) {
                     connectStart = new HandleConnection(handle);
-                    const canvasRect = canvasRef?.getBoundingClientRect();
                     if (canvasRect) {
                         const x =
                             (e.clientX -
@@ -262,13 +232,11 @@
                                 canvasTransform.y * canvasTransform.scale) /
                             canvasTransform.scale;
 
-                        pendingEdge = EdgeData.create(
+                        pendingEdge = EdgeData.createPending(
                             targetHandleId,
                             handle.nodeId,
-                            null,
-                            null,
                             new Position(x, y),
-                        ).reactive();
+                        );
                     }
                 }
                 return;
@@ -284,13 +252,13 @@
             ) {
                 const targetNodeEl = e.target.closest("[data-node-id]");
                 const targetNodeId = targetNodeEl.getAttribute("data-node-id");
-                const targetNode = nodes[targetNodeId];
+                const targetNode = pipeline.nodes[targetNodeId];
                 if (targetNode) {
                     isDragging = true;
                     draggingPositions = {};
                     if (selectedNodeIds.includes(targetNode.id)) {
                         selectedNodeIds.forEach((id) => {
-                            const n = nodes[id];
+                            const n = pipeline.nodes[id];
                             if (n) {
                                 draggingPositions[n.id] = n.position;
                             }
@@ -301,26 +269,23 @@
                     }
                     dragCore = targetNode.id;
 
-                    dragStart = new Movement(
+                    dragStart = new Position(
                         e.clientX -
                             targetNode.position.x * canvasTransform.scale,
                         e.clientY -
                             targetNode.position.y * canvasTransform.scale,
-                        0,
-                        0,
-                    ).reactive();
+                    );
                 }
                 return;
             }
         }
         if (e.button === 1 || panMode) {
             isPanning = true;
-            panStart = new Movement(
-                e.clientX,
-                e.clientY,
-                canvasTransform.x,
-                canvasTransform.y,
-            ).reactive();
+            panStart = {
+                origin: new Position(e.clientX, e.clientY),
+                canvas: new Position(canvasTransform.x, canvasTransform.y),
+            };
+
             return;
         }
         if (
@@ -333,7 +298,6 @@
 
         selectedNodeIds = [];
         selectedEdgeIds = [];
-        const canvasRect = canvasRef?.getBoundingClientRect();
         if (canvasRect) {
             const x =
                 (e.clientX -
@@ -345,8 +309,8 @@
                     canvasRect.top -
                     canvasTransform.y * canvasTransform.scale) /
                 canvasTransform.scale;
-            selectStart = new Movement(x, y, 0, 0).reactive();
-            selectionRect = new Rectangle(x, y, 0, 0).reactive();
+            selectStart = new Position(x, y);
+            selectionRect = new Rectangle(x, y, 0, 0);
         }
     };
     /**
@@ -372,7 +336,7 @@
                 selectedNodeIds.forEach((id) => {
                     const origin = draggingPositions[id];
                     if (origin) {
-                        const cn = nodes[id];
+                        const cn = pipeline.nodes[id];
                         if (cn) {
                             let newX = origin.x + deltaX;
                             let newY = origin.y + deltaY;
@@ -397,7 +361,7 @@
         }
         if (resizingNode) {
             const node = document.getElementById(resizingNode);
-            const cn = nodes[resizingNode];
+            const cn = pipeline.nodes[resizingNode];
             if (node && cn) {
                 const nodeRect = node.getBoundingClientRect();
                 const deltaX =
@@ -444,14 +408,14 @@
             return;
         }
         if (isPanning) {
-            const dx = (e.clientX - panStart.x) / canvasTransform.scale;
-            const dy = (e.clientY - panStart.y) / canvasTransform.scale;
-            canvasTransform.x = panStart.tx + dx;
-            canvasTransform.y = panStart.ty + dy;
+            const dx = (e.clientX - panStart.origin.x) / canvasTransform.scale;
+            const dy = (e.clientY - panStart.origin.y) / canvasTransform.scale;
+
+            canvasTransform.x = panStart.canvas.x + dx;
+            canvasTransform.y = panStart.canvas.y + dy;
             moved = true;
             return;
         }
-        const canvasRect = canvasRef?.getBoundingClientRect();
         if (connectStart && pendingEdge) {
             if (canvasRect) {
                 const x =
@@ -496,7 +460,7 @@
                 const selTop = selectionRect.y;
                 const selRight = selLeft + selectionRect.width;
                 const selBottom = selTop + selectionRect.height;
-                const selectedN = Object.values(nodes)
+                const selectedN = Object.values(pipeline.nodes)
                     .filter((node) => {
                         const nodeRect = document
                             .getElementById(node.id)
@@ -518,7 +482,7 @@
                         );
                     })
                     .map((n) => n.id);
-                const selectedE = Object.values(edges())
+                const selectedE = Object.values(pipeline.edges)
                     .filter((edge) => {
                         const edgePath = document.getElementById(edge.id);
                         if (!edgePath) return false;
@@ -572,12 +536,15 @@
                     const handle = findHandle(targetHandleId);
                     if (handle) {
                         if (
-                            connectStart.connect(handle, Object.values(edges()))
+                            connectStart.connect(
+                                handle,
+                                Object.values(pipeline.edges),
+                            )
                         ) {
                             pendingEdge.end = handle.id;
                             pendingEdge.endNode = handle.nodeId;
                             pendingEdge.tail = null;
-                            edgeAdder(pendingEdge.id, pendingEdge);
+                            pipeline.edges[pendingEdge.id] = pendingEdge;
                         }
                     }
                 }
@@ -658,7 +625,6 @@
     const onWheel = (e) => {
         if (e.ctrlKey) {
             e.preventDefault();
-            const canvasRect = canvasRef?.getBoundingClientRect();
             if (!canvasRect) {
                 return;
             }
@@ -728,7 +694,7 @@
                 data-edge-view="true"
                 class="absolute w-full h-full transform-[scale(1)] left-0 top-0 overflow-visible"
             >
-                {#each Object.entries(edges()) as [id, edge] (id)}
+                {#each Object.entries(pipeline.edges) as [id, edge] (id)}
                     <EdgePath
                         {edge}
                         isSelected={selectedEdgeIds.includes(id)}
@@ -747,7 +713,7 @@
                     />
                 {/if}
             </svg>
-            {#each Object.entries(nodes) as [id, node] (id)}
+            {#each Object.entries(pipeline.nodes) as [id, node] (id)}
                 <BaseNode
                     {node}
                     isSelected={selectedNodeIds.includes(id)}
@@ -756,7 +722,6 @@
                 />
             {/each}
         </div>
-        {@render props.children?.()}
     </div>
 </BlurOut>
 <PipelineToolbar

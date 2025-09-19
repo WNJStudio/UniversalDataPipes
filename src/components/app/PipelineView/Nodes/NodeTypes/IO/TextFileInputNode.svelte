@@ -4,15 +4,14 @@
         getDataContextCleaner,
         getDataContextSetter,
     } from "../../../../../../context/DataContext.svelte";
-    import { getEdgeData } from "../../../../../../context/EdgeContext.svelte";
-    import { EdgeData } from "../../../../../../model/Edge.svelte";
+    import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
     import Button from "../../../../../ui/Button/Button.svelte";
 
     const dataSetter = getDataContextSetter();
 
     const dataCleaner = getDataContextCleaner();
 
-    const edges = getEdgeData();
+    const { edges } = pipelineContext.get();
 
     /**
      * @type {import('../NodeProps.svelte').NodeProps}
@@ -26,11 +25,11 @@
     let fileContent = $state();
 
     /**
-     * @type {EdgeData[]}
+     * @type {import("../../../../../../model/Edge.svelte").EdgeData[]}
      */
     let myEdges = $derived.by(() => {
-        if (edges()) {
-            return Object.values(edges()).filter(
+        if (edges) {
+            return Object.values(edges).filter(
                 (edge) =>
                     outputs?.[0]?.id?.includes?.(edge.start) ||
                     outputs?.[0]?.id?.includes?.(edge.end),

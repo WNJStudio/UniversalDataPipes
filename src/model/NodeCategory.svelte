@@ -12,19 +12,38 @@
     import { HandleDefinition } from "./HandleDefinition.svelte";
     import { DefaultNodeDef, NodeDefinition } from "./NodeDefinition.svelte";
     import JsonParserNode from "../components/app/PipelineView/Nodes/NodeTypes/Text/JSONParserNode.svelte";
+    /**
+     * @typedef {"IO"|"TEXT"|"OBJ"} Categories
+     */
 
+    /**
+     * Reactive
+     */
     export class NodeCategory {
         /**
-         * @param {string} name
+         * Reactive
+         * @param {Categories} name
          * @param {string} label
          * @param {import('svelte').Component<import('@lucide/svelte').IconProps>} icon
          * @param {NodeDefinition[]} nodes
          */
         constructor(name, label, icon, nodes = []) {
-            this.name = name;
-            this.label = label;
-            this.icon = icon;
-            this.nodes = nodes;
+            /**
+             * @type {Categories}
+             */
+            this.name = $state(name);
+            /**
+             * @type {string}
+             */
+            this.label = $state(label);
+            /**
+             * @type {import('svelte').Component<import('@lucide/svelte').IconProps>}
+             */
+            this.icon = $state(icon);
+            /**
+             * @type {NodeDefinition[]}
+             */
+            this.nodes = $state(nodes);
         }
         /**
          * @param {string} name
@@ -33,7 +52,7 @@
          * @param {import('svelte').Snippet<[{inputs:HandleData[], outputs:HandleData[]}]>} render
          * @param {import('svelte').Component<import('@lucide/svelte').IconProps>} icon
          */
-        addNode(name, inputs, outputs, render, icon) {
+        createDefinition(name, inputs, outputs, render, icon) {
             this.nodes.push(
                 new NodeDefinition(
                     this.name,
@@ -45,19 +64,23 @@
                 ),
             );
         }
+
+        /**
+         * @param {NodeDefinition} def
+         */
+        addDefinition(def) {
+            this.nodes.push(def);
+        }
     }
     const IO = new NodeCategory("IO", "Input/Output", FolderInput);
     const TEXT = new NodeCategory("TEXT", "Text Processing", Combine);
     const OBJ = new NodeCategory("OBJ", "Object Processing", Funnel);
 
-    /**
-     * @type {{[x:string]:NodeCategory}}
-     */
-    export const NodeDefs = { IO, TEXT, OBJ };
+    export const NodeDefs = $state({ IO, TEXT, OBJ });
 
     /**
      *
-     * @param {string} category
+     * @param {Categories} category
      * @param {string} name
      * @returns {NodeDefinition}
      */
@@ -68,21 +91,21 @@
         );
     };
 
-    IO.addNode(
+    IO.createDefinition(
         "Text File Input",
         [],
         [new HandleDefinition("Text Content", HandleTypes.string, "OUT")],
         tfin,
         FileText,
     );
-    IO.addNode(
+    IO.createDefinition(
         "Object Preview",
         [new HandleDefinition("Input objects", HandleTypes.object, "IN")],
         [],
         ojout,
         Braces,
     );
-    TEXT.addNode(
+    TEXT.createDefinition(
         "JSON Parser",
         [new HandleDefinition("Input text", HandleTypes.string, "IN")],
         [new HandleDefinition("Output objects", HandleTypes.object, "OUT")],

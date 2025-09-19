@@ -1,9 +1,12 @@
 <script module>
     import { v4 } from "uuid";
     import { HandleData } from "./Handle.svelte";
-
+    /**
+     * Reactive
+     */
     export class HandleDefinition {
         /**
+         * Reactive
          * @param {string} name
          * @param {import('./Handle.svelte').HandleType} type
          * @param {"IN"|"OUT"} dir
@@ -12,15 +15,15 @@
             /**
              * @type {import('./Handle.svelte').HandleType}
              */
-            this.type = type;
+            this.type = $state(type);
             /**
              * @type {"IN"|"OUT"}
              */
-            this.dir = dir;
+            this.dir = $state(dir);
             /**
              * @type {string}
              */
-            this.name = name;
+            this.name = $state(name);
         }
 
         /**

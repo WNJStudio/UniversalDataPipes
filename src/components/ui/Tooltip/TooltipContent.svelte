@@ -1,14 +1,9 @@
 <script>
-    /** @type {{[x:string]:"top"|"bottom"|"left"|"right"}}*/
-    const oppositeSide = {
-        top: "bottom",
-        bottom: "top",
-        left: "right",
-        right: "left",
-    };
+    import { getOpposite } from "../Sides.svelte";
+
     /**
      * @typedef {Object} TooltipContentProps
-     * @prop {"top"|"bottom"|"left"|"right"} [preferredSide]
+     * @prop {import('../Sides.svelte').Sides} [preferredSide]
      * @prop {number} [sideOffset]
      * @prop {number} [duration]
      * @prop {boolean} isOpen
@@ -39,7 +34,7 @@
             const triggerRect = triggerRef.getBoundingClientRect();
             const contentRect = contentRef.getBoundingClientRect();
             /**
-             * @param {"top"|"bottom"|"left"|"right"} side
+             * @param {import('../Sides.svelte').Sides} side
              */
             const calculatePosition = (side) => {
                 let tempTop = 0,
@@ -112,7 +107,7 @@
             };
 
             if (collisions[preferredSide]) {
-                finalSide = oppositeSide[preferredSide];
+                finalSide = getOpposite(preferredSide);
                 pos = calculatePosition(finalSide);
             }
             if (pos.left < padding) pos.left = padding;

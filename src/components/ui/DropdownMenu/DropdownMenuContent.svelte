@@ -1,12 +1,6 @@
 <script>
     import { ElementRect, onClickOutside } from "runed";
-    /** @type {{[x:string]:"top"|"bottom"|"left"|"right"}}*/
-    const oppositeSide = {
-        top: "bottom",
-        bottom: "top",
-        left: "right",
-        right: "left",
-    };
+
     /**
      * @typedef {Object} DropdownMenuContentProps
      * @prop {boolean} isOpen
@@ -19,6 +13,7 @@
 
     import FlyOut from "../Transitions/FlyOut.svelte";
     import { getMenuDisplayer } from "../../../portals/MenuPortal.svelte";
+    import { getOpposite } from "../Sides.svelte";
 
     /** @type {DropdownMenuContentProps & import('svelte/elements').SvelteHTMLElements['div']} */
     let {
@@ -51,13 +46,13 @@
         let left = 0;
         let top = 0;
         /**
-         * @type {"top"|"bottom"|"left"|"right"}
+         * @type {import('../Sides.svelte').Sides}
          */
         let finalSide = "bottom";
         if (x !== undefined && y !== undefined && contentRef) {
             const triggerRect = { top: y, left: x, bottom: y, right: x };
             /**
-             * @param {"top"|"bottom"|"left"|"right"} side
+             * @param {import('../Sides.svelte').Sides} side
              */
             const calculatePosition = (side) => {
                 let tempTop = 0,
@@ -102,7 +97,7 @@
             };
 
             if (collisions["bottom"]) {
-                finalSide = oppositeSide["bottom"];
+                finalSide = getOpposite("bottom");
                 pos = calculatePosition(finalSide);
             }
             if (pos.left < padding) pos.left = padding;
@@ -120,7 +115,7 @@
             const triggerRect = triggerRef.getBoundingClientRect();
             const contentRect = contentRef.getBoundingClientRect();
             /**
-             * @param {"top"|"bottom"|"left"|"right"} side
+             * @param {import('../Sides.svelte').Sides} side
              */
             const calculatePosition = (side) => {
                 let tempTop = 0,
@@ -165,7 +160,7 @@
             };
 
             if (collisions["bottom"]) {
-                finalSide = oppositeSide["bottom"];
+                finalSide = getOpposite("bottom");
                 pos = calculatePosition(finalSide);
             }
             if (pos.left < padding) pos.left = padding;

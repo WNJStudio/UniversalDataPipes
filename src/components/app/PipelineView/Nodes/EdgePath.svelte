@@ -1,7 +1,6 @@
 <script>
     import { circInOut } from "svelte/easing";
     import { EdgeData } from "../../../../model/Edge.svelte";
-    import { Transform } from "../../../../model/Pipeline.svelte";
 
     /**
      * @typedef {Object} EdgePathProps
@@ -10,7 +9,7 @@
      * @prop {boolean} moved
      * @prop {boolean} isSelected
      * @prop {(e:MouseEvent, id:string)=>any} onEdgeClick
-     * @prop {Transform} canvasTransform
+     * @prop {import('../../../../model/Transform.svelte').Transform} canvasTransform
      * @prop {HTMLElement} canvasView
      */
     /** @type {EdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */
