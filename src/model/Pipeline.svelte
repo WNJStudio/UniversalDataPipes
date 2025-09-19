@@ -141,10 +141,11 @@
          * @param {Pipeline} pipe
          */
         shipOfTheseus(pipe) {
-            this.name = pipe.name;
-            this.edges = pipe.edges;
-            this.nodes = pipe.nodes;
-            this.setSavedAt(pipe.savedAt);
+            const temp = Pipeline.create(pipe.toJSON());
+            this.name = temp.name;
+            this.edges = temp.edges;
+            this.nodes = temp.nodes;
+            this.setSavedAt(temp.savedAt);
         }
 
         /**

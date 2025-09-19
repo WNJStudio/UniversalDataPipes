@@ -1,5 +1,6 @@
 <script>
     import { ElementRect } from "runed";
+    import { dataContext } from "../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../context/PipelineContext.svelte";
     import {
         getCurrentView,
@@ -12,21 +13,18 @@
     } from "../../../context/SettingsContext.svelte";
     import { EdgeData } from "../../../model/Edge.svelte";
     import { HandleConnection } from "../../../model/HandleConnection.svelte";
-    import {
-        getDefinition,
-        NodeDefs,
-    } from "../../../model/NodeCategory.svelte";
+    import { getDefinition } from "../../../model/NodeCategory.svelte";
     import { Position } from "../../../model/Position.svelte";
     import { Rectangle } from "../../../model/Rectangle.svelte";
     import { Transform } from "../../../model/Transform.svelte";
+    import { clamp, roundMult } from "../../../utils/MathUtils";
     import BlurOut from "../../ui/Transitions/BlurOut.svelte";
     import BaseNode from "./Nodes/BaseNode.svelte";
     import EdgePath from "./Nodes/EdgePath.svelte";
     import PendingEdgePath from "./Nodes/PendingEdgePath.svelte";
     import SelectionRect from "./SelectionRect.svelte";
     import PipelineToolbar from "./Toolbar/PipelineToolbar.svelte";
-    import { dataContext } from "../../../context/DataContext.svelte";
-    import { clamp, roundMult } from "../../../utils/MathUtils";
+    import { nodeRectContext } from "../../../context/NodeRectContext.svelte";
 
     const isSnapToGrid = getSnapToGrid();
     const sidebarToggler = getSidebarToggler();
@@ -34,6 +32,11 @@
     const gridSize = getGridSize();
     const pipeline = pipelineContext.get();
     const data = dataContext.get();
+    /**
+     * @type {Object<string,()=>DOMRect>}
+     */
+    const nodeRects = $state({});
+    nodeRectContext.set(nodeRects);
 
     const ZOOM_SENSITIVITY = 0.001;
     const EDGE_DETECTION_SENSITIVITY = 10;
@@ -270,7 +273,6 @@
                             targetNode.position.x,
                             targetNode.position.y,
                         );
-
                     dragStart = new Position(
                         e.clientX - dragX,
                         e.clientY - dragY,
@@ -324,6 +326,7 @@
                 let { x: deltaX, y: deltaY } = canvasTransform.canvasPosition(
                     delta.x,
                     delta.y,
+                    true,
                 );
                 deltaX = deltaX - corePos.x;
                 deltaY = deltaY - corePos.y;
@@ -348,10 +351,9 @@
             return;
         }
         if (resizingNode) {
-            const node = document.getElementById(resizingNode);
+            const nodeRect = nodeRects[resizingNode]?.();
             const cn = pipeline.nodes[resizingNode];
-            if (node && cn) {
-                const nodeRect = node.getBoundingClientRect();
+            if (nodeRect && cn) {
                 const { x: deltaX, y: deltaY } = canvasTransform.canvasPosition(
                     e.clientX - nodeRect.x - nodeRect.width,
                     e.clientY - nodeRect.y - nodeRect.height,
@@ -430,11 +432,8 @@
                 const selBottom = selTop + selectionRect.height;
                 const selectedN = Object.values(pipeline.nodes)
                     .filter((node) => {
-                        const nodeRect = document
-                            .getElementById(node.id)
-                            ?.getBoundingClientRect();
+                        const nodeRect = nodeRects[node.id]?.();
                         if (!nodeRect) return false;
-
                         const nodeLeft = node.position.x;
                         const nodeTop = node.position.y;
                         const nodeRight =

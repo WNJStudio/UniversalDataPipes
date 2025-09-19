@@ -111,9 +111,8 @@
             top = pos.top + window.scrollY;
             return { left, top, side: finalSide };
         }
-        if (triggerRef && contentRef) {
+        if (triggerRef && contentRect) {
             const triggerRect = triggerRef.getBoundingClientRect();
-            const contentRect = contentRef.getBoundingClientRect();
             /**
              * @param {import('../Sides.svelte').Sides} side
              */

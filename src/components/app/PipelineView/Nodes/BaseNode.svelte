@@ -1,5 +1,6 @@
 <script>
   import { cubicOut, elasticOut } from "svelte/easing";
+  import { nodeRectContext } from "../../../../context/NodeRectContext.svelte";
   import { NodeData } from "../../../../model/Node.svelte";
   import { getDefinition } from "../../../../model/NodeCategory.svelte";
   import Card from "../../../ui/Card/Card.svelte";
@@ -16,12 +17,15 @@
    */
   /** @type {BaseNodeProps & import('svelte/elements').SvelteHTMLElements['div']} */
   let { isSelected, isDragging, node, onClick, ...props } = $props();
+  const nodeRects = nodeRectContext.get();
   let definition = $derived(getDefinition(node.category, node.name));
 
   const Icon = $derived(definition ? definition.icon : undefined);
 
   let width = $derived(node.size?.width);
   let height = $derived(node.size?.height);
+
+  let ref = $state();
 
   /**
    * @param {HTMLElement} _el
@@ -54,11 +58,19 @@
       },
     };
   };
+
+  $effect(() => {
+    nodeRects[node.id] = () => ref?.getBoundingClientRect();
+    return () => {
+      delete nodeRects[node.id];
+    };
+  });
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <div
+  bind:this={ref}
   in:plop={{}}
   out:puff={{}}
   role="definition"

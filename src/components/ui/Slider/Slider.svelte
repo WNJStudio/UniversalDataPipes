@@ -1,4 +1,6 @@
 <script>
+    import { ElementRect } from "runed";
+
     /**
      * @typedef {Object} SliderProps
      * @prop {number} value
@@ -24,6 +26,7 @@
      * @type {HTMLElement}
      */
     let ref = $state();
+    let rect = new ElementRect(() => ref);
 
     /**
      * @param {number} v
@@ -36,7 +39,7 @@
      * @param {number} p
      */
     const getValueFromPosition = (p) => {
-        const { width } = ref?.getBoundingClientRect();
+        const { width } = rect;
         const percentage = Math.max(0, Math.min(1, p / width));
         const rawValue = min + percentage * (max - min);
         const steppedValue = Math.round(rawValue / step) * step;
@@ -48,7 +51,6 @@
      */
     const handleMouseDown = (e) => {
         if (disabled || !ref) return;
-        const rect = ref.getBoundingClientRect();
         const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
         const position = clientX - rect.left;
         const newValue = getValueFromPosition(position);
@@ -64,7 +66,6 @@
      */
     const handleMouseMove = (e) => {
         if (!isDragging || !ref) return;
-        const rect = ref.getBoundingClientRect();
         const position = e.clientX - rect.left;
         const newValue = getValueFromPosition(position);
         if (valueChanger) {
