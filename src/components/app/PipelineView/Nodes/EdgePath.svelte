@@ -1,6 +1,8 @@
 <script>
     import { circInOut } from "svelte/easing";
     import { EdgeData } from "../../../../model/Edge.svelte";
+    import { clamp } from "../../../../utils/MathUtils";
+    import { ElementRect } from "runed";
 
     /**
      * @typedef {Object} EdgePathProps
@@ -10,13 +12,13 @@
      * @prop {boolean} isSelected
      * @prop {(e:MouseEvent, id:string)=>any} onEdgeClick
      * @prop {import('../../../../model/Transform.svelte').Transform} canvasTransform
-     * @prop {HTMLElement} canvasView
+     * @prop {ElementRect} canvasViewRect
      */
     /** @type {EdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */
     let {
         edge,
         canvasTransform,
-        canvasView,
+        canvasViewRect,
         zoomed = $bindable(),
         moved = $bindable(),
         onEdgeClick,
@@ -33,21 +35,24 @@
             `[data-handle-id="${edge.end}"]`,
         );
         if (startHandle && endHandle) {
-            if (canvasView) {
+            if (canvasViewRect) {
                 const startRect = startHandle.getBoundingClientRect();
                 const endRect = endHandle.getBoundingClientRect();
-                const viewRect = canvasView.getBoundingClientRect();
                 let startX =
-                    (startRect.left + startRect.width / 2 - viewRect.left) /
+                    (startRect.left +
+                        startRect.width / 2 -
+                        canvasViewRect.left) /
                     canvasTransform.scale;
                 let startY =
-                    (startRect.top + startRect.height / 2 - viewRect.top) /
+                    (startRect.top +
+                        startRect.height / 2 -
+                        canvasViewRect.top) /
                     canvasTransform.scale;
                 let endX =
-                    (endRect.left + endRect.width / 2 - viewRect.left) /
+                    (endRect.left + endRect.width / 2 - canvasViewRect.left) /
                     canvasTransform.scale;
                 let endY =
-                    (endRect.top + endRect.height / 2 - viewRect.top) /
+                    (endRect.top + endRect.height / 2 - canvasViewRect.top) /
                     canvasTransform.scale;
                 if (startX > endX) {
                     [endX, startX] = [startX, endX];
@@ -79,13 +84,15 @@
             delay,
             duration,
             css: (t, u) => {
-                const dash = Math.min(
+                const dash = clamp(
+                    (circInOut(t) * totalLength) / 2,
+                    0,
                     totalLength,
-                    Math.max(0, (circInOut(t) * totalLength) / 2),
                 );
-                const dot = Math.min(
+                const dot = clamp(
+                    circInOut(u) * totalLength,
+                    0,
                     totalLength * 2,
-                    Math.max(0, circInOut(u) * totalLength),
                 );
                 return `stroke-dasharray: ${dash} ${dot};`;
             },
@@ -103,11 +110,13 @@
             delay,
             duration,
             css: (t, u) => {
-                const dash = Math.min(
+                const dash = clamp(
+                    (circInOut(t) * totalLength) / 2,
+                    0,
                     totalLength,
-                    Math.max(0, (circInOut(t) * totalLength) / 2),
                 );
-                const dotp = Math.min(dot, Math.max(0, circInOut(u) * dot));
+
+                const dotp = clamp(circInOut(u) * dot, 0, dot);
                 return `stroke-dasharray:  ${dash} ${dotp};`;
             },
         };

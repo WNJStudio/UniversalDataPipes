@@ -161,6 +161,15 @@
             this._savedAt = new Date(sa);
         }
 
+        /**
+         * @param {string} id
+         */
+        findHandle(id) {
+            return Object.values(this.nodes)
+                .flatMap((n) => [...n.inputs, ...n.outputs])
+                .find((v) => v.id === id);
+        }
+
         get saveLocalString() {
             return this._savedAt.toLocaleDateString();
         }

@@ -80,14 +80,15 @@
 
     /**
      *
-     * @param {Categories} category
+     * @param {string} category
      * @param {string} name
      * @returns {NodeDefinition}
      */
     export const getDefinition = (category, name) => {
         return (
-            NodeDefs[category]?.nodes?.find?.((n) => n.name === name) ||
-            DefaultNodeDef
+            NodeDefs[category]?.nodes?.find?.(
+                (/** @type {{ name: string; }} */ n) => n.name === name,
+            ) || DefaultNodeDef
         );
     };
 

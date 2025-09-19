@@ -1,28 +1,28 @@
 <script>
+    import { ElementRect } from "runed";
     import { EdgeData } from "../../../../model/Edge.svelte";
 
     /**
      * @typedef {Object} PendingEdgePathProps
      * @prop {EdgeData} pendingEdge
      * @prop {import('../../../../model/Transform.svelte').Transform} canvasTransform
-     * @prop {HTMLElement} canvasView
+     * @prop {ElementRect} canvasViewRect
      */
     /** @type {PendingEdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */
-    let { pendingEdge, canvasTransform, canvasView, ...props } = $props();
+    let { pendingEdge, canvasTransform, canvasViewRect, ...props } = $props();
 
     const path = $derived.by(() => {
         const startHandle = document.querySelector(
             `[data-handle-id="${pendingEdge.start}"]`,
         );
         if (startHandle) {
-            if (canvasView) {
+            if (canvasViewRect) {
                 const startRect = startHandle.getBoundingClientRect();
-                const viewRect = canvasView.getBoundingClientRect();
                 const startX =
-                    (startRect.left + startRect.width / 2 - viewRect.left) /
+                    (startRect.left + startRect.width / 2 - canvasViewRect.x) /
                     canvasTransform.scale;
                 const startY =
-                    (startRect.top + startRect.height / 2 - viewRect.top) /
+                    (startRect.top + startRect.height / 2 - canvasViewRect.y) /
                     canvasTransform.scale;
 
                 const { x: endX, y: endY } = pendingEdge.tail;

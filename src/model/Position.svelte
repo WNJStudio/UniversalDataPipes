@@ -43,6 +43,19 @@
         }
 
         /**
+         * Gets the difference x,y - pos or pos - x,y
+         * @param {number} x
+         * @param {number} y
+         * @param {boolean} [rev]
+         */
+        delta(x, y, rev = false) {
+            if (rev) {
+                return { x: this.x - x, y: this.y - x };
+            }
+            return { x: x - this.x, y: y - this.y };
+        }
+
+        /**
          * @returns {PositionObject}
          */
         toJSON() {

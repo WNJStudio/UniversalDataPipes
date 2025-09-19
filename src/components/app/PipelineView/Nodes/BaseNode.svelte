@@ -121,7 +121,7 @@
     class="absolute h-3 w-3 bottom-0 right-0 cursor-nwse-resize group"
   >
     <div
-      class="absolute bottom-0 right-0 w-3 h-3 rounded-tl-lg rounded-br-lg bg-primary/75 group-hover:brightness-150"
+      class="absolute bottom-0 right-0 w-3 h-3 rounded-tl-lg rounded-br-lg transition-colors bg-accent/25 group-hover:bg-primary/75 group-hover:brightness-150"
     ></div>
   </div>
 </div>

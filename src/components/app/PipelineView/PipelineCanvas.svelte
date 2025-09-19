@@ -12,7 +12,10 @@
     } from "../../../context/SettingsContext.svelte";
     import { EdgeData } from "../../../model/Edge.svelte";
     import { HandleConnection } from "../../../model/HandleConnection.svelte";
-    import { NodeDefs } from "../../../model/NodeCategory.svelte";
+    import {
+        getDefinition,
+        NodeDefs,
+    } from "../../../model/NodeCategory.svelte";
     import { Position } from "../../../model/Position.svelte";
     import { Rectangle } from "../../../model/Rectangle.svelte";
     import { Transform } from "../../../model/Transform.svelte";
@@ -23,6 +26,7 @@
     import SelectionRect from "./SelectionRect.svelte";
     import PipelineToolbar from "./Toolbar/PipelineToolbar.svelte";
     import { dataContext } from "../../../context/DataContext.svelte";
+    import { clamp, roundMult } from "../../../utils/MathUtils";
 
     const isSnapToGrid = getSnapToGrid();
     const sidebarToggler = getSidebarToggler();
@@ -47,6 +51,7 @@
      * @type {HTMLElement}
      */
     let canvasViewport = $state();
+    let canvasViewRect = new ElementRect(() => canvasViewport);
     /**
      * @type {SVGElement}
      */
@@ -103,12 +108,8 @@
 
     let zoomed = $state(false);
     let moved = $state(false);
+    let justDragged = $state(false);
 
-    const findHandle = (handleId) => {
-        return Object.values(pipeline.nodes)
-            .flatMap((n) => [...n.inputs, ...n.outputs])
-            .find((v) => v.id === handleId);
-    };
     /**
      * @param {MouseEvent} e
      */
@@ -119,17 +120,14 @@
                     "data-template-category",
                 );
                 const name = e.currentTarget.getAttribute("data-template-name");
-                const template = NodeDefs[category]?.nodes?.find?.(
-                    (n) => n.name === name,
-                );
+                const template = getDefinition(category, name);
                 if (template) {
                     if (canvasRect) {
-                        const newNode = template.create(
-                            (e.clientX - canvasRect.x) / canvasTransform.scale -
-                                canvasTransform.x,
-                            (e.clientY - canvasRect.y) / canvasTransform.scale -
-                                canvasTransform.y,
+                        const { x, y } = canvasTransform.canvasPosition(
+                            e.clientX - canvasRect.x,
+                            e.clientY - canvasRect.y,
                         );
+                        const newNode = template.create(x, y);
                         pipeline.nodes[newNode.id] = newNode;
                         isDragging = true;
                         draggingPositions = {};
@@ -137,11 +135,15 @@
                         draggingPositions[newNode.id] = newNode.position;
                         dragCore = newNode.id;
 
+                        const { x: dragX, y: dragY } =
+                            canvasTransform.screenPosition(
+                                newNode.position.x,
+                                newNode.position.y,
+                            );
+
                         dragStart = new Position(
-                            e.clientX -
-                                newNode.position.x * canvasTransform.scale,
-                            e.clientY -
-                                newNode.position.y * canvasTransform.scale,
+                            e.clientX - dragX,
+                            e.clientY - dragY,
                         );
                     }
                 }
@@ -156,19 +158,19 @@
         if (!canvasRect) {
             return;
         }
-        const newScale = Math.max(
+        const newScale = clamp(
+            canvasTransform.scale + delta,
             MIN_ZOOM,
-            Math.min(MAX_ZOOM, canvasTransform.scale + delta),
+            MAX_ZOOM,
         );
 
         const centerX = canvasRect.width / 2;
         const centerY = canvasRect.height / 2;
 
-        const mousePointX = centerX / canvasTransform.scale - canvasTransform.x;
-        const mousePointY = centerY / canvasTransform.scale - canvasTransform.y;
+        const { x, y } = canvasTransform.canvasPosition(centerX, centerY);
 
-        const newX = centerX / newScale - mousePointX;
-        const newY = centerY / newScale - mousePointY;
+        const newX = centerX / newScale - x;
+        const newY = centerY / newScale - y;
         canvasTransform.x = newX;
         canvasTransform.y = newY;
         canvasTransform.scale = newScale;
@@ -217,20 +219,14 @@
                 const targetHandle = e.target.closest("[data-handle-id]");
                 const targetHandleId =
                     targetHandle.getAttribute("data-handle-id");
-                const handle = findHandle(targetHandleId);
+                const handle = pipeline.findHandle(targetHandleId);
                 if (handle) {
                     connectStart = new HandleConnection(handle);
                     if (canvasRect) {
-                        const x =
-                            (e.clientX -
-                                canvasRect.left -
-                                canvasTransform.x * canvasTransform.scale) /
-                            canvasTransform.scale;
-                        const y =
-                            (e.clientY -
-                                canvasRect.top -
-                                canvasTransform.y * canvasTransform.scale) /
-                            canvasTransform.scale;
+                        const { x, y } = canvasTransform.canvasPosition(
+                            e.clientX - canvasRect.x,
+                            e.clientY - canvasRect.y,
+                        );
 
                         pendingEdge = EdgeData.createPending(
                             targetHandleId,
@@ -269,11 +265,15 @@
                     }
                     dragCore = targetNode.id;
 
+                    const { x: dragX, y: dragY } =
+                        canvasTransform.screenPosition(
+                            targetNode.position.x,
+                            targetNode.position.y,
+                        );
+
                     dragStart = new Position(
-                        e.clientX -
-                            targetNode.position.x * canvasTransform.scale,
-                        e.clientY -
-                            targetNode.position.y * canvasTransform.scale,
+                        e.clientX - dragX,
+                        e.clientY - dragY,
                     );
                 }
                 return;
@@ -299,16 +299,10 @@
         selectedNodeIds = [];
         selectedEdgeIds = [];
         if (canvasRect) {
-            const x =
-                (e.clientX -
-                    canvasRect.left -
-                    canvasTransform.x * canvasTransform.scale) /
-                canvasTransform.scale;
-            const y =
-                (e.clientY -
-                    canvasRect.top -
-                    canvasTransform.y * canvasTransform.scale) /
-                canvasTransform.scale;
+            const { x, y } = canvasTransform.canvasPosition(
+                e.clientX - canvasRect.x,
+                e.clientY - canvasRect.y,
+            );
             selectStart = new Position(x, y);
             selectionRect = new Rectangle(x, y, 0, 0);
         }
@@ -326,13 +320,13 @@
         ) {
             const corePos = draggingPositions[dragCore];
             if (corePos) {
-                const deltaX =
-                    (e.clientX - dragStart.x) / canvasTransform.scale -
-                    corePos.x;
-                const deltaY =
-                    (e.clientY - dragStart.y) / canvasTransform.scale -
-                    corePos.y;
-
+                const delta = dragStart.delta(e.clientX, e.clientY);
+                let { x: deltaX, y: deltaY } = canvasTransform.canvasPosition(
+                    delta.x,
+                    delta.y,
+                );
+                deltaX = deltaX - corePos.x;
+                deltaY = deltaY - corePos.y;
                 selectedNodeIds.forEach((id) => {
                     const origin = draggingPositions[id];
                     if (origin) {
@@ -341,14 +335,8 @@
                             let newX = origin.x + deltaX;
                             let newY = origin.y + deltaY;
                             if (isSnapToGrid()) {
-                                newX =
-                                    Math.round(
-                                        (origin.x + deltaX) / gridSize(),
-                                    ) * gridSize();
-                                newY =
-                                    Math.round(
-                                        (origin.y + deltaY) / gridSize(),
-                                    ) * gridSize();
+                                newX = roundMult(newX, gridSize());
+                                newY = roundMult(newY, gridSize());
                             }
                             cn.position.x = newX;
                             cn.position.y = newY;
@@ -364,12 +352,12 @@
             const cn = pipeline.nodes[resizingNode];
             if (node && cn) {
                 const nodeRect = node.getBoundingClientRect();
-                const deltaX =
-                    (e.clientX - nodeRect.x - nodeRect.width) /
-                    canvasTransform.scale;
-                const deltaY =
-                    (e.clientY - nodeRect.y - nodeRect.height) /
-                    canvasTransform.scale;
+                const { x: deltaX, y: deltaY } = canvasTransform.canvasPosition(
+                    e.clientX - nodeRect.x - nodeRect.width,
+                    e.clientY - nodeRect.y - nodeRect.height,
+                    true,
+                );
+
                 if (!cn.minSize.height) {
                     cn.minSize.height = nodeRect.height;
                     cn.size.height = nodeRect.height;
@@ -385,18 +373,10 @@
                     ? cn.size.height + deltaY
                     : nodeRect.height + deltaY;
                 if (isSnapToGrid()) {
-                    const minWGrid =
-                        Math.round(cn.minSize.width / gridSize()) * gridSize();
-                    const minHGrid =
-                        Math.round(cn.minSize.height / gridSize()) * gridSize();
-                    newW = Math.max(
-                        minWGrid,
-                        Math.round(newW / gridSize()) * gridSize(),
-                    );
-                    newH = Math.max(
-                        minHGrid,
-                        Math.round(newH / gridSize()) * gridSize(),
-                    );
+                    const minWGrid = roundMult(cn.minSize.width, gridSize());
+                    const minHGrid = roundMult(cn.minSize.height, gridSize());
+                    newW = Math.max(minWGrid, roundMult(newW, gridSize()));
+                    newH = Math.max(minHGrid, roundMult(newH, gridSize()));
                 } else {
                     newW = Math.max(cn.minSize.width, newW);
                     newH = Math.max(cn.minSize.height, newH);
@@ -408,8 +388,12 @@
             return;
         }
         if (isPanning) {
-            const dx = (e.clientX - panStart.origin.x) / canvasTransform.scale;
-            const dy = (e.clientY - panStart.origin.y) / canvasTransform.scale;
+            const delta = panStart.origin.delta(e.clientX, e.clientY);
+            const { x: dx, y: dy } = canvasTransform.canvasPosition(
+                delta.x,
+                delta.y,
+                true,
+            );
 
             canvasTransform.x = panStart.canvas.x + dx;
             canvasTransform.y = panStart.canvas.y + dy;
@@ -418,44 +402,28 @@
         }
         if (connectStart && pendingEdge) {
             if (canvasRect) {
-                const x =
-                    (e.clientX -
-                        canvasRect.left -
-                        canvasTransform.x * canvasTransform.scale) /
-                    canvasTransform.scale;
-                const y =
-                    (e.clientY -
-                        canvasRect.top -
-                        canvasTransform.y * canvasTransform.scale) /
-                    canvasTransform.scale;
-                pendingEdge.tail = new Position(x, y);
+                const { x, y } = canvasTransform.canvasPosition(
+                    e.clientX - canvasRect.x,
+                    e.clientY - canvasRect.y,
+                );
+                pendingEdge.tail.x = x;
+                pendingEdge.tail.y = y;
             }
         } else if (selectStart) {
             if (canvasRect) {
-                const currentX =
-                    (e.clientX -
-                        canvasRect.left -
-                        canvasTransform.x * canvasTransform.scale) /
-                    canvasTransform.scale;
-                const currentY =
-                    (e.clientY -
-                        canvasRect.top -
-                        canvasTransform.y * canvasTransform.scale) /
-                    canvasTransform.scale;
+                const { x: currentX, y: currentY } =
+                    canvasTransform.canvasPosition(
+                        e.clientX - canvasRect.x,
+                        e.clientY - canvasRect.y,
+                    );
                 const startX = selectStart.x;
                 const startY = selectStart.y;
 
-                const rectX = Math.min(startX, currentX);
-                const rectY = Math.min(startY, currentY);
-                const rectWidth = Math.abs(startX - currentX);
-                const rectHeight = Math.abs(startY - currentY);
+                selectionRect.x = Math.min(startX, currentX);
+                selectionRect.y = Math.min(startY, currentY);
+                selectionRect.width = Math.abs(startX - currentX);
+                selectionRect.height = Math.abs(startY - currentY);
 
-                selectionRect = new Rectangle(
-                    rectX,
-                    rectY,
-                    rectWidth,
-                    rectHeight,
-                );
                 const selLeft = selectionRect.x;
                 const selTop = selectionRect.y;
                 const selRight = selLeft + selectionRect.width;
@@ -524,6 +492,9 @@
         dragStart = undefined;
         dragCore = undefined;
         draggingPositions = undefined;
+        if (isDragging) {
+            justDragged = true;
+        }
         isDragging = false;
         isPanning = false;
         resizingNode = undefined;
@@ -533,7 +504,7 @@
                 if (targetHandle) {
                     const targetHandleId =
                         targetHandle.getAttribute("data-handle-id");
-                    const handle = findHandle(targetHandleId);
+                    const handle = pipeline.findHandle(targetHandleId);
                     if (handle) {
                         if (
                             connectStart.connect(
@@ -563,7 +534,8 @@
      */
     const onNodeClick = (e, id) => {
         e.stopPropagation();
-        if (panMode) {
+        if (panMode || justDragged) {
+            justDragged = false;
             return;
         }
         if (e.shiftKey) {
@@ -634,16 +606,12 @@
                 Math.min(MAX_ZOOM, canvasTransform.scale + delta),
             );
 
-            const mouseX = e.clientX - canvasRect.left;
-            const mouseY = e.clientY - canvasRect.top;
+            const mouseX = e.clientX - canvasRect.x;
+            const mouseY = e.clientY - canvasRect.y;
+            const { x, y } = canvasTransform.canvasPosition(mouseX, mouseY);
 
-            const mousePointX =
-                mouseX / canvasTransform.scale - canvasTransform.x;
-            const mousePointY =
-                mouseY / canvasTransform.scale - canvasTransform.y;
-
-            const newX = mouseX / newScale - mousePointX;
-            const newY = mouseY / newScale - mousePointY;
+            const newX = mouseX / newScale - x;
+            const newY = mouseY / newScale - y;
             canvasTransform.x = newX;
             canvasTransform.y = newY;
             canvasTransform.scale = newScale;
@@ -700,7 +668,7 @@
                         isSelected={selectedEdgeIds.includes(id)}
                         {onEdgeClick}
                         {canvasTransform}
-                        canvasView={canvasViewport}
+                        {canvasViewRect}
                         bind:zoomed
                         bind:moved
                     />
@@ -708,7 +676,7 @@
                 {#if pendingEdge}
                     <PendingEdgePath
                         {pendingEdge}
-                        canvasView={canvasViewport}
+                        {canvasViewRect}
                         {canvasTransform}
                     />
                 {/if}
