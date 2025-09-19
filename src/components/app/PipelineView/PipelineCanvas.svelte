@@ -1,6 +1,5 @@
 <script>
     import { ElementRect } from "runed";
-    import { getDataContextCleaner } from "../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../context/PipelineContext.svelte";
     import {
         getCurrentView,
@@ -23,13 +22,14 @@
     import PendingEdgePath from "./Nodes/PendingEdgePath.svelte";
     import SelectionRect from "./SelectionRect.svelte";
     import PipelineToolbar from "./Toolbar/PipelineToolbar.svelte";
+    import { dataContext } from "../../../context/DataContext.svelte";
 
-    const dataCleaner = getDataContextCleaner();
     const isSnapToGrid = getSnapToGrid();
     const sidebarToggler = getSidebarToggler();
     const currentView = getCurrentView();
     const gridSize = getGridSize();
     const pipeline = pipelineContext.get();
+    const data = dataContext.get();
 
     const ZOOM_SENSITIVITY = 0.001;
     const EDGE_DETECTION_SENSITIVITY = 10;
@@ -189,7 +189,7 @@
         });
         selectedEdgeIds.forEach((id) => {
             delete pipeline.edges[id];
-            dataCleaner(id);
+            delete data[id];
         });
         const toRemove = [];
         Object.entries(pipeline.edges).forEach(([id, edge]) => {
@@ -202,7 +202,7 @@
         });
         toRemove.forEach((id) => {
             delete pipeline.edges[id];
-            dataCleaner(id);
+            delete data[id];
         });
         selectedNodeIds = [];
         selectedEdgeIds = [];

@@ -135,7 +135,7 @@
         }
     };
     /**
-     * @param {import("../model/Pipeline.svelte").Transform} t transform
+     * @param {import("../model/Transform.svelte").Transform} t transform
      */
     export const getPatternOffset = (t) => {
         let offsetRadial = (settings.current.gridSize * t.scale) / 2;

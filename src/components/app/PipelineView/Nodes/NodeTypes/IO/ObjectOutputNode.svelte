@@ -1,13 +1,13 @@
 <script>
     import { RefreshCw } from "@lucide/svelte";
-    import { getDataContext } from "../../../../../../context/DataContext.svelte";
+    import { dataContext } from "../../../../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
     import Button from "../../../../../ui/Button/Button.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();
 
-    const pipelineData = getDataContext();
+    const pipelineData = dataContext.get();
 
     const { edges } = pipelineContext.get();
 
@@ -29,8 +29,8 @@
      * @type {any[]}
      */
     let data = $derived.by(() => {
-        if (myEdges.length > 0 && pipelineData()) {
-            return myEdges.flatMap((edge) => pipelineData()[edge.id] || []);
+        if (myEdges.length > 0 && pipelineData) {
+            return myEdges.flatMap((edge) => pipelineData[edge.id] || []);
         }
         return [];
     });

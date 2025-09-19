@@ -1,18 +1,11 @@
 <script>
-    import {
-        getDataContext,
-        getDataContextCleaner,
-        getDataContextSetter,
-    } from "../../../../../../context/DataContext.svelte";
+    import { dataContext } from "../../../../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();
 
-    const dataSetter = getDataContextSetter();
-    const dataCleaner = getDataContextCleaner();
-
-    const pipelineData = getDataContext();
+    const pipelineData = dataContext.get();
 
     const { edges } = pipelineContext.get();
 
@@ -50,10 +43,8 @@
      * @type {string[]}
      */
     let inputData = $derived.by(() => {
-        if (myInputEdges.length > 0 && pipelineData()) {
-            return myInputEdges.flatMap(
-                (edge) => pipelineData()[edge.id] || [],
-            );
+        if (myInputEdges.length > 0 && pipelineData) {
+            return myInputEdges.flatMap((edge) => pipelineData[edge.id] || []);
         }
         return [];
     });
@@ -64,7 +55,7 @@
                 try {
                     const outputData = inputData.map((i) => JSON.parse(i));
                     myOutputEdges.forEach((edge) => {
-                        dataSetter(edge.id, outputData);
+                        pipelineData[edge.id] = outputData;
                     });
                     errorMessage = "";
                 } catch (error) {
@@ -74,7 +65,7 @@
         } else {
             if (myOutputEdges.length > 0) {
                 myOutputEdges.forEach((edge) => {
-                    dataCleaner(edge.id);
+                    delete pipelineData[edge.id];
                 });
             }
         }

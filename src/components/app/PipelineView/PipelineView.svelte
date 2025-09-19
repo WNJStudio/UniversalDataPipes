@@ -1,4 +1,5 @@
 <script>
+    import { dataContext } from "../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../context/PipelineContext.svelte";
     import { Pipeline, pipelineStorage } from "../../../model/Pipeline.svelte";
     import ImportExportDialog from "./ImportExportDialog.svelte";
@@ -8,6 +9,8 @@
 
     let pipeline = $state(new Pipeline());
     pipelineContext.set(pipeline);
+    let data = $state({});
+    dataContext.set(data);
 
     /**
      * @type {{open: boolean, name: string}}

@@ -1,28 +1,12 @@
 <script module>
+    import { Context } from "runed";
+
     /////////////////////////////
     ////   PIPILINE DATA     ////
     /////////////////////////////
-    /**
-     * @type {Object<string, any>}
-     */
-    let pipelineData = $state({});
-    /**
-     * @param {string} edgeId
-     * @param {any} data
-     */
-    const dataSetter = (edgeId, data) => {
-        pipelineData[edgeId] = data;
-    };
-    /**
-     * @param {string} edgeId
-     */
-    const dataCleaner = (edgeId) => {
-        delete pipelineData[edgeId];
-    };
 
-    export const getDataContextSetter = () => dataSetter;
-
-    export const getDataContextCleaner = () => dataCleaner;
-
-    export const getDataContext = () => () => pipelineData;
+    /**
+     * @type {Context<Object<string,any>>}
+     */
+    export const dataContext = new Context("dataContext");
 </script>

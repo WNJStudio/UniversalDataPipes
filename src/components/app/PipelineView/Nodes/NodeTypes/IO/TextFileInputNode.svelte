@@ -1,15 +1,10 @@
 <script>
     import { CloudUpload, FileIcon } from "@lucide/svelte";
-    import {
-        getDataContextCleaner,
-        getDataContextSetter,
-    } from "../../../../../../context/DataContext.svelte";
+    import { dataContext } from "../../../../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
     import Button from "../../../../../ui/Button/Button.svelte";
 
-    const dataSetter = getDataContextSetter();
-
-    const dataCleaner = getDataContextCleaner();
+    const pipelineData = dataContext.get();
 
     const { edges } = pipelineContext.get();
 
@@ -44,7 +39,7 @@
         fileContent = null;
         if (myEdges.length > 0) {
             myEdges.forEach((edge) => {
-                dataCleaner(edge.id);
+                delete pipelineData[edge.id];
             });
         }
     };
@@ -52,7 +47,7 @@
     $effect(() => {
         if (myEdges.length > 0 && fileContent) {
             myEdges.forEach((edge) => {
-                dataSetter(edge.id, fileContent);
+                pipelineData[edge.id] = fileContent;
             });
         }
     });
