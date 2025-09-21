@@ -34,7 +34,7 @@ jobs:
       id-token: write
     
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/pages'
 
     steps:
       - name: Deploy to GitHub Pages
