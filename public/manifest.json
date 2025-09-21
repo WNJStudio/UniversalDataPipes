@@ -1,0 +1,12 @@
+{
+    "name": "Universal Data Pipes",
+    "short_name": "UDP",
+    "start_url": "/",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/flow.svg",
+            "type": "image/svg+xml"
+        }
+    ]
+}
