@@ -3,73 +3,82 @@
     import { EdgeData } from "../../../../model/Edge.svelte";
     import { clamp } from "../../../../utils/MathUtils";
     import { ElementRect } from "runed";
+    import { getZoomed } from "../CanvasActions/Zoom.svelte";
+    import { getPanned } from "../CanvasActions/Pan.svelte";
+    import {
+        getEdgeSelectionChecker,
+        onEdgeClick,
+    } from "../CanvasActions/Select.svelte";
+    import { getDragged } from "../CanvasActions/Drag.svelte";
+    import { getLoaded } from "../../../../model/Pipeline.svelte";
 
     /**
      * @typedef {Object} EdgePathProps
      * @prop {EdgeData} edge
-     * @prop {boolean} zoomed
-     * @prop {boolean} moved
-     * @prop {boolean} isSelected
-     * @prop {(e:MouseEvent, id:string)=>any} onEdgeClick
      * @prop {import('../../../../model/Transform.svelte').Transform} canvasTransform
      * @prop {ElementRect} canvasViewRect
      */
     /** @type {EdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */
-    let {
-        edge,
-        canvasTransform,
-        canvasViewRect,
-        zoomed = $bindable(),
-        moved = $bindable(),
-        onEdgeClick,
-        isSelected = false,
-        ...props
-    } = $props();
+    let { edge, canvasTransform, canvasViewRect, ...props } = $props();
+    const lastZoomed = getZoomed();
+    const lastPanned = getPanned();
+    const lastDragged = getDragged();
+    const lastLoaded = getLoaded();
+    const checker = getEdgeSelectionChecker();
+    const isSelected = () => checker([edge.id]);
+    let lastUpdated = $state(Date.now());
+    /**
+     * @type {DOMRect}
+     */
+    let startRect = $state();
+    /**
+     * @type {DOMRect}
+     */
+    let endRect = $state();
+
     const path = $derived.by(() => {
-        if (moved || zoomed) {
-        }
-        const startHandle = document.querySelector(
-            `[data-handle-id="${edge.start}"]`,
-        );
-        const endHandle = document.querySelector(
-            `[data-handle-id="${edge.end}"]`,
-        );
-        if (startHandle && endHandle) {
-            if (canvasViewRect) {
-                const startRect = startHandle.getBoundingClientRect();
-                const endRect = endHandle.getBoundingClientRect();
-                let startX =
-                    (startRect.left +
-                        startRect.width / 2 -
-                        canvasViewRect.left) /
-                    canvasTransform.scale;
-                let startY =
-                    (startRect.top +
-                        startRect.height / 2 -
-                        canvasViewRect.top) /
-                    canvasTransform.scale;
-                let endX =
-                    (endRect.left + endRect.width / 2 - canvasViewRect.left) /
-                    canvasTransform.scale;
-                let endY =
-                    (endRect.top + endRect.height / 2 - canvasViewRect.top) /
-                    canvasTransform.scale;
-                if (startX > endX) {
-                    [endX, startX] = [startX, endX];
-                    [endY, startY] = [startY, endY];
-                }
-                // TODO: should thing of more extreme cases and make the curve look better
-                return `M ${startX},${startY} C ${startX + 50},${startY} ${endX - 50},${endY} ${endX},${endY}`;
+        if (canvasViewRect && startRect && endRect) {
+            let startX =
+                (startRect.left + startRect.width / 2 - canvasViewRect.left) /
+                canvasTransform.scale;
+            let startY =
+                (startRect.top + startRect.height / 2 - canvasViewRect.top) /
+                canvasTransform.scale;
+            let endX =
+                (endRect.left + endRect.width / 2 - canvasViewRect.left) /
+                canvasTransform.scale;
+            let endY =
+                (endRect.top + endRect.height / 2 - canvasViewRect.top) /
+                canvasTransform.scale;
+            if (startX > endX) {
+                [endX, startX] = [startX, endX];
+                [endY, startY] = [startY, endY];
             }
+            // TODO: should thing of more extreme cases and make the curve look better
+            return `M ${startX},${startY} C ${startX + 50},${startY} ${endX - 50},${endY} ${endX},${endY}`;
         }
         return "";
     });
     $effect(() => {
-        if (moved) {
-            moved = false;
-        }
-        if (zoomed) {
-            zoomed = false;
+        if (
+            !startRect ||
+            !endRect ||
+            lastPanned() > lastUpdated ||
+            lastZoomed() > lastUpdated ||
+            lastDragged() > lastUpdated ||
+            lastLoaded() > lastUpdated
+        ) {
+            const startHandle = document.querySelector(
+                `[data-handle-id="${edge.start}"]`,
+            );
+            const endHandle = document.querySelector(
+                `[data-handle-id="${edge.end}"]`,
+            );
+            if (startHandle && endHandle) {
+                startRect = startHandle.getBoundingClientRect();
+                endRect = endHandle.getBoundingClientRect();
+            }
+            lastUpdated = Date.now();
         }
     });
 
@@ -135,6 +144,6 @@
     class={[
         "stroke-primary stroke-[12] [stroke-linecap:round] fill-none",
         "transition-[filter] duration-500 drop-shadow-2xl drop-shadow-black/50 brightness-100 hover:brightness-150",
-        isSelected ? "brightness-125" : "",
+        isSelected() ? "brightness-125" : "",
     ]}
 />

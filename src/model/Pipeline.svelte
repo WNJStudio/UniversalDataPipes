@@ -19,6 +19,11 @@
      */
     export const pipelineStorage = new PersistedState("UDP_PIPELINES", {});
     /**
+     * @type {number}
+     */
+    let lastLoaded = $state(Date.now());
+    export const getLoaded = () => () => lastLoaded;
+    /**
      * Reactive
      */
     export class Pipeline {
@@ -146,6 +151,7 @@
             this.edges = temp.edges;
             this.nodes = temp.nodes;
             this.setSavedAt(temp.savedAt);
+            lastLoaded = Date.now();
         }
 
         /**

@@ -1,23 +1,26 @@
 <script>
   import { cubicOut, elasticOut } from "svelte/easing";
-  import { nodeRectContext } from "../../../../context/NodeRectContext.svelte";
   import { NodeData } from "../../../../model/Node.svelte";
   import { getDefinition } from "../../../../model/NodeCategory.svelte";
   import Card from "../../../ui/Card/Card.svelte";
   import CardHeader from "../../../ui/Card/CardHeader.svelte";
   import CardTitle from "../../../ui/Card/CardTitle.svelte";
   import Handle from "./Handle.svelte";
+  import {
+    getNodeSelectionChecker,
+    onNodeClick,
+  } from "../CanvasActions/Select.svelte";
+  import { getIsDragging } from "../CanvasActions/Drag.svelte";
 
   /**
    * @typedef {Object} BaseNodeProps
-   * @prop {boolean} isSelected
-   * @prop {boolean} isDragging
-   * @prop {(e:MouseEvent, id:string)=>any} onClick
    * @prop {NodeData} node
    */
   /** @type {BaseNodeProps & import('svelte/elements').SvelteHTMLElements['div']} */
-  let { isSelected, isDragging, node, onClick, ...props } = $props();
-  const nodeRects = nodeRectContext.get();
+  let { node, ...props } = $props();
+  const checker = getNodeSelectionChecker();
+  const isSelected = () => checker([node.id]);
+  const isDragging = getIsDragging();
   let definition = $derived(getDefinition(node.category, node.name));
 
   const Icon = $derived(definition ? definition.icon : undefined);
@@ -58,13 +61,6 @@
       },
     };
   };
-
-  $effect(() => {
-    nodeRects[node.id] = () => ref?.getBoundingClientRect();
-    return () => {
-      delete nodeRects[node.id];
-    };
-  });
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -76,15 +72,19 @@
   role="definition"
   data-node-id={node.id}
   id={node.id}
-  onclick={(e) => onClick(e, node.id)}
-  class={["absolute min-w-3xs", isDragging ? "opacity-50" : "", props.class]}
+  onclick={(e) => onNodeClick(e, node.id)}
+  class={[
+    "absolute min-w-3xs",
+    isDragging() && isSelected() ? "opacity-50" : "",
+    props.class,
+  ]}
   style={`left: ${node.position?.x}px; top: ${node.position?.y}px;${width ? ` width: ${width}px;` : ""}${height ? ` height: ${height}px;` : ""}`}
 >
   <Card
     class={[
       "shadow-2xl! shadow-black/50 transition-[filter] flex h-full",
       "[&:not(:has([data-handle-id]:hover)):not(:has([data-resize-handle]:hover))]:hover:brightness-150",
-      isSelected
+      isSelected()
         ? "ring-2 ring-primary ring-offset-2 ring-offset-background brightness-125"
         : "",
     ]}

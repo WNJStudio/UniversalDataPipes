@@ -10,28 +10,17 @@
   import ZoomOutButton from "./ZoomOutButton.svelte";
   /**
    * @typedef {Object} PipelineToolbarProps
-   * @prop {boolean} panMode
    * @prop {boolean} hidden
-   * @prop {boolean} hasSelection
    * @prop {number} currentZoom
    * @prop {()=>any} onZoomIn
    * @prop {()=>any} onZoomOut
-   * @prop {()=>any} onDelete
    * @prop {(e)=>any} onToolbarDrag
    */
 
   /** @type {PipelineToolbarProps & import('svelte/elements').SvelteHTMLElements['div']} */
-  let {
-    panMode = $bindable(),
-    hidden,
-    hasSelection,
-    currentZoom,
-    onZoomIn,
-    onZoomOut,
-    onDelete,
-    onToolbarDrag,
-    ...props
-  } = $props();
+  let { hidden, currentZoom, onZoomIn, onZoomOut, onToolbarDrag, ...props } =
+    $props();
+
   /** @type {string} */
   let activeCategory = $state("");
   let pattern = $state("");
@@ -58,12 +47,12 @@
           <CategorySelection bind:pattern bind:activeCategory />
         </div>
         <div class="flex items-center gap-1 px-2">
-          <CursorToggle bind:panMode />
+          <CursorToggle />
           <ZoomInButton {onZoomIn} />
           <ZoomIndicator {currentZoom} />
           <ZoomOutButton {onZoomOut} />
         </div>
-        <DeleteSection {onDelete} {hasSelection} />
+        <DeleteSection />
       </div>
     </div>
   </Card>
