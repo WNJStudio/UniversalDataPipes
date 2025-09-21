@@ -1,6 +1,7 @@
 <script>
     import { HandleData } from "../../../../model/Handle.svelte";
     import Tooltip from "../../../ui/Tooltip/Tooltip.svelte";
+    import { getIsPanning } from "../CanvasActions/Pan.svelte";
     /**
      * @typedef {Object} HandleProps
      * @prop {HandleData} handle
@@ -8,6 +9,8 @@
 
     /** @type {HandleProps & import('svelte/elements').SvelteHTMLElements['div']} */
     let { handle, ...props } = $props();
+
+    const isPanning = getIsPanning();
 </script>
 
 <Tooltip
@@ -28,7 +31,8 @@
             data-handle-type={handle.type.type}
             data-handle-dir={handle.dir}
             class={[
-                "relative h-3.5 w-3.5 rounded-full border-2 border-background cursor-pointer",
+                "relative h-3.5 w-3.5 rounded-full border-2 border-background",
+                isPanning() ? "" : "cursor-pointer",
                 handle.dir === "IN" ? "-left-3" : "-right-1.5",
                 handle.type.color,
                 props.class,

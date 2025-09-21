@@ -3,6 +3,7 @@
   import {
     getCurrentView,
     getSidebarStatus,
+    getSidebarToggler,
     PIPEVIEW,
   } from "../../../../context/SettingsContext.svelte";
   import { Pipeline, pipelineStorage } from "../../../../model/Pipeline.svelte";
@@ -31,6 +32,7 @@
   const portalShow = getMenuDisplayer();
   const currentView = getCurrentView();
   const sidebarStatus = getSidebarStatus();
+  const sidebarToggler = getSidebarToggler();
   const pipeline = pipelineContext.get();
 
   let hidden = $derived(!sidebarStatus() || currentView() !== PIPEVIEW);
@@ -115,6 +117,15 @@
   const onLoad = (pipe) => {
     pipeline.shipOfTheseus(pipe);
   };
+
+  /**
+   * @param {KeyboardEvent} e
+   */
+  const onkeydown = (e) => {
+    if (e.ctrlKey && e.key?.toLowerCase() === "b") {
+      sidebarToggler();
+    }
+  };
 </script>
 
 <FlyOut
@@ -158,3 +169,5 @@
   {handleDelete}
 />
 <PipelineMenu {handleExportSingle} {openDeleteDialog} />
+
+<svelte:window {onkeydown} />

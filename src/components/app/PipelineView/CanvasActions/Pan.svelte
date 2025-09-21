@@ -18,6 +18,7 @@
     export const getIsPanning = () => () => panMode || !!panOrigin;
 
     /**
+     * Attach order -- FIRST
      * @param {import('../../../../model/Transform.svelte').Transform} transform
      */
     export const attachPanAction = (transform) => {
@@ -80,7 +81,7 @@
             }
         };
         /**
-         * @param {HTMLElement} el
+         * @param {Window} el
          */
         const panAttachment = (el) => {
             el.addEventListener("mousedown", startPanning);

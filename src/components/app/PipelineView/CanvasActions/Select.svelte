@@ -104,6 +104,7 @@
     };
 
     /**
+     * Attach order -- LAST
      * @param {ElementRect} rect
      * @param {import('../../../../model/Transform.svelte').Transform} transform
      * @param {Pipeline} pipeline
@@ -123,7 +124,7 @@
                     return;
                 }
                 if (
-                    e.target !== e.currentTarget &&
+                    !e.target.closest("[data-canvas]") &&
                     !e.target.closest("[data-canvas-view]") &&
                     !e.target.closest("[data-edge-view]")
                 ) {
@@ -224,7 +225,7 @@
             }
         };
         /**
-         * @param {HTMLElement} el
+         * @param {Window} el
          */
         const selectAttachment = (el) => {
             el.addEventListener("mousedown", startSelecting);

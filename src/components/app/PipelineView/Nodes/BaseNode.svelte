@@ -11,6 +11,12 @@
     onNodeClick,
   } from "../CanvasActions/Select.svelte";
   import { getIsDragging } from "../CanvasActions/Drag.svelte";
+  import { getIsPanning } from "../CanvasActions/Pan.svelte";
+  import {
+    getGridSize,
+    getSnapToGrid,
+  } from "../../../../context/SettingsContext.svelte";
+  import { roundMult } from "../../../../utils/MathUtils";
 
   /**
    * @typedef {Object} BaseNodeProps
@@ -21,11 +27,15 @@
   const checker = getNodeSelectionChecker();
   const isSelected = () => checker([node.id]);
   const isDragging = getIsDragging();
+  const isPanning = getIsPanning();
+  const gridSize = getGridSize();
+  const isSnapToGrid = getSnapToGrid();
   let definition = $derived(getDefinition(node.category, node.name));
 
   const Icon = $derived(definition ? definition.icon : undefined);
 
   let width = $derived(node.size?.width);
+  let minWidth = $derived(node.minSize?.width);
   let height = $derived(node.size?.height);
 
   let ref = $state();
@@ -74,16 +84,22 @@
   id={node.id}
   onclick={(e) => onNodeClick(e, node.id)}
   class={[
-    "absolute min-w-3xs",
+    "absolute",
     isDragging() && isSelected() ? "opacity-50" : "",
     props.class,
   ]}
-  style={`left: ${node.position?.x}px; top: ${node.position?.y}px;${width ? ` width: ${width}px;` : ""}${height ? ` height: ${height}px;` : ""}`}
+  style={`left: ${node.position?.x}px;
+          top: ${node.position?.y}px;
+          ${width ? ` width: ${width}px;` : ""}
+          ${height ? ` height: ${height}px;` : ""}
+          min-width: ${minWidth ? (isSnapToGrid() ? roundMult(minWidth, gridSize()) : minWidth) : "200"}px;`}
 >
   <Card
     class={[
       "shadow-2xl! shadow-black/50 transition-[filter] flex h-full",
-      "[&:not(:has([data-handle-id]:hover)):not(:has([data-resize-handle]:hover))]:hover:brightness-150",
+      isPanning()
+        ? ""
+        : "[&:not(:has([data-handle-id]:hover)):not(:has([data-resize-handle]:hover))]:hover:brightness-150",
       isSelected()
         ? "ring-2 ring-primary ring-offset-2 ring-offset-background brightness-125"
         : "",
@@ -130,10 +146,18 @@
   </Card>
   <div
     data-resize-handle="true"
-    class="absolute h-3 w-3 bottom-0 right-0 cursor-nwse-resize group"
+    class={[
+      "absolute h-3 w-3 bottom-0 right-0 group",
+      isPanning() ? "" : "cursor-nwse-resize",
+    ]}
   >
     <div
-      class="absolute bottom-0 right-0 w-3 h-3 rounded-tl-lg rounded-br-lg transition-colors bg-accent/25 group-hover:bg-primary/75 group-hover:brightness-150"
+      class={[
+        "absolute bottom-0 right-0 w-3 h-3 rounded-tl-lg rounded-br-lg transition-colors bg-accent/25",
+        isPanning()
+          ? ""
+          : "group-hover:bg-primary/75 group-hover:brightness-150",
+      ]}
     ></div>
   </div>
 </div>

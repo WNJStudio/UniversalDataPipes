@@ -73,6 +73,7 @@
         };
 
     /**
+     * Attach order -- FOURTH
      * @param {import('../../../../model/Transform.svelte').Transform} transform
      * @param {Pipeline} pipeline
      * @param {(s:string[])=>boolean} checker
@@ -192,7 +193,7 @@
         };
 
         /**
-         * @param {HTMLElement} el
+         * @param {Window} el
          */
         const dragAttachment = (el) => {
             el.addEventListener("mousedown", startDragging);

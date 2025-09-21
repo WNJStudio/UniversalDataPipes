@@ -3,6 +3,7 @@
 
     /**
      * @param {()=>string[]} selectedNodes
+     * @param {()=>string[]} selectedEdges
      * @param {Pipeline} pipeline
      * @param {Object<string,any>} data
      * @param {(n:string[])=>boolean} checker
@@ -10,6 +11,7 @@
      */
     export const onDelete = (
         selectedNodes,
+        selectedEdges,
         pipeline,
         data,
         checker,
@@ -18,7 +20,7 @@
         selectedNodes().forEach((id) => {
             delete pipeline.nodes[id];
         });
-        selectedNodes().forEach((id) => {
+        selectedEdges().forEach((id) => {
             delete pipeline.edges[id];
             delete data[id];
         });
@@ -37,6 +39,7 @@
 
     /**
      * @param {()=>string[]} selectedNodes
+     * @param {()=>string[]} selectedEdges
      * @param {Pipeline} pipeline
      * @param {Object<string,any>} data
      * @param {(n:string[])=>boolean} checker
@@ -44,13 +47,13 @@
      */
     export const attachDeleteAction = (
         selectedNodes,
+        selectedEdges,
         pipeline,
         data,
         checker,
         cleaner,
     ) => {
         const onKeyDown = (e) => {
-            console.log("here");
             if (e.key === "Delete" || e.key === "Backspace") {
                 if (e.target instanceof HTMLElement) {
                     if (
@@ -60,7 +63,14 @@
                         return;
                     }
                 }
-                onDelete(selectedNodes, pipeline, data, checker, cleaner);
+                onDelete(
+                    selectedNodes,
+                    selectedEdges,
+                    pipeline,
+                    data,
+                    checker,
+                    cleaner,
+                );
             }
         };
 

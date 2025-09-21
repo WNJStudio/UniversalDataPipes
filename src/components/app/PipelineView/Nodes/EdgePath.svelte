@@ -11,6 +11,7 @@
     } from "../CanvasActions/Select.svelte";
     import { getDragged } from "../CanvasActions/Drag.svelte";
     import { getLoaded } from "../../../../model/Pipeline.svelte";
+    import { getResized } from "../CanvasActions/Resize.svelte";
 
     /**
      * @typedef {Object} EdgePathProps
@@ -24,6 +25,7 @@
     const lastPanned = getPanned();
     const lastDragged = getDragged();
     const lastLoaded = getLoaded();
+    const lastResized = getResized();
     const checker = getEdgeSelectionChecker();
     const isSelected = () => checker([edge.id]);
     let lastUpdated = $state(Date.now());
@@ -66,7 +68,8 @@
             lastPanned() > lastUpdated ||
             lastZoomed() > lastUpdated ||
             lastDragged() > lastUpdated ||
-            lastLoaded() > lastUpdated
+            lastLoaded() > lastUpdated ||
+            lastResized() > lastUpdated
         ) {
             const startHandle = document.querySelector(
                 `[data-handle-id="${edge.start}"]`,
