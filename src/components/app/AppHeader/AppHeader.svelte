@@ -5,14 +5,29 @@
     import {
         PIPEVIEW,
         DATAVIEW,
+        getSidebarToggler,
+        getSidebarStatus,
+        getCurrentView,
+        getViewChanger,
     } from "../../../context/SettingsContext.svelte";
     import Button from "../../ui/Button/Button.svelte";
     import { Settings } from "@lucide/svelte";
-    import SettingsDialog from "../SettingsDialog.svelte";
+    import SettingsDialog from "../Settings/SettingsDialog.svelte";
 
     /** @type {import('svelte/elements').SvelteHTMLElements['header']} */
     let { ...props } = $props();
     let settingsDialogOpen = $state(false);
+
+    const currentView = getCurrentView();
+    const viewChanger = getViewChanger();
+    let sidebarStatus = getSidebarStatus();
+    let toggleSidebar = getSidebarToggler();
+    const onOpenSettings = () => {
+        if (sidebarStatus()) {
+            toggleSidebar();
+        }
+        settingsDialogOpen = true;
+    };
 </script>
 
 <header
@@ -27,16 +42,14 @@
     </div>
     <div class="flex items-center gap-2">
         <TabList
+            currentValue={currentView()}
+            changer={viewChanger}
             tabs={[
                 { value: PIPEVIEW, label: "Pipeline" },
                 { value: DATAVIEW, label: "Data" },
             ]}
         />
-        <Button
-            variant="ghost"
-            size="icon"
-            onclick={() => (settingsDialogOpen = true)}
-        >
+        <Button variant="ghost" size="icon" onclick={onOpenSettings}>
             {#snippet tooltip()}
                 <span class="text-xs font-normal">Settings</span>
             {/snippet}
