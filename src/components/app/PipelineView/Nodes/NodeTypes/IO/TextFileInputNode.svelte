@@ -3,6 +3,7 @@
     import { dataContext } from "../../../../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
     import Button from "../../../../../ui/Button/Button.svelte";
+    import { t } from "../../../../../../i18n/i18n.svelte";
 
     const pipelineData = dataContext.get();
 
@@ -125,7 +126,9 @@
                 {Math.round(filesize / 1024)} KB
             </p>
         </div>
-        <Button size="sm" variant="ghost" onclick={clearData}>Clear</Button>
+        <Button size="sm" variant="ghost" onclick={clearData}
+            >{t("label.clear")}</Button
+        >
     </div>
 {:else}
     <input
@@ -147,9 +150,11 @@
         ]}
     >
         <CloudUpload class="h-8 w-8 text-muted-foreground mb-2" />
-        <p class="text-sm text-muted-foreground mb-2">Drop a file or</p>
+        <p class="text-sm text-muted-foreground mb-2">
+            {t("label.file.drop.or")}
+        </p>
         <Button onclick={handleSelectFile} variant="outline" size="sm"
-            >Select File</Button
+            >{t("label.file.select")}</Button
         >
     </div>
 {/if}

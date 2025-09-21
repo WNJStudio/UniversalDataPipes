@@ -17,6 +17,7 @@
     getSnapToGrid,
   } from "../../../../context/SettingsContext.svelte";
   import { roundMult } from "../../../../utils/MathUtils";
+  import { t } from "../../../../i18n/i18n.svelte";
 
   /**
    * @typedef {Object} BaseNodeProps
@@ -119,7 +120,7 @@
         <div class="flex items-center gap-2">
           <Icon class="h-4 w-4 text-primary" />
           <CardTitle class="text-sm font-medium">
-            {node.name}
+            {t(node.name)}
           </CardTitle>
         </div>
       </CardHeader>

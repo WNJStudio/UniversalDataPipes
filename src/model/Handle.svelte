@@ -1,6 +1,6 @@
 <script module>
     /**
-     * @typedef {{type:string,color:string}} HandleType
+     * @typedef {{type:string,color:string, label:import('../i18n/i18n.svelte').i18nlabel}} HandleType
      */
     /**
      * @typedef {Object} HandleObject
@@ -11,27 +11,43 @@
      * @prop {"IN"|"OUT"} dir
      */
 
+    /**
+     * @type {Object<string, HandleType>}
+     */
     export const HandleTypes = {
         object: {
             type: "object",
             color: "bg-yellow-500",
+            label: "label.handle.type.object",
         },
         number: {
             type: "number",
             color: "bg-green-500",
+            label: "label.handle.type.number",
         },
         string: {
             type: "string",
             color: "bg-blue-500",
+            label: "label.handle.type.string",
         },
         boolean: {
             type: "boolean",
             color: "bg-purple-500",
+            label: "label.handle.type.boolean",
         },
         any: {
             type: "any",
             color: "bg-gray-400",
+            label: "label.handle.type.any",
         },
+    };
+
+    /**
+     * @type {Object<string, import('../i18n/i18n.svelte').i18nlabel>}
+     */
+    export const HandleDirLabels = {
+        IN: "label.handle.dir.in",
+        OUT: "label.handle.dir.out",
     };
     /**
      * Reactive
@@ -40,7 +56,7 @@
         /**
          * Reactive
          * @param {string} id
-         * @param {string} name
+         * @param {import('../i18n/i18n.svelte').i18nlabel} name
          * @param {string} nodeId
          * @param {HandleType} type
          * @param {"IN"|"OUT"} dir
@@ -55,7 +71,7 @@
              */
             this.nodeId = $state(nodeId);
             /**
-             * @type {string}
+             * @type {import('../i18n/i18n.svelte').i18nlabel}
              */
             this.name = $state(name);
             /**

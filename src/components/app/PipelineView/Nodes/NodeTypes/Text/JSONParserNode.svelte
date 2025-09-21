@@ -1,6 +1,7 @@
 <script>
     import { dataContext } from "../../../../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
+    import { t } from "../../../../../../i18n/i18n.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();
@@ -80,14 +81,20 @@
             {errorMessage}
         </p>
     {:else if myInputEdges.length === 0}
-        <p class="text-sm text-center text-muted-foreground">Connect input</p>
+        <p class="text-sm text-center text-muted-foreground">
+            {t("label.node.jsonparser.connect.input")}
+        </p>
     {:else if myOutputEdges.length === 0}
-        <p class="text-sm text-center text-muted-foreground">Connect output</p>
+        <p class="text-sm text-center text-muted-foreground">
+            {t("label.node.jsonparser.connect.output")}
+        </p>
     {:else if inputData.length === 0}
-        <p class="text-sm text-center text-muted-foreground">No input data</p>
+        <p class="text-sm text-center text-muted-foreground">
+            {t("label.node.jsonparser.nodata")}
+        </p>
     {:else}
         <p class="text-sm text-center text-primary">
-            Data processed successfully
+            {t("label.node.jsonparser.success")}
         </p>
     {/if}
 </div>

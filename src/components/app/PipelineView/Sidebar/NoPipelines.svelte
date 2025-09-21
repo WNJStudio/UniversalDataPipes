@@ -6,6 +6,7 @@
         Pipeline,
         pipelineStorage,
     } from "../../../../model/Pipeline.svelte";
+    import { t } from "../../../../i18n/i18n.svelte";
 
     /**
      * @typedef {Object} NoPipelinesProps
@@ -22,9 +23,9 @@
     axis="y"
     class="text-center text-sm text-muted-foreground py-10"
 >
-    <p class="select-none">No saved pipelines found.</p>
+    <p class="select-none">{t("label.pipeline.notfound")}</p>
     {#if Object.keys(pipelineStorage.current).length > 0 && pattern !== ""}
-        <p class="mt-2">Try searching for something else.</p>
+        <p class="mt-2">{t("label.try.search")}</p>
     {/if}
     {#if Object.keys(pipelineStorage.current).length === 0}
         <Button
@@ -34,7 +35,7 @@
             onclick={() => onSave()}
         >
             <Plus class="mr-2 h-4 w-4" />
-            Save your first pipeline
+            {t("label.pipeline.save.first")}
         </Button>
     {/if}
 </SlideOut>

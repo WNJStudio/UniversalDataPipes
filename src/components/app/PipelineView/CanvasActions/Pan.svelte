@@ -70,6 +70,14 @@
          * @param {KeyboardEvent} e
          */
         const keyPressed = (e) => {
+            if (e.target instanceof HTMLElement) {
+                if (
+                    e.target.nodeName === "INPUT" ||
+                    e.target.nodeName === "TEXTAREA"
+                ) {
+                    return;
+                }
+            }
             if (e.key?.toLowerCase() === "p") {
                 e.stopPropagation();
                 e.stopImmediatePropagation();

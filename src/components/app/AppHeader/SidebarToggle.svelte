@@ -9,6 +9,7 @@
         getCurrentView,
         PIPEVIEW,
     } from "../../../context/SettingsContext.svelte";
+    import { t } from "../../../i18n/i18n.svelte";
     const sidebarToggler = getSidebarToggler();
     const sidebarStatus = getSidebarStatus();
     const currentView = getCurrentView();
@@ -27,8 +28,8 @@
         {#snippet tooltip()}
             <span class="text-xs font-normal"
                 >{sidebarStatus()
-                    ? "Collapse Sidebar (CTRL + B)"
-                    : "Expand Sidebar (CTRL + B)"}</span
+                    ? t("label.sidebar.collapse")
+                    : t("label.sidebar.expand")}</span
             >
         {/snippet}
         {#snippet toggleOn()}

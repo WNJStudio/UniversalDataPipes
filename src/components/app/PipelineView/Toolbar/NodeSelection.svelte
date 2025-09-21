@@ -1,11 +1,11 @@
 <script>
     import { Search } from "@lucide/svelte";
-    import Card from "../../../ui/Card/Card.svelte";
-    import FlyOut from "../../../ui/Transitions/FlyOut.svelte";
-    import Input from "../../../ui/Input/Input.svelte";
     import { fade } from "svelte/transition";
-    import Tooltip from "../../../ui/Tooltip/Tooltip.svelte";
     import { NodeDefs } from "../../../../model/NodeCategory.svelte";
+    import Card from "../../../ui/Card/Card.svelte";
+    import Input from "../../../ui/Input/Input.svelte";
+    import FlyOut from "../../../ui/Transitions/FlyOut.svelte";
+    import { t } from "../../../../i18n/i18n.svelte";
 
     /**
      * @typedef {Object} NodeSelectionProps
@@ -18,8 +18,9 @@
     let query = $derived(new RegExp(pattern, "i"));
 
     let filteredNodes = $derived(
-        NodeDefs[activeCategory]?.nodes?.filter?.((n) => query.test(n.name)) ||
-            [],
+        NodeDefs[activeCategory]?.nodes?.filter?.((n) =>
+            query.test(t(n.name)),
+        ) || [],
     );
 </script>
 
@@ -34,7 +35,7 @@
                 <Search class="h-4 w-4 text-muted-foreground" />
                 <Input
                     type="search"
-                    placeholder="Search nodes..."
+                    placeholder={t("label.toolbar.search.placeholder")}
                     class="h-8 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
                     value={pattern}
                     onValueChange={(v) => (pattern = v)}
@@ -51,7 +52,7 @@
                         <p
                             class="text-sm text-muted-foreground text-center w-full py-4"
                         >
-                            No nodes found.
+                            {t("label.toolbar.search.notfound")}
                         </p>
                     {/if}
                     {#each filteredNodes as node (node.name)}
@@ -65,7 +66,7 @@
                             >
                                 <node.icon class="h-6 w-6 mb-1 text-primary" />
                                 <p class="text-xs text-center">
-                                    {node.name}
+                                    {t(node.name)}
                                 </p>
                             </div>
                         </div>

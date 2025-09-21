@@ -1,5 +1,9 @@
 <script>
-    import { HandleData } from "../../../../model/Handle.svelte";
+    import { t } from "../../../../i18n/i18n.svelte";
+    import {
+        HandleData,
+        HandleDirLabels,
+    } from "../../../../model/Handle.svelte";
     import Tooltip from "../../../ui/Tooltip/Tooltip.svelte";
     import { getIsPanning } from "../CanvasActions/Pan.svelte";
     /**
@@ -19,8 +23,10 @@
     delay={500}
 >
     {#snippet content()}
-        <p>{handle.name}</p>
-        <p class="text-muted-foreground">{handle.dir}: {handle.type.type}</p>
+        <p>{t(handle.name)}</p>
+        <p class="text-muted-foreground">
+            {t(HandleDirLabels[handle.dir])}: {t(handle.type.label)}
+        </p>
     {/snippet}
     {#snippet trigger({ attach })}
         <div

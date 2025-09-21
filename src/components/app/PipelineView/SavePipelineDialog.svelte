@@ -1,4 +1,5 @@
 <script>
+    import { t } from "../../../i18n/i18n.svelte";
     import Button from "../../ui/Button/Button.svelte";
     import Dialog from "../../ui/Dialog/Dialog.svelte";
     import DialogDescription from "../../ui/Dialog/DialogDescription.svelte";
@@ -62,10 +63,14 @@
                 flyB={{ y: !overwriting ? "-100%" : "100%" }}
             >
                 {#snippet a()}
-                    <DialogTitle>Save Pipeline</DialogTitle>
+                    <DialogTitle
+                        >{t("label.dialog.save.title.save")}</DialogTitle
+                    >
                 {/snippet}
                 {#snippet b()}
-                    <DialogTitle>Overwrite Pipeline</DialogTitle>
+                    <DialogTitle
+                        >{t("label.dialog.save.title.overwrite")}</DialogTitle
+                    >
                 {/snippet}
             </FlySwap>
             <FlySwap
@@ -75,22 +80,24 @@
             >
                 {#snippet a()}
                     <DialogDescription>
-                        Enter a name for your pipeline. This will be saved in
-                        your browser's local storage.
+                        {t("label.dialog.save.description.save")}
                     </DialogDescription>
                 {/snippet}
                 {#snippet b()}
                     <DialogDescription>
-                        You are going to overwrite the pipeline named <span
-                            class="font-semibold">{inname}</span
-                        >. Proceed if you are sure.
+                        {t(
+                            "template.dialog.save.description.overwrite",
+                            inname,
+                        )}
                     </DialogDescription>
                 {/snippet}
             </FlySwap>
         </DialogHeader>
         <div class="grid gap-4 py-4">
             <div class="grid grid-cols-4 items-center gap-4">
-                <Label for="name" class="text-right">Name</Label>
+                <Label for="name" class="text-right"
+                    >{t("label.dialog.save.name")}</Label
+                >
                 <Input
                     id="name"
                     delay={150}
@@ -101,7 +108,9 @@
             </div>
         </div>
         <DialogFooter>
-            <Button variant="outline" onclick={handleCancel}>Cancel</Button>
+            <Button variant="outline" onclick={handleCancel}
+                >{t("label.dialog.cancel")}</Button
+            >
             <FlySwap
                 toggle={overwriting}
                 flyA={{ x: "100%" }}
@@ -111,7 +120,8 @@
                     <Button
                         type="submit"
                         onclick={handleOnSave}
-                        disabled={!inname?.trim()}>Save Pipeline</Button
+                        disabled={!inname?.trim()}
+                        >{t("label.dialog.save.title.save")}</Button
                     >
                 {/snippet}
                 {#snippet b()}
@@ -119,7 +129,8 @@
                         type="submit"
                         variant="destructive"
                         onclick={handleOnSave}
-                        disabled={!inname?.trim()}>Overwrite Pipeline</Button
+                        disabled={!inname?.trim()}
+                        >{t("label.dialog.save.title.overwrite")}</Button
                     >
                 {/snippet}
             </FlySwap>

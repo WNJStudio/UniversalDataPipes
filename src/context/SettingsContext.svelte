@@ -1,6 +1,7 @@
 <script module>
     import { PersistedState } from "runed";
     import { getTimeDiff } from "../utils/TimeUtils";
+    import { t } from "../i18n/i18n.svelte";
 
     export const PIPEVIEW = "pipeline";
     export const DATAVIEW = "data";
@@ -16,6 +17,7 @@
      * @prop {number} gridSize
      * @prop {DOTS|CROSSES|LINES} currentPattern
      * @prop {number} [lastSave]
+     * @prop {string} lang
      *
      */
 
@@ -28,6 +30,7 @@
         gridSize: 20,
         isSidebarOpen: true,
         isSnapToGrid: true,
+        lang: "system",
     });
 
     /**
@@ -59,8 +62,20 @@
     /**
      * @param {DOTS|CROSSES|LINES} pattern
      */
-    const changePatterm = (pattern) => {
+    const changePattern = (pattern) => {
         settings.current.currentPattern = pattern;
+        settings.current.lastSave = Date.now();
+    };
+
+    /**
+     * @param {string} lang
+     */
+    const changeLanguage = (lang) => {
+        settings.current.lang = lang;
+        document.documentElement.setAttribute(
+            "lang",
+            lang === "system" ? "en-US" : lang,
+        );
         settings.current.lastSave = Date.now();
     };
 
@@ -68,7 +83,8 @@
     export const getSidebarToggler = () => toggleSidebar;
     export const getSnapToggler = () => toggleSnapToGrid;
     export const getGridChanger = () => changeGridSize;
-    export const getPatternChanger = () => changePatterm;
+    export const getPatternChanger = () => changePattern;
+    export const getLanguageChanger = () => changeLanguage;
 
     export const getCurrentView = () => () => settings.current.currentView;
     export const getSidebarStatus = () => () => settings.current.isSidebarOpen;
@@ -80,14 +96,14 @@
         }
         const timediff = getTimeDiff(settings.current.lastSave, Date.now());
         if (timediff.trim() === "") {
-            return "Just saved.";
+            return t("label.justsaved");
         }
 
-        return `Last saved ${timediff} ago.`;
+        return t("template.lastsaved", timediff);
     };
     export const getCurrentPattern = () => () =>
         settings.current.currentPattern;
-
+    export const getLanguage = () => () => settings.current.lang;
     /**
      * @param {number} scale
      */

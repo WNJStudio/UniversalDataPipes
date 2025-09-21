@@ -1,4 +1,5 @@
 <script>
+    import { t } from "../../../../i18n/i18n.svelte";
     import { NodeDefs } from "../../../../model/NodeCategory.svelte";
     import Button from "../../../ui/Button/Button.svelte";
 
@@ -27,7 +28,7 @@
     >
         {#snippet tooltip()}
             <span class="text-xs font-normal">
-                {def.label}
+                {t(def.label)}
             </span>
         {/snippet}
         <def.icon class="h-5 w-5" />

@@ -17,7 +17,7 @@
      */
     const handleClick = (e) => {
         onClick?.(e);
-        portalShow();
+        portalShow(undefined);
     };
 </script>
 

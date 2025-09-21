@@ -55,7 +55,7 @@
                             Pipeline.create(pipe);
                         success += 1;
                     } catch (e) {
-                        console.log("Import failed: ", e);
+                        console.error("Import failed: ", e);
                         failure += 1;
                     }
                 });

@@ -28,7 +28,7 @@
          * Reactive
          * @param {string} id
          * @param {import('./NodeCategory.svelte').Categories} category
-         * @param {string} name
+         * @param {import('../i18n/i18n.svelte').i18nlabel} name
          * @param {Position} position
          * @param {Size} size
          * @param {Size} minSize
@@ -54,7 +54,7 @@
              */
             this.category = $state(category);
             /**
-             * @type {string}
+             * @type {import('../i18n/i18n.svelte').i18nlabel}
              */
             this.name = $state(name);
             /**

@@ -13,6 +13,7 @@
     import Button from "../../ui/Button/Button.svelte";
     import { Settings } from "@lucide/svelte";
     import SettingsDialog from "../Settings/SettingsDialog.svelte";
+    import { t } from "../../../i18n/i18n.svelte";
 
     /** @type {import('svelte/elements').SvelteHTMLElements['header']} */
     let { ...props } = $props();
@@ -45,13 +46,13 @@
             currentValue={currentView()}
             changer={viewChanger}
             tabs={[
-                { value: PIPEVIEW, label: "Pipeline" },
-                { value: DATAVIEW, label: "Data" },
+                { value: PIPEVIEW, label: t("label.pipeline") },
+                { value: DATAVIEW, label: t("label.data") },
             ]}
         />
         <Button variant="ghost" size="icon" onclick={onOpenSettings}>
             {#snippet tooltip()}
-                <span class="text-xs font-normal">Settings</span>
+                <span class="text-xs font-normal">{t("label.settings")}</span>
             {/snippet}
             <Settings class="h-5 w-5" />
         </Button>

@@ -18,6 +18,7 @@
   import SearchBar from "./SearchBar.svelte";
   import SidebarMenu from "./SidebarMenu.svelte";
   import { pipelineContext } from "../../../../context/PipelineContext.svelte";
+  import { t } from "../../../../i18n/i18n.svelte";
 
   /**
    * @typedef {Object} PipelineSidebarProps
@@ -139,9 +140,11 @@
 >
   <div class="p-4 border-b border-border/50 flex justify-between items-center">
     <div>
-      <h2 class="text-lg font-semibold select-none">Pipelines</h2>
+      <h2 class="text-lg font-semibold select-none">
+        {t("label.pipeline.plural")}
+      </h2>
       <p class="text-sm text-muted-foreground select-none">
-        Save and load your pipeline configurations.
+        {t("label.sidebar.description")}
       </p>
     </div>
     <SidebarMenu {onExportAll} {onImportAll} />
@@ -149,7 +152,7 @@
   <div class="p-4">
     <Button onclick={() => onSave()} class="w-full select-none">
       <Save class="mr-2 h-4 w-4" />
-      Save Current Pipeline
+      {t("label.sidebar.savecurrent")}
     </Button>
   </div>
   <SearchBar bind:pattern />

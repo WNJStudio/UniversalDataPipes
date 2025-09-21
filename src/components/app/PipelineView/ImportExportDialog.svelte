@@ -8,6 +8,7 @@
     import DialogTitle from "../../ui/Dialog/DialogTitle.svelte";
     import TextArea from "../../ui/Input/TextArea.svelte";
     import Label from "../../ui/Label/Label.svelte";
+    import { t } from "../../../i18n/i18n.svelte";
 
     /**
      * @typedef {Object} ImportExportDialogProps
@@ -59,9 +60,16 @@
             try {
                 const result = onImport?.(JSON.parse(content));
                 if (result.failure > 0) {
-                    errorMessage = `Imported: ${result.success} - Failed: ${result.failure}`;
+                    errorMessage = t(
+                        "template.dialog.ie.message.error",
+                        result.success,
+                        result.failure,
+                    );
                 } else {
-                    successMessage = `Imported: ${result.success}`;
+                    successMessage = t(
+                        "template.dialog.ie.message.success",
+                        result.success,
+                    );
                 }
             } catch (error) {
                 errorMessage = `${error}`;
@@ -74,9 +82,16 @@
             try {
                 const result = onImport?.(JSON.parse(jsonData));
                 if (result.failure > 0) {
-                    errorMessage = `Imported: ${result.success} - Failed: ${result.failure}`;
+                    errorMessage = errorMessage = t(
+                        "template.dialog.ie.message.error",
+                        result.success,
+                        result.failure,
+                    );
                 } else {
-                    successMessage = `Imported: ${result.success}`;
+                    successMessage = t(
+                        "template.dialog.ie.message.success",
+                        result.success,
+                    );
                 }
             } catch (error) {
                 errorMessage = `${error}`;
@@ -110,17 +125,17 @@
         <DialogHeader>
             <DialogTitle
                 >{mode === "export"
-                    ? "Export Pipelines"
-                    : "Import Pipelines"}</DialogTitle
+                    ? t("label.dialog.ie.title.export")
+                    : t("label.dialog.ie.title.import")}</DialogTitle
             >
             <DialogDescription>
                 {mode === "export"
-                    ? "Copy the JSON below or download it as a file."
-                    : "Paste JSON here or upload a file to import pipelines. Pipelines with the same name will be overridden."}
+                    ? t("label.dialog.ie.description.export")
+                    : t("label.dialog.ie.description.import")}
             </DialogDescription>
         </DialogHeader>
         <div class="grid gap-4 py-4">
-            <Label for="json-data">Pipeline Data (JSON)</Label>
+            <Label for="json-data">{t("label.dialog.ie.text.label")}</Label>
             <TextArea
                 id="json-data"
                 value={jsonData}
@@ -132,7 +147,9 @@
                         ? "ring-destructive ring-2 ring-offset-2"
                         : "",
                 ]}
-                placeholder={mode !== "export" ? "Paste your JSON here..." : ""}
+                placeholder={mode !== "export"
+                    ? t("label.dialog.ie.text.placeholder")
+                    : ""}
             />
             {#if errorMessage !== ""}
                 <span class="text-destructive font-semibold"
@@ -147,7 +164,7 @@
             {#if mode === "export"}
                 <Button onclick={handleDownload}>
                     <Download class="h-5 w-5" />
-                    Download File</Button
+                    {t("label.dialog.ie.download")}</Button
                 >
             {:else}
                 <input
@@ -158,10 +175,10 @@
                     class="hidden"
                 />
                 <Button variant="outline" onclick={triggerFileUpload}
-                    >Upload File</Button
+                    >{t("label.dialog.ie.upload")}</Button
                 >
                 <Button onclick={handleImportClick} disabled={!jsonData.trim()}
-                    >Import from Text</Button
+                    >{t("label.dialog.ie.importtext")}</Button
                 >
             {/if}
         </DialogFooter>

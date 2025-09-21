@@ -11,6 +11,7 @@
     import { pipelineContext } from "../../../../context/PipelineContext.svelte";
     import { dataContext } from "../../../../context/DataContext.svelte";
     import { onDelete } from "../CanvasActions/Delete.svelte";
+    import { t } from "../../../../i18n/i18n.svelte";
 
     const hasSelection = getHasSelection();
     const selectedNodes = getSelectedNodes();
@@ -38,7 +39,7 @@
         disabled={!hasSelection()}
     >
         {#snippet tooltip()}
-            <p class="text-xs">Delete Selected</p>
+            <p class="text-xs">{t("label.toolbar.delete.tooltip")}</p>
         {/snippet}
         <Trash2 class="h-5 w-5 text-destructive" />
     </Button>

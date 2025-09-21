@@ -3,6 +3,7 @@
     import { dataContext } from "../../../../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
     import Button from "../../../../../ui/Button/Button.svelte";
+    import { t } from "../../../../../../i18n/i18n.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();
@@ -68,7 +69,7 @@
         </Button>
     {:else}
         <p class="text-sm text-center text-muted-foreground">
-            Connect to preview output
+            {t("label.node.objectpreview.connect")}
         </p>
     {/if}
 </div>

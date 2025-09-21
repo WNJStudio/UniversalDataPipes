@@ -23,7 +23,7 @@
         /**
          * Reactive
          * @param {Categories} name
-         * @param {string} label
+         * @param {import('../i18n/i18n.svelte').i18nlabel} label
          * @param {import('svelte').Component<import('@lucide/svelte').IconProps>} icon
          * @param {NodeDefinition[]} nodes
          */
@@ -33,7 +33,7 @@
              */
             this.name = $state(name);
             /**
-             * @type {string}
+             * @type {import('../i18n/i18n.svelte').i18nlabel}
              */
             this.label = $state(label);
             /**
@@ -46,7 +46,7 @@
             this.nodes = $state(nodes);
         }
         /**
-         * @param {string} name
+         * @param {import('../i18n/i18n.svelte').i18nlabel} name
          * @param {HandleDefinition[]} inputs
          * @param {HandleDefinition[]} outputs
          * @param {import('svelte').Snippet<[{inputs:HandleData[], outputs:HandleData[]}]>} render
@@ -72,9 +72,9 @@
             this.nodes.push(def);
         }
     }
-    const IO = new NodeCategory("IO", "Input/Output", FolderInput);
-    const TEXT = new NodeCategory("TEXT", "Text Processing", Combine);
-    const OBJ = new NodeCategory("OBJ", "Object Processing", Funnel);
+    const IO = new NodeCategory("IO", "label.node.category.io", FolderInput);
+    const TEXT = new NodeCategory("TEXT", "label.node.category.text", Combine);
+    const OBJ = new NodeCategory("OBJ", "label.node.category.obj", Funnel);
 
     export const NodeDefs = $state({ IO, TEXT, OBJ });
 
@@ -93,23 +93,47 @@
     };
 
     IO.createDefinition(
-        "Text File Input",
+        "label.node.textinput",
         [],
-        [new HandleDefinition("Text Content", HandleTypes.string, "OUT")],
+        [
+            new HandleDefinition(
+                "label.node.handle.textcontent",
+                HandleTypes.string,
+                "OUT",
+            ),
+        ],
         tfin,
         FileText,
     );
     IO.createDefinition(
-        "Object Preview",
-        [new HandleDefinition("Input objects", HandleTypes.object, "IN")],
+        "label.node.objectpreview",
+        [
+            new HandleDefinition(
+                "label.node.handle.inputobjects",
+                HandleTypes.object,
+                "IN",
+            ),
+        ],
         [],
         ojout,
         Braces,
     );
     TEXT.createDefinition(
-        "JSON Parser",
-        [new HandleDefinition("Input text", HandleTypes.string, "IN")],
-        [new HandleDefinition("Output objects", HandleTypes.object, "OUT")],
+        "label.node.jsonparser",
+        [
+            new HandleDefinition(
+                "label.node.handle.inputtext",
+                HandleTypes.string,
+                "IN",
+            ),
+        ],
+        [
+            new HandleDefinition(
+                "label.node.handle.outputobjects",
+                HandleTypes.object,
+                "OUT",
+            ),
+        ],
         jsonparser,
         Braces,
     );

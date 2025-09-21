@@ -3,6 +3,7 @@
     import Button from "../../../ui/Button/Button.svelte";
     import DropdownMenu from "../../../ui/DropdownMenu/DropdownMenu.svelte";
     import DropdownMenuItem from "../../../ui/DropdownMenu/DropdownMenuItem.svelte";
+    import { t } from "../../../../i18n/i18n.svelte";
 
     /**
      * @typedef {Object} SidebarMenuProps
@@ -22,11 +23,11 @@
     {#snippet content()}
         <DropdownMenuItem onClick={onExportAll}>
             <Download class="mr-2 h-4 w-4" />
-            <span>Export All Pipelines</span>
+            <span>{t("label.sidebar.menu.export")}</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onImportAll}>
             <Upload class="mr-2 h-4 w-4" />
-            <span>Import Pipelines</span>
+            <span>{t("label.sidebar.menu.import")}</span>
         </DropdownMenuItem>
     {/snippet}
 </DropdownMenu>

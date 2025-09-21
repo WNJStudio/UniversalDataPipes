@@ -1,4 +1,5 @@
 <script>
+    import { t } from "../../../../i18n/i18n.svelte";
     import Button from "../../../ui/Button/Button.svelte";
     import AlertDialogCancel from "../../../ui/Dialog/AlertDialogCancel.svelte";
     import Dialog from "../../../ui/Dialog/Dialog.svelte";
@@ -31,16 +32,17 @@
 >
     {#snippet content()}
         <DialogHeader>
-            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogTitle>{t("label.alert.sure")}</DialogTitle>
             <DialogDescription>
-                This action cannot be undone. This will permanently delete the
-                pipeline file
-                <span class="font-semibold"> {actionCandidateName}</span>.
+                {t("label.dialog.delete.description")}
+                <span class="font-semibold"> {actionCandidateName}</span>
             </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-            <AlertDialogCancel onclick={closeDialog}>Cancel</AlertDialogCancel>
-            <Button onclick={handleDelete}>Continue</Button>
+            <AlertDialogCancel onclick={closeDialog}
+                >{t("label.dialog.cancel")}</AlertDialogCancel
+            >
+            <Button onclick={handleDelete}>{t("label.dialog.continue")}</Button>
         </DialogFooter>
     {/snippet}
 </Dialog>

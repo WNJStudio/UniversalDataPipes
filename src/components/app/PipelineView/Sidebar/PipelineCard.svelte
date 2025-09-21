@@ -7,6 +7,7 @@
     import Button from "../../../ui/Button/Button.svelte";
     import { EllipsisVertical, SquareArrowOutUpRight } from "@lucide/svelte";
     import { Pipeline } from "../../../../model/Pipeline.svelte";
+    import { t } from "../../../../i18n/i18n.svelte";
 
     /**
      * @typedef {Object} PipelineCardProps
@@ -35,7 +36,7 @@
                     {/snippet}
                 </Tooltip>
                 <CardDescription class="text-xs mt-1">
-                    Saved on {pipeline.saveLocalString}
+                    {t("template.pipeline.savedat", pipeline.saveLocalString)}
                 </CardDescription>
             </div>
             <Button
@@ -56,7 +57,7 @@
                 onclick={() => onLoad(pipeline)}
             >
                 {#snippet tooltip()}
-                    {"Load Pipeline"}
+                    {t("label.pipeline.load")}
                 {/snippet}
                 <SquareArrowOutUpRight class="h-4 w-4" />
             </Button>

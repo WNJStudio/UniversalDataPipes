@@ -6,11 +6,12 @@
     import { CircleQuestionMark } from "@lucide/svelte";
     import { HandleData } from "./Handle.svelte";
     import { Size } from "./Size.svelte";
+    import { t } from "../i18n/i18n.svelte";
 
     export class NodeDefinition {
         /**
          * @param {import('./NodeCategory.svelte').Categories} category
-         * @param {string} name
+         * @param {import('../i18n/i18n.svelte').i18nlabel} name
          * @param {HandleDefinition[]} inputs
          * @param {HandleDefinition[]} outputs
          * @param {import('svelte').Snippet<[{inputs:HandleData[], outputs:HandleData[]}]>} render
@@ -22,7 +23,7 @@
              */
             this.category = category;
             /**
-             * @type {string}
+             * @type {import('../i18n/i18n.svelte').i18nlabel}
              */
             this.name = name;
             /**
@@ -64,7 +65,7 @@
 
     export const DefaultNodeDef = new NodeDefinition(
         "IO",
-        "default",
+        "label.default",
         [],
         [],
         defaultNode,
@@ -73,5 +74,5 @@
 </script>
 
 {#snippet defaultNode({ inputs, outputs })}
-    <p class="text-muted-foreground text-2xl font-body">Default</p>
+    <p class="text-muted-foreground text-2xl font-body">{t("label.default")}</p>
 {/snippet}

@@ -1,3 +1,5 @@
+import { t } from "../i18n/i18n.svelte";
+
 const SECOND_MILLIS = 1000;
 const MINUTE_MILLIS = SECOND_MILLIS * 60;
 const HOUR_MILLIS = MINUTE_MILLIS * 60;
@@ -38,9 +40,9 @@ export const getTimeDiff = (past, future) => {
     const seconds = ~~(diff / SECOND_MILLIS);
 
     return [
-        withUnit(days, "day", "days"),
-        withUnit(hours, "hour", "hours"),
-        withUnit(minutes, "minute", "minutes"),
-        withUnit(seconds, "second", "seconds"),
+        withUnit(days, t("label.day"), t("label.day.plural")),
+        withUnit(hours, t("label.hour"), t("label.hour.plural")),
+        withUnit(minutes, t("label.minute"), t("label.minute.plural")),
+        withUnit(seconds, t("label.second"), t("label.second.plural")),
     ].join(" ");
 };
