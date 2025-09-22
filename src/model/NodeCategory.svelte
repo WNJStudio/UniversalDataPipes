@@ -8,10 +8,10 @@
     } from "@lucide/svelte";
     import ObjectOutputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/ObjectOutputNode.svelte";
     import TextFileInputNode from "../components/app/PipelineView/Nodes/NodeTypes/IO/TextFileInputNode.svelte";
+    import JsonParserNode from "../components/app/PipelineView/Nodes/NodeTypes/Text/JSONParserNode.svelte";
     import { HandleData, HandleTypes } from "./Handle.svelte";
     import { HandleDefinition } from "./HandleDefinition.svelte";
     import { DefaultNodeDef, NodeDefinition } from "./NodeDefinition.svelte";
-    import JsonParserNode from "../components/app/PipelineView/Nodes/NodeTypes/Text/JSONParserNode.svelte";
     /**
      * @typedef {"IO"|"TEXT"|"OBJ"} Categories
      */

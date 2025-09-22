@@ -1,5 +1,6 @@
 <script>
     import { ElementRect } from "runed";
+    import { blur } from "svelte/transition";
     import { dataContext } from "../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../context/PipelineContext.svelte";
     import {
@@ -11,7 +12,6 @@
         PIPEVIEW,
     } from "../../../context/SettingsContext.svelte";
     import { Transform } from "../../../model/Transform.svelte";
-    import BlurOut from "../../ui/Transitions/BlurOut.svelte";
     import { attachConnectAction } from "./CanvasActions/Connect.svelte";
     import { attachDeleteAction } from "./CanvasActions/Delete.svelte";
     import {
@@ -19,6 +19,7 @@
         onToolbarDrag,
     } from "./CanvasActions/Drag.svelte";
     import { attachPanAction, getIsPanning } from "./CanvasActions/Pan.svelte";
+    import { attachResizeAction } from "./CanvasActions/Resize.svelte";
     import {
         attachSelectAction,
         getNodeSelectionChecker,
@@ -37,7 +38,6 @@
     import PendingEdgePath from "./Nodes/PendingEdgePath.svelte";
     import SelectionRect from "./SelectionRect.svelte";
     import PipelineToolbar from "./Toolbar/PipelineToolbar.svelte";
-    import { attachResizeAction } from "./CanvasActions/Resize.svelte";
 
     const isSnapToGrid = getSnapToGrid();
     const currentView = getCurrentView();
@@ -69,42 +69,44 @@
     const selectedEdges = getSelectedEdges();
 </script>
 
-<BlurOut class={["flex-1 relative"]} {hidden}>
-    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-    <div
-        {@attach attachWheel(canvasRect, canvasTransform)}
-        bind:this={canvasRef}
-        role="definition"
-        data-canvas="true"
-        class={[
-            "w-full h-full absolute top-0 left-0 overflow-hidden",
-            isPanning() ? "cursor-grab" : "",
-        ]}
-        style={`${getPattern(canvasTransform.scale)};${getPatternOffset(canvasTransform)};`}
-        oncontextmenu={(e) => e.preventDefault()}
-    >
+{#if !hidden}
+    <div transition:blur class={["flex-1 relative"]}>
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <div
-            bind:this={canvasViewport}
-            data-canvas-view="true"
-            class="w-full h-full relative"
-            style={`transform: translate(${canvasTransform.x * canvasTransform.scale}px, ${canvasTransform.y * canvasTransform.scale}px) scale(${canvasTransform.scale});transform-origin: top left;`}
+            {@attach attachWheel(canvasRect, canvasTransform)}
+            bind:this={canvasRef}
+            role="definition"
+            data-canvas="true"
+            class={[
+                "w-full h-full absolute top-0 left-0 overflow-hidden",
+                isPanning() ? "cursor-grab" : "",
+            ]}
+            style={`${getPattern(canvasTransform.scale)};${getPatternOffset(canvasTransform)};`}
+            oncontextmenu={(e) => e.preventDefault()}
         >
-            <SelectionRect />
-            <svg
-                data-edge-view="true"
-                class="absolute w-full h-full transform-[scale(1)] left-0 top-0 overflow-visible"
+            <div
+                bind:this={canvasViewport}
+                data-canvas-view="true"
+                class="w-full h-full relative"
+                style={`transform: translate(${canvasTransform.x * canvasTransform.scale}px, ${canvasTransform.y * canvasTransform.scale}px) scale(${canvasTransform.scale});transform-origin: top left;`}
             >
-                {#each Object.entries(pipeline.edges) as [id, edge] (id)}
-                    <EdgePath {edge} {canvasTransform} {canvasViewRect} />
+                <SelectionRect />
+                <svg
+                    data-edge-view="true"
+                    class="absolute w-full h-full transform-[scale(1)] left-0 top-0 overflow-visible"
+                >
+                    {#each Object.entries(pipeline.edges) as [id, edge] (id)}
+                        <EdgePath {edge} {canvasTransform} {canvasViewRect} />
+                    {/each}
+                    <PendingEdgePath {canvasViewRect} {canvasTransform} />
+                </svg>
+                {#each Object.entries(pipeline.nodes) as [id, node] (id)}
+                    <BaseNode {node} />
                 {/each}
-                <PendingEdgePath {canvasViewRect} {canvasTransform} />
-            </svg>
-            {#each Object.entries(pipeline.nodes) as [id, node] (id)}
-                <BaseNode {node} />
-            {/each}
+            </div>
         </div>
     </div>
-</BlurOut>
+{/if}
 <PipelineToolbar
     {hidden}
     onToolbarDrag={onToolbarDrag(

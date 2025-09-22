@@ -1,8 +1,8 @@
 <script>
     import { Download, Trash2 } from "@lucide/svelte";
+    import { t } from "../../../../i18n/i18n.svelte";
     import DropdownMenu from "../../../ui/DropdownMenu/DropdownMenu.svelte";
     import DropdownMenuItem from "../../../ui/DropdownMenu/DropdownMenuItem.svelte";
-    import { t } from "../../../../i18n/i18n.svelte";
 
     /**
      * @typedef {Object} PipelineMenuProps

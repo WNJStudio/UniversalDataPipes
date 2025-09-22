@@ -1,8 +1,8 @@
 <script>
     import { ChevronDown } from "@lucide/svelte";
-    import SlideOut from "../Transitions/SlideOut.svelte";
-    import SelectItem from "./SelectItem.svelte";
     import { onClickOutside } from "runed";
+    import { slide } from "svelte/transition";
+    import SelectItem from "./SelectItem.svelte";
 
     /**
      * @typedef {Object} SelectProps
@@ -58,24 +58,24 @@
         {/if}
         <ChevronDown class="h-4 w-4 opacity-50" />
     </button>
-
-    <SlideOut
-        hidden={!isOpen}
-        axis="y"
-        class={[
-            "absolute z-50 mt-1 max-h-96 min-w-32 overflow-auto rounded-md border bg-popover text-popover-foreground shadow-md custom-scrollbar",
-            props.class,
-        ]}
-    >
-        <div class="p-1">
-            {#each items as item}
-                <SelectItem
-                    value={item.value}
-                    label={item.label}
-                    isSelected={value === item.value}
-                    {valueSetter}
-                />
-            {/each}
+    {#if isOpen}
+        <div
+            transition:slide={{ axis: "y" }}
+            class={[
+                "absolute z-50 mt-1 max-h-96 min-w-32 overflow-auto rounded-md border bg-popover text-popover-foreground shadow-md custom-scrollbar",
+                props.class,
+            ]}
+        >
+            <div class="p-1">
+                {#each items as item}
+                    <SelectItem
+                        value={item.value}
+                        label={item.label}
+                        isSelected={value === item.value}
+                        {valueSetter}
+                    />
+                {/each}
+            </div>
         </div>
-    </SlideOut>
+    {/if}
 </div>

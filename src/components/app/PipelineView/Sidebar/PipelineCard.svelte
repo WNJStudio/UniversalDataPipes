@@ -1,13 +1,13 @@
 <script>
-    import { slide } from "svelte/transition";
-    import Card from "../../../ui/Card/Card.svelte";
-    import Tooltip from "../../../ui/Tooltip/Tooltip.svelte";
-    import CardTitle from "../../../ui/Card/CardTitle.svelte";
-    import CardDescription from "../../../ui/Card/CardDescription.svelte";
-    import Button from "../../../ui/Button/Button.svelte";
     import { EllipsisVertical, SquareArrowOutUpRight } from "@lucide/svelte";
-    import { Pipeline } from "../../../../model/Pipeline.svelte";
+    import { slide } from "svelte/transition";
     import { t } from "../../../../i18n/i18n.svelte";
+    import { Pipeline } from "../../../../model/Pipeline.svelte";
+    import Button from "../../../ui/Button/Button.svelte";
+    import Card from "../../../ui/Card/Card.svelte";
+    import CardDescription from "../../../ui/Card/CardDescription.svelte";
+    import CardTitle from "../../../ui/Card/CardTitle.svelte";
+    import Tooltip from "../../../ui/Tooltip/Tooltip.svelte";
 
     /**
      * @typedef {Object} PipelineCardProps

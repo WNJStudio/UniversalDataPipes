@@ -1,13 +1,12 @@
 <script>
-    import { getContext } from "svelte";
     import { v4 } from "uuid";
 
-    import TooltipContent from "./TooltipContent.svelte";
     import {
         getTooltipDisplayer,
         getTooltipSubscriber,
         getTooltipUnubscriber,
     } from "../../../portals/TooltipPortal.svelte";
+    import TooltipContent from "./TooltipContent.svelte";
 
     /**
      * @typedef {Object} TooltipProps

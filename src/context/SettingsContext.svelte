@@ -1,7 +1,7 @@
 <script module>
     import { PersistedState } from "runed";
-    import { getTimeDiff } from "../utils/TimeUtils";
     import { t } from "../i18n/i18n.svelte";
+    import { getTimeDiff } from "../utils/TimeUtils";
 
     export const PIPEVIEW = "pipeline";
     export const DATAVIEW = "data";

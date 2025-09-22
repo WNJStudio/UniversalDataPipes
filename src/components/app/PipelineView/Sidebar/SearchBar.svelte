@@ -1,7 +1,7 @@
 <script>
     import { Search } from "@lucide/svelte";
-    import Input from "../../../ui/Input/Input.svelte";
     import { t } from "../../../../i18n/i18n.svelte";
+    import Input from "../../../ui/Input/Input.svelte";
 
     /**
      * @typedef {Object} SearchBarProps

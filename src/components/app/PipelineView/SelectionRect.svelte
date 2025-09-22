@@ -1,5 +1,4 @@
 <script>
-    import { Rectangle } from "../../../model/Rectangle.svelte";
     import { getSelectionRectangle } from "./CanvasActions/Select.svelte";
 
     const rect = getSelectionRectangle();

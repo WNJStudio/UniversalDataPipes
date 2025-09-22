@@ -2,8 +2,8 @@
     import { RefreshCw } from "@lucide/svelte";
     import { dataContext } from "../../../../../../context/DataContext.svelte";
     import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
-    import Button from "../../../../../ui/Button/Button.svelte";
     import { t } from "../../../../../../i18n/i18n.svelte";
+    import Button from "../../../../../ui/Button/Button.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();

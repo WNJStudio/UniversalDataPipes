@@ -1,12 +1,12 @@
 <script module>
+    import { CircleQuestionMark } from "@lucide/svelte";
     import { v4 } from "uuid";
+    import { t } from "../i18n/i18n.svelte";
+    import { HandleData } from "./Handle.svelte";
     import { HandleDefinition } from "./HandleDefinition.svelte";
     import { NodeData } from "./Node.svelte";
     import { Position } from "./Position.svelte";
-    import { CircleQuestionMark } from "@lucide/svelte";
-    import { HandleData } from "./Handle.svelte";
     import { Size } from "./Size.svelte";
-    import { t } from "../i18n/i18n.svelte";
 
     export class NodeDefinition {
         /**

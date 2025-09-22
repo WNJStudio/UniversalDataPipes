@@ -1,5 +1,6 @@
 <script>
     import { Download } from "@lucide/svelte";
+    import { t } from "../../../i18n/i18n.svelte";
     import Button from "../../ui/Button/Button.svelte";
     import Dialog from "../../ui/Dialog/Dialog.svelte";
     import DialogDescription from "../../ui/Dialog/DialogDescription.svelte";
@@ -8,7 +9,6 @@
     import DialogTitle from "../../ui/Dialog/DialogTitle.svelte";
     import TextArea from "../../ui/Input/TextArea.svelte";
     import Label from "../../ui/Label/Label.svelte";
-    import { t } from "../../../i18n/i18n.svelte";
 
     /**
      * @typedef {Object} ImportExportDialogProps

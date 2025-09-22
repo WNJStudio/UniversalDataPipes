@@ -1,9 +1,7 @@
 <script>
-    import { X } from "@lucide/svelte";
-    import FadeOut from "../Transitions/FadeOut.svelte";
-    import ScaleOut from "../Transitions/ScaleOut.svelte";
-    import DialogOverlay from "./DialogOverlay.svelte";
     import { PressedKeys } from "runed";
+    import { fade, scale } from "svelte/transition";
+    import DialogOverlay from "./DialogOverlay.svelte";
     /**
      * @typedef {Object} AlertDialogContentProps
      * @prop {boolean} isOpen
@@ -38,30 +36,29 @@
     });
 </script>
 
-<FadeOut
-    {...props}
-    hidden={!isOpen}
-    delay={150}
-    duration={150}
-    class={[
-        "fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center",
-        props.class,
-    ]}
->
-    <DialogOverlay
-        hidden={!isOpen}
-        onclick={closeOnOverlay ? tryClosing : undefined}
-    />
-    <ScaleOut
+{#if isOpen}
+    <div
+        transition:fade={{ delay: 150, duration: 150 }}
         {...props}
-        role="dialog"
-        hidden={!isOpen}
-        duration={150}
         class={[
-            "z-50 grid w-full max-w-lg gap-4 border bg-background p-6 shadow-lg sm:rounded-lg",
+            "fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center",
             props.class,
         ]}
     >
-        {@render props.children?.()}
-    </ScaleOut>
-</FadeOut>
+        <DialogOverlay
+            hidden={!isOpen}
+            onclick={closeOnOverlay ? tryClosing : undefined}
+        />
+        <div
+            transition:scale={{ duration: 150 }}
+            {...props}
+            role="dialog"
+            class={[
+                "z-50 grid w-full max-w-lg gap-4 border bg-background p-6 shadow-lg sm:rounded-lg",
+                props.class,
+            ]}
+        >
+            {@render props.children?.()}
+        </div>
+    </div>
+{/if}

@@ -1,4 +1,5 @@
 <script>
+    import { fly } from "svelte/transition";
     import { getOpposite } from "../Sides.svelte";
 
     /**
@@ -10,8 +11,6 @@
      * @prop {"start"|"center"|"end"} [align]
      * @prop {HTMLElement} [triggerRef]
      */
-
-    import FlyOut from "../Transitions/FlyOut.svelte";
 
     /** @type {TooltipContentProps & import('svelte/elements').SvelteHTMLElements['div']} */
     let {
@@ -124,30 +123,35 @@
     });
 </script>
 
-<FlyOut
-    hidden={!isOpen}
-    x={position.side === "left"
-        ? "-50%"
-        : position.side === "right"
-          ? "50%"
-          : undefined}
-    y={position.side === "top"
-        ? "-50%"
-        : position.side === "bottom"
-          ? "50%"
-          : undefined}
-    class={[
-        "absolute z-50",
-        isOpen ? "pointer-events-auto" : "pointer-events-none",
-        props.class,
-    ]}
-    {duration}
-    style={`left: ${position.left}px; top: ${position.top}px`}
->
+{#if isOpen}
     <div
-        bind:this={contentRef}
-        class="overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md"
+        transition:fly={{
+            x:
+                position.side === "left"
+                    ? "-50%"
+                    : position.side === "right"
+                      ? "50%"
+                      : undefined,
+            y:
+                position.side === "top"
+                    ? "-50%"
+                    : position.side === "bottom"
+                      ? "50%"
+                      : undefined,
+            duration,
+        }}
+        class={[
+            "absolute z-50",
+            isOpen ? "pointer-events-auto" : "pointer-events-none",
+            props.class,
+        ]}
+        style={`left: ${position.left}px; top: ${position.top}px`}
     >
-        {@render props.children?.()}
+        <div
+            bind:this={contentRef}
+            class="overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md"
+        >
+            {@render props.children?.()}
+        </div>
     </div>
-</FlyOut>
+{/if}

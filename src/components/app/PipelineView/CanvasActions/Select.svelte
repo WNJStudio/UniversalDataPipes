@@ -3,8 +3,8 @@
     import { Pipeline } from "../../../../model/Pipeline.svelte";
     import { Position } from "../../../../model/Position.svelte";
     import { Rectangle } from "../../../../model/Rectangle.svelte";
-    import { getPanMode } from "./Pan.svelte";
     import { getDragged } from "./Drag.svelte";
+    import { getPanMode } from "./Pan.svelte";
     const EDGE_DETECTION_SENSITIVITY = 10;
 
     /**

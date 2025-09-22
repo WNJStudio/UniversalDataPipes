@@ -1,5 +1,5 @@
 <script>
-    import FlyOut from "./FlyOut.svelte";
+    import { fly } from "svelte/transition";
 
     /**
      * @typedef {Object} FlySwapProps
@@ -14,10 +14,13 @@
 </script>
 
 <div {...props} class={["grid", props.class]}>
-    <FlyOut class="col-span-full row-span-full" hidden={toggle} {...flyA}>
-        {@render a()}
-    </FlyOut>
-    <FlyOut class="col-span-full row-span-full" hidden={!toggle} {...flyB}>
-        {@render b()}
-    </FlyOut>
+    {#if toggle}
+        <div transition:fly={flyB} class="col-span-full row-span-full">
+            {@render b()}
+        </div>
+    {:else}
+        <div transition:fly={flyA} class="col-span-full row-span-full">
+            {@render a()}
+        </div>
+    {/if}
 </div>

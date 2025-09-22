@@ -1,6 +1,10 @@
 <script>
     import { Trash2 } from "@lucide/svelte";
+    import { dataContext } from "../../../../context/DataContext.svelte";
+    import { pipelineContext } from "../../../../context/PipelineContext.svelte";
+    import { t } from "../../../../i18n/i18n.svelte";
     import Button from "../../../ui/Button/Button.svelte";
+    import { onDelete } from "../CanvasActions/Delete.svelte";
     import {
         getHasSelection,
         getNodeSelectionChecker,
@@ -8,10 +12,6 @@
         getSelectedNodes,
         getSelectionCleaner,
     } from "../CanvasActions/Select.svelte";
-    import { pipelineContext } from "../../../../context/PipelineContext.svelte";
-    import { dataContext } from "../../../../context/DataContext.svelte";
-    import { onDelete } from "../CanvasActions/Delete.svelte";
-    import { t } from "../../../../i18n/i18n.svelte";
 
     const hasSelection = getHasSelection();
     const selectedNodes = getSelectedNodes();

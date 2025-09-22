@@ -1,19 +1,19 @@
 <script>
+    import { Settings } from "@lucide/svelte";
+    import {
+        DATAVIEW,
+        getCurrentView,
+        getSidebarStatus,
+        getSidebarToggler,
+        getViewChanger,
+        PIPEVIEW,
+    } from "../../../context/SettingsContext.svelte";
+    import { t } from "../../../i18n/i18n.svelte";
+    import Button from "../../ui/Button/Button.svelte";
     import TabList from "../../ui/Tabs/TabList.svelte";
+    import SettingsDialog from "../Settings/SettingsDialog.svelte";
     import Logo from "./Logo.svelte";
     import SidebarToggle from "./SidebarToggle.svelte";
-    import {
-        PIPEVIEW,
-        DATAVIEW,
-        getSidebarToggler,
-        getSidebarStatus,
-        getCurrentView,
-        getViewChanger,
-    } from "../../../context/SettingsContext.svelte";
-    import Button from "../../ui/Button/Button.svelte";
-    import { Settings } from "@lucide/svelte";
-    import SettingsDialog from "../Settings/SettingsDialog.svelte";
-    import { t } from "../../../i18n/i18n.svelte";
 
     /** @type {import('svelte/elements').SvelteHTMLElements['header']} */
     let { ...props } = $props();

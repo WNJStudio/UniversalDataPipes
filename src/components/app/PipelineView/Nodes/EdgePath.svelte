@@ -1,17 +1,17 @@
 <script>
+    import { ElementRect } from "runed";
     import { circInOut } from "svelte/easing";
     import { EdgeData } from "../../../../model/Edge.svelte";
+    import { getLoaded } from "../../../../model/Pipeline.svelte";
     import { clamp } from "../../../../utils/MathUtils";
-    import { ElementRect } from "runed";
-    import { getZoomed } from "../CanvasActions/Zoom.svelte";
+    import { getDragged } from "../CanvasActions/Drag.svelte";
     import { getPanned } from "../CanvasActions/Pan.svelte";
+    import { getResized } from "../CanvasActions/Resize.svelte";
     import {
         getEdgeSelectionChecker,
         onEdgeClick,
     } from "../CanvasActions/Select.svelte";
-    import { getDragged } from "../CanvasActions/Drag.svelte";
-    import { getLoaded } from "../../../../model/Pipeline.svelte";
-    import { getResized } from "../CanvasActions/Resize.svelte";
+    import { getZoomed } from "../CanvasActions/Zoom.svelte";
 
     /**
      * @typedef {Object} EdgePathProps

@@ -1,6 +1,5 @@
 <script>
     import { ElementRect, onClickOutside } from "runed";
-
     /**
      * @typedef {Object} DropdownMenuContentProps
      * @prop {boolean} isOpen
@@ -11,7 +10,7 @@
      * @prop {HTMLElement} [triggerRef]
      */
 
-    import FlyOut from "../Transitions/FlyOut.svelte";
+    import { fly } from "svelte/transition";
     import { getMenuDisplayer } from "../../../portals/MenuPortal.svelte";
     import { getOpposite } from "../Sides.svelte";
 
@@ -176,20 +175,22 @@
     });
 </script>
 
-<FlyOut
-    hidden={!isOpen}
-    class={["fixed z-50 min-w-max inline-block text-left"]}
-    style={`top: ${position.top}px; left: ${position.left}px;`}
->
+{#if isOpen}
     <div
-        data-menu={name}
-        {...props}
-        bind:this={contentRef}
-        class={[
-            "z-50 min-w-32 overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-none pointer-events-auto",
-            props.class,
-        ]}
+        transition:fly
+        class={["fixed z-50 min-w-max inline-block text-left"]}
+        style={`top: ${position.top}px; left: ${position.left}px;`}
     >
-        {@render props.children?.()}
+        <div
+            data-menu={name}
+            {...props}
+            bind:this={contentRef}
+            class={[
+                "z-50 min-w-32 overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-none pointer-events-auto",
+                props.class,
+            ]}
+        >
+            {@render props.children?.()}
+        </div>
     </div>
-</FlyOut>
+{/if}

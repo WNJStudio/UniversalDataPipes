@@ -1,8 +1,8 @@
 <script>
     import { Hand, MousePointer } from "@lucide/svelte";
+    import { t } from "../../../../i18n/i18n.svelte";
     import Button from "../../../ui/Button/Button.svelte";
     import { getPanMode, togglePanMode } from "../CanvasActions/Pan.svelte";
-    import { t } from "../../../../i18n/i18n.svelte";
 
     const panMode = getPanMode();
     const toggle = togglePanMode();
