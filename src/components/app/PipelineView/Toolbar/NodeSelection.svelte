@@ -23,7 +23,7 @@
     );
 </script>
 
-{#if !activeCategory && activeCategory !== ""}
+{#if activeCategory && activeCategory !== ""}
     <div transition:fly={{ duration: 150, y: "100%" }}>
         <Card class="bg-card/90 backdrop-blur-xs w-full max-w-[50vw]">
             <div class="p-2">
