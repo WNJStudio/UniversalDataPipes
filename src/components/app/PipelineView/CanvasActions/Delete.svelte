@@ -6,7 +6,6 @@
      * @param {()=>string[]} selectedEdges
      * @param {Pipeline} pipeline
      * @param {Object<string,any>} data
-     * @param {(n:string[])=>boolean} checker
      * @param {()=>void} cleaner
      */
     export const onDelete = (
@@ -14,22 +13,19 @@
         selectedEdges,
         pipeline,
         data,
-        checker,
         cleaner,
     ) => {
-        selectedNodes().forEach((id) => {
+        const nodes = selectedNodes();
+        nodes.forEach((id) => {
             delete pipeline.nodes[id];
         });
         selectedEdges().forEach((id) => {
             delete pipeline.edges[id];
             delete data[id];
         });
-        const toRemove = [];
-        Object.entries(pipeline.edges).forEach(([id, edge]) => {
-            if (checker([edge.endNode, edge.startNode])) {
-                toRemove.push(id);
-            }
-        });
+        const toRemove = nodes.flatMap((nid) =>
+            pipeline.getConnectedEdges(nid).map((e) => e.id),
+        );
         toRemove.forEach((id) => {
             delete pipeline.edges[id];
             delete data[id];
@@ -42,7 +38,6 @@
      * @param {()=>string[]} selectedEdges
      * @param {Pipeline} pipeline
      * @param {Object<string,any>} data
-     * @param {(n:string[])=>boolean} checker
      * @param {()=>void} cleaner
      */
     export const attachDeleteAction = (
@@ -50,7 +45,6 @@
         selectedEdges,
         pipeline,
         data,
-        checker,
         cleaner,
     ) => {
         const onKeyDown = (e) => {
@@ -63,14 +57,7 @@
                         return;
                     }
                 }
-                onDelete(
-                    selectedNodes,
-                    selectedEdges,
-                    pipeline,
-                    data,
-                    checker,
-                    cleaner,
-                );
+                onDelete(selectedNodes, selectedEdges, pipeline, data, cleaner);
             }
         };
 

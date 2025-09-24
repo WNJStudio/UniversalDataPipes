@@ -126,7 +126,6 @@
         selectedEdges,
         pipeline,
         data,
-        areNodesSelected,
         cleanSelection,
     )}
     {@attach attachPanAction(canvasTransform)}

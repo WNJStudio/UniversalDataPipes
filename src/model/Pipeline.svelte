@@ -177,6 +177,24 @@
                 .find((v) => v.id === id);
         }
 
+        /**
+         * @param {string} nodeId
+         */
+        getConnectedEdges(nodeId) {
+            return Object.values(this.edges).filter(
+                (e) => e.startNode === nodeId || e.endNode === nodeId,
+            );
+        }
+
+        /**
+         * @param {string[]} nodes
+         */
+        getConnectedBetween(nodes) {
+            return Object.values(this.edges).filter(
+                (e) => nodes.includes(e.startNode) && nodes.includes(e.endNode),
+            );
+        }
+
         get saveLocalString() {
             return this._savedAt.toLocaleDateString();
         }

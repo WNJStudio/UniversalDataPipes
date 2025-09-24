@@ -7,7 +7,6 @@
     import { onDelete } from "../CanvasActions/Delete.svelte";
     import {
         getHasSelection,
-        getNodeSelectionChecker,
         getSelectedEdges,
         getSelectedNodes,
         getSelectionCleaner,
@@ -18,7 +17,6 @@
     const selectedEdges = getSelectedEdges();
     const pipeline = pipelineContext.get();
     const data = dataContext.get();
-    const checker = getNodeSelectionChecker();
     const cleaner = getSelectionCleaner();
 </script>
 
@@ -28,14 +26,7 @@
         variant="ghost"
         size="icon"
         onclick={() =>
-            onDelete(
-                selectedNodes,
-                selectedEdges,
-                pipeline,
-                data,
-                checker,
-                cleaner,
-            )}
+            onDelete(selectedNodes, selectedEdges, pipeline, data, cleaner)}
         disabled={!hasSelection()}
     >
         {#snippet tooltip()}
