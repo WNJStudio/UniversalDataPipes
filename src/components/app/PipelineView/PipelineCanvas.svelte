@@ -1,8 +1,6 @@
 <script>
-    import { ElementRect } from "runed";
-    import { blur } from "svelte/transition";
-    import { dataContext } from "../../../context/DataContext.svelte";
-    import { pipelineContext } from "../../../context/PipelineContext.svelte";
+    import { dataContext } from "@context/DataContext.svelte";
+    import { pipelineContext } from "@context/PipelineContext.svelte";
     import {
         getCurrentView,
         getGridSize,
@@ -10,8 +8,10 @@
         getPatternOffset,
         getSnapToGrid,
         PIPEVIEW,
-    } from "../../../context/SettingsContext.svelte";
-    import { Transform } from "../../../model/Transform.svelte";
+    } from "@context/SettingsContext.svelte";
+    import { Transform } from "@model/Transform.svelte";
+    import { ElementRect } from "runed";
+    import { blur } from "svelte/transition";
     import { attachConnectAction } from "./CanvasActions/Connect.svelte";
     import { attachDeleteAction } from "./CanvasActions/Delete.svelte";
     import {

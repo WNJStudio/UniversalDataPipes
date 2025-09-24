@@ -1,5 +1,5 @@
 <script module>
-    import { getLanguage } from "../context/SettingsContext.svelte";
+    import { getLanguage } from "@context/SettingsContext.svelte";
     import { DEFAULT } from "./DEFAULT.svelte";
     import { ZH_CN } from "./ZH_CN.svelte";
     /**

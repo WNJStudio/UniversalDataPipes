@@ -1,9 +1,9 @@
 <script module>
+    import { getDefinition } from "@model/NodeCategory.svelte";
+    import { Pipeline } from "@model/Pipeline.svelte";
+    import { Position } from "@model/Position.svelte";
+    import { roundMult } from "@utils/MathUtils";
     import { ElementRect } from "runed";
-    import { getDefinition } from "../../../../model/NodeCategory.svelte";
-    import { Pipeline } from "../../../../model/Pipeline.svelte";
-    import { Position } from "../../../../model/Position.svelte";
-    import { roundMult } from "../../../../utils/MathUtils";
 
     let lastDragged = $state();
     /**
@@ -25,7 +25,7 @@
     export const getIsDragging = () => () => !!dragOrigin;
 
     /**
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      * @param {ElementRect} rect
      * @param {Pipeline} pipeline
      * @param {(id:string)=>void} selectNode
@@ -74,7 +74,7 @@
 
     /**
      * Attach order -- FOURTH
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      * @param {Pipeline} pipeline
      * @param {(s:string[])=>boolean} checker
      * @param {()=>boolean} isSnapToGrid

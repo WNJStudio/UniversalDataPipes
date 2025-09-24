@@ -1,7 +1,7 @@
 <script module>
+    import { t } from "@i18n/i18n.svelte";
+    import { getTimeDiff } from "@utils/TimeUtils";
     import { PersistedState } from "runed";
-    import { t } from "../i18n/i18n.svelte";
-    import { getTimeDiff } from "../utils/TimeUtils";
 
     export const PIPEVIEW = "pipeline";
     export const DATAVIEW = "data";
@@ -151,7 +151,7 @@
         }
     };
     /**
-     * @param {import("../model/Transform.svelte").Transform} t transform
+     * @param {import("@model/Transform.svelte").Transform} t transform
      */
     export const getPatternOffset = (t) => {
         let offsetRadial = (settings.current.gridSize * t.scale) / 2;

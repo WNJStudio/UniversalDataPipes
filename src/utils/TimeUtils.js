@@ -1,4 +1,4 @@
-import { t } from "../i18n/i18n.svelte";
+import { t } from "@i18n/i18n.svelte";
 
 const SECOND_MILLIS = 1000;
 const MINUTE_MILLIS = SECOND_MILLIS * 60;

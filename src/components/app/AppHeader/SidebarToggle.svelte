@@ -1,15 +1,15 @@
 <script>
     import { PanelLeft, PanelRight } from "@lucide/svelte";
-    import Button from "../../ui/Button/Button.svelte";
+    import Button from "@ui/Button/Button.svelte";
 
-    import { slide } from "svelte/transition";
     import {
         getCurrentView,
         getSidebarStatus,
         getSidebarToggler,
         PIPEVIEW,
-    } from "../../../context/SettingsContext.svelte";
-    import { t } from "../../../i18n/i18n.svelte";
+    } from "@context/SettingsContext.svelte";
+    import { t } from "@i18n/i18n.svelte";
+    import { slide } from "svelte/transition";
     const sidebarToggler = getSidebarToggler();
     const sidebarStatus = getSidebarStatus();
     const currentView = getCurrentView();

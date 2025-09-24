@@ -47,16 +47,12 @@
     export const getMenuUnubscriber = () => unsubscriber;
 
     export const getMenuDisplayer = () => displayMenu;
-
-    export { menus };
 </script>
 
-{#snippet menus()}
-    {#each Object.entries(menuPortal) as [name, menu] (name)}
-        {@render menu({
-            hidden: name === showMenu.name,
-            x: showMenu.x,
-            y: showMenu.y,
-        })}
-    {/each}
-{/snippet}
+{#each Object.entries(menuPortal) as [name, menu] (name)}
+    {@render menu({
+        hidden: name === showMenu.name,
+        x: showMenu.x,
+        y: showMenu.y,
+    })}
+{/each}

@@ -1,16 +1,13 @@
 <script>
+  import { getGridSize, getSnapToGrid } from "@context/SettingsContext.svelte";
+  import { t } from "@i18n/i18n.svelte";
+  import { NodeData } from "@model/Node.svelte";
+  import { getDefinition } from "@model/NodeCategory.svelte";
+  import Card from "@ui/Card/Card.svelte";
+  import CardHeader from "@ui/Card/CardHeader.svelte";
+  import CardTitle from "@ui/Card/CardTitle.svelte";
+  import { roundMult } from "@utils/MathUtils";
   import { cubicOut, elasticOut } from "svelte/easing";
-  import {
-    getGridSize,
-    getSnapToGrid,
-  } from "../../../../context/SettingsContext.svelte";
-  import { t } from "../../../../i18n/i18n.svelte";
-  import { NodeData } from "../../../../model/Node.svelte";
-  import { getDefinition } from "../../../../model/NodeCategory.svelte";
-  import { roundMult } from "../../../../utils/MathUtils";
-  import Card from "../../../ui/Card/Card.svelte";
-  import CardHeader from "../../../ui/Card/CardHeader.svelte";
-  import CardTitle from "../../../ui/Card/CardTitle.svelte";
   import { getIsDragging } from "../CanvasActions/Drag.svelte";
   import { getIsPanning } from "../CanvasActions/Pan.svelte";
   import {

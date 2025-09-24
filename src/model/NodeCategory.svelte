@@ -23,7 +23,7 @@
         /**
          * Reactive
          * @param {Categories} name
-         * @param {import('../i18n/i18n.svelte').i18nlabel} label
+         * @param {import('@i18n/i18n.svelte').i18nlabel} label
          * @param {import('svelte').Component<import('@lucide/svelte').IconProps>} icon
          * @param {NodeDefinition[]} nodes
          */
@@ -33,7 +33,7 @@
              */
             this.name = $state(name);
             /**
-             * @type {import('../i18n/i18n.svelte').i18nlabel}
+             * @type {import('@i18n/i18n.svelte').i18nlabel}
              */
             this.label = $state(label);
             /**
@@ -46,7 +46,7 @@
             this.nodes = $state(nodes);
         }
         /**
-         * @param {import('../i18n/i18n.svelte').i18nlabel} name
+         * @param {import('@i18n/i18n.svelte').i18nlabel} name
          * @param {HandleDefinition[]} inputs
          * @param {HandleDefinition[]} outputs
          * @param {import('svelte').Snippet<[{inputs:HandleData[], outputs:HandleData[]}]>} render

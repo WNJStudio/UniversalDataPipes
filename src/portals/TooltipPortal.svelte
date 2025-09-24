@@ -45,12 +45,8 @@
      * @returns {(id:string)=>void}
      */
     export const getTooltipDisplayer = () => displayTooltip;
-
-    export { tooltips };
 </script>
 
-{#snippet tooltips()}
-    {#each Object.entries(tooltipPortal) as [id, tooltip] (id)}
-        {@render tooltip({ hidden: id === showtip })}
-    {/each}
-{/snippet}
+{#each Object.entries(tooltipPortal) as [id, tooltip] (id)}
+    {@render tooltip({ hidden: id === showtip })}
+{/each}

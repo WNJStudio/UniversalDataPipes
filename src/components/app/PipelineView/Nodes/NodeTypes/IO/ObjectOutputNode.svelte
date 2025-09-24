@@ -1,9 +1,9 @@
 <script>
+    import { dataContext } from "@context/DataContext.svelte";
+    import { pipelineContext } from "@context/PipelineContext.svelte";
+    import { t } from "@i18n/i18n.svelte";
     import { RefreshCw } from "@lucide/svelte";
-    import { dataContext } from "../../../../../../context/DataContext.svelte";
-    import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
-    import { t } from "../../../../../../i18n/i18n.svelte";
-    import Button from "../../../../../ui/Button/Button.svelte";
+    import Button from "@ui/Button/Button.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();
@@ -13,7 +13,7 @@
     const { edges } = pipelineContext.get();
 
     /**
-     * @type {import("../../../../../../model/Edge.svelte").EdgeData[]}
+     * @type {import("@model/Edge.svelte").EdgeData[]}
      */
     let myEdges = $derived.by(() => {
         if (edges) {

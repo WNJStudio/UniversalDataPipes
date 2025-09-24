@@ -3,7 +3,7 @@
         getMenuDisplayer,
         getMenuSubscriber,
         getMenuUnubscriber,
-    } from "../../../portals/MenuPortal.svelte";
+    } from "@portal/MenuPortal.svelte";
     import DropdownMenuContent from "./DropdownMenuContent.svelte";
     /**
      * @typedef {Object} DropdownMenuProps

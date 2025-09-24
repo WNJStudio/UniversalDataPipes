@@ -1,10 +1,10 @@
 <script>
+    import { t } from "@i18n/i18n.svelte";
     import { Search } from "@lucide/svelte";
+    import { NodeDefs } from "@model/NodeCategory.svelte";
+    import Card from "@ui/Card/Card.svelte";
+    import Input from "@ui/Input/Input.svelte";
     import { fade, fly } from "svelte/transition";
-    import { t } from "../../../../i18n/i18n.svelte";
-    import { NodeDefs } from "../../../../model/NodeCategory.svelte";
-    import Card from "../../../ui/Card/Card.svelte";
-    import Input from "../../../ui/Input/Input.svelte";
 
     /**
      * @typedef {Object} NodeSelectionProps

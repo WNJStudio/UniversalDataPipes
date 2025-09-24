@@ -1,9 +1,9 @@
 <script>
+    import { EdgeData } from "@model/Edge.svelte";
+    import { getLoaded } from "@model/Pipeline.svelte";
+    import { clamp } from "@utils/MathUtils";
     import { ElementRect } from "runed";
     import { circInOut } from "svelte/easing";
-    import { EdgeData } from "../../../../model/Edge.svelte";
-    import { getLoaded } from "../../../../model/Pipeline.svelte";
-    import { clamp } from "../../../../utils/MathUtils";
     import { getDragged } from "../CanvasActions/Drag.svelte";
     import { getPanned } from "../CanvasActions/Pan.svelte";
     import { getResized } from "../CanvasActions/Resize.svelte";
@@ -16,7 +16,7 @@
     /**
      * @typedef {Object} EdgePathProps
      * @prop {EdgeData} edge
-     * @prop {import('../../../../model/Transform.svelte').Transform} canvasTransform
+     * @prop {import('@model/Transform.svelte').Transform} canvasTransform
      * @prop {ElementRect} canvasViewRect
      */
     /** @type {EdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */

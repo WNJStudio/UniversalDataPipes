@@ -1,7 +1,7 @@
 <script>
+    import { t } from "@i18n/i18n.svelte";
     import { ZoomIn } from "@lucide/svelte";
-    import { t } from "../../../../i18n/i18n.svelte";
-    import Button from "../../../ui/Button/Button.svelte";
+    import Button from "@ui/Button/Button.svelte";
 
     /**
      * @typedef {Object} ZoomInButtonProps

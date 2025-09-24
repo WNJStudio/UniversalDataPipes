@@ -1,9 +1,9 @@
 <script>
+    import { t } from "@i18n/i18n.svelte";
     import { Download, EllipsisVertical, Upload } from "@lucide/svelte";
-    import { t } from "../../../../i18n/i18n.svelte";
-    import Button from "../../../ui/Button/Button.svelte";
-    import DropdownMenu from "../../../ui/DropdownMenu/DropdownMenu.svelte";
-    import DropdownMenuItem from "../../../ui/DropdownMenu/DropdownMenuItem.svelte";
+    import Button from "@ui/Button/Button.svelte";
+    import DropdownMenu from "@ui/DropdownMenu/DropdownMenu.svelte";
+    import DropdownMenuItem from "@ui/DropdownMenu/DropdownMenuItem.svelte";
 
     /**
      * @typedef {Object} SidebarMenuProps

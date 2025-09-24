@@ -1,9 +1,6 @@
 <script>
+    import { DATAVIEW, getCurrentView } from "@context/SettingsContext.svelte";
     import { blur } from "svelte/transition";
-    import {
-        DATAVIEW,
-        getCurrentView,
-    } from "../../../context/SettingsContext.svelte";
 
     /** @type {import('svelte/elements').SvelteHTMLElements['div']} */
     let { ...props } = $props();

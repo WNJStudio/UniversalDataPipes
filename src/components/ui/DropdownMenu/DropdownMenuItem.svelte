@@ -1,5 +1,5 @@
 <script>
-    import { getMenuDisplayer } from "../../../portals/MenuPortal.svelte";
+    import { getMenuDisplayer } from "@portal/MenuPortal.svelte";
 
     /**
      * @typedef {Object} DropdownMenuItemProps

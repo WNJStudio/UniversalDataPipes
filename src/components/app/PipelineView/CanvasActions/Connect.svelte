@@ -1,9 +1,9 @@
 <script module>
+    import { EdgeData } from "@model/Edge.svelte";
+    import { HandleConnection } from "@model/HandleConnection.svelte";
+    import { Pipeline } from "@model/Pipeline.svelte";
+    import { Position } from "@model/Position.svelte";
     import { ElementRect } from "runed";
-    import { EdgeData } from "../../../../model/Edge.svelte";
-    import { HandleConnection } from "../../../../model/HandleConnection.svelte";
-    import { Pipeline } from "../../../../model/Pipeline.svelte";
-    import { Position } from "../../../../model/Position.svelte";
 
     /**
      * @type {HandleConnection}
@@ -18,7 +18,7 @@
     /**
      * Attach order -- SECOND
      * @param {ElementRect} rect
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      * @param {Pipeline} pipeline
      */
     export const attachConnectAction = (rect, transform, pipeline) => {

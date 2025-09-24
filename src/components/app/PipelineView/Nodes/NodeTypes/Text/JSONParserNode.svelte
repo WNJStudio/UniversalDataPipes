@@ -1,7 +1,7 @@
 <script>
-    import { dataContext } from "../../../../../../context/DataContext.svelte";
-    import { pipelineContext } from "../../../../../../context/PipelineContext.svelte";
-    import { t } from "../../../../../../i18n/i18n.svelte";
+    import { dataContext } from "@context/DataContext.svelte";
+    import { pipelineContext } from "@context/PipelineContext.svelte";
+    import { t } from "@i18n/i18n.svelte";
 
     /** @type {import('../NodeProps.svelte').NodeProps} */
     let { inputs, outputs } = $props();
@@ -13,7 +13,7 @@
     let errorMessage = $state("");
 
     /**
-     * @type {import("../../../../../../model/Edge.svelte").EdgeData[]}
+     * @type {import("@model/Edge.svelte").EdgeData[]}
      */
     let myInputEdges = $derived.by(() => {
         if (edges) {
@@ -27,7 +27,7 @@
     });
 
     /**
-     * @type {import("../../../../../../model/Edge.svelte").EdgeData[]}
+     * @type {import("@model/Edge.svelte").EdgeData[]}
      */
     let myOutputEdges = $derived.by(() => {
         if (edges) {

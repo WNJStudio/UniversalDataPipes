@@ -1,12 +1,9 @@
 <script>
+    import { t } from "@i18n/i18n.svelte";
     import { Plus } from "@lucide/svelte";
+    import { Pipeline, pipelineStorage } from "@model/Pipeline.svelte";
+    import Button from "@ui/Button/Button.svelte";
     import { slide } from "svelte/transition";
-    import { t } from "../../../../i18n/i18n.svelte";
-    import {
-        Pipeline,
-        pipelineStorage,
-    } from "../../../../model/Pipeline.svelte";
-    import Button from "../../../ui/Button/Button.svelte";
 
     /**
      * @typedef {Object} NoPipelinesProps

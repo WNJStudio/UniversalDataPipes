@@ -1,14 +1,14 @@
 <script>
-    import { t } from "../../../i18n/i18n.svelte";
-    import Button from "../../ui/Button/Button.svelte";
-    import Dialog from "../../ui/Dialog/Dialog.svelte";
-    import DialogDescription from "../../ui/Dialog/DialogDescription.svelte";
-    import DialogFooter from "../../ui/Dialog/DialogFooter.svelte";
-    import DialogHeader from "../../ui/Dialog/DialogHeader.svelte";
-    import DialogTitle from "../../ui/Dialog/DialogTitle.svelte";
-    import Input from "../../ui/Input/Input.svelte";
-    import Label from "../../ui/Label/Label.svelte";
-    import FlySwap from "../../ui/Transitions/FlySwap.svelte";
+    import { t } from "@i18n/i18n.svelte";
+    import Button from "@ui/Button/Button.svelte";
+    import Dialog from "@ui/Dialog/Dialog.svelte";
+    import DialogDescription from "@ui/Dialog/DialogDescription.svelte";
+    import DialogFooter from "@ui/Dialog/DialogFooter.svelte";
+    import DialogHeader from "@ui/Dialog/DialogHeader.svelte";
+    import DialogTitle from "@ui/Dialog/DialogTitle.svelte";
+    import Input from "@ui/Input/Input.svelte";
+    import Label from "@ui/Label/Label.svelte";
+    import FlySwap from "@ui/Transitions/FlySwap.svelte";
 
     /**
      * @typedef {Object} SavePipelineDialogProps

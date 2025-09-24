@@ -1,10 +1,7 @@
 <script>
-    import { t } from "../../../../i18n/i18n.svelte";
-    import {
-        HandleData,
-        HandleDirLabels,
-    } from "../../../../model/Handle.svelte";
-    import Tooltip from "../../../ui/Tooltip/Tooltip.svelte";
+    import { t } from "@i18n/i18n.svelte";
+    import { HandleData, HandleDirLabels } from "@model/Handle.svelte";
+    import Tooltip from "@ui/Tooltip/Tooltip.svelte";
     import { getIsPanning } from "../CanvasActions/Pan.svelte";
     /**
      * @typedef {Object} HandleProps

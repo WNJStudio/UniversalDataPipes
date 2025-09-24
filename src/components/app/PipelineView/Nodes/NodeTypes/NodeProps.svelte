@@ -1,9 +1,7 @@
 <script module>
-    import { HandleData } from "../../../../../model/Handle.svelte";
-
     /**
      * @typedef {Object} NodeProps
-     * @prop {HandleData[]} inputs
-     * @prop {HandleData[]} outputs
+     * @prop {import('@model/Handle.svelte').HandleData[]} inputs
+     * @prop {import('@model/Handle.svelte').HandleData[]} outputs
      */
 </script>

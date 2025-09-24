@@ -1,5 +1,5 @@
 <script module>
-    import { Position } from "../../../../model/Position.svelte";
+    import { Position } from "@model/Position.svelte";
     /**
      * @type {number}
      */
@@ -19,7 +19,7 @@
 
     /**
      * Attach order -- FIRST
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      */
     export const attachPanAction = (transform) => {
         /**

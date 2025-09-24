@@ -1,7 +1,7 @@
 <script>
-    import { dataContext } from "../../../context/DataContext.svelte";
-    import { pipelineContext } from "../../../context/PipelineContext.svelte";
-    import { Pipeline, pipelineStorage } from "../../../model/Pipeline.svelte";
+    import { dataContext } from "@context/DataContext.svelte";
+    import { pipelineContext } from "@context/PipelineContext.svelte";
+    import { Pipeline, pipelineStorage } from "@model/Pipeline.svelte";
     import ImportExportDialog from "./ImportExportDialog.svelte";
     import PipelineCanvas from "./PipelineCanvas.svelte";
     import SavePipelineDialog from "./SavePipelineDialog.svelte";

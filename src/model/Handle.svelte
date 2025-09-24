@@ -1,6 +1,6 @@
 <script module>
     /**
-     * @typedef {{type:string,color:string, label:import('../i18n/i18n.svelte').i18nlabel}} HandleType
+     * @typedef {{type:string,color:string, label:import('@i18n/i18n.svelte').i18nlabel}} HandleType
      */
     /**
      * @typedef {Object} HandleObject
@@ -43,7 +43,7 @@
     };
 
     /**
-     * @type {Object<string, import('../i18n/i18n.svelte').i18nlabel>}
+     * @type {Object<string, import('@i18n/i18n.svelte').i18nlabel>}
      */
     export const HandleDirLabels = {
         IN: "label.handle.dir.in",
@@ -56,7 +56,7 @@
         /**
          * Reactive
          * @param {string} id
-         * @param {import('../i18n/i18n.svelte').i18nlabel} name
+         * @param {import('@i18n/i18n.svelte').i18nlabel} name
          * @param {string} nodeId
          * @param {HandleType} type
          * @param {"IN"|"OUT"} dir
@@ -71,7 +71,7 @@
              */
             this.nodeId = $state(nodeId);
             /**
-             * @type {import('../i18n/i18n.svelte').i18nlabel}
+             * @type {import('@i18n/i18n.svelte').i18nlabel}
              */
             this.name = $state(name);
             /**

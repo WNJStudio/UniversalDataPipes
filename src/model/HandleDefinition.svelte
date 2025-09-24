@@ -7,7 +7,7 @@
     export class HandleDefinition {
         /**
          * Reactive
-         * @param {import('../i18n/i18n.svelte').i18nlabel} name
+         * @param {import('@i18n/i18n.svelte').i18nlabel} name
          * @param {import('./Handle.svelte').HandleType} type
          * @param {"IN"|"OUT"} dir
          */
@@ -21,7 +21,7 @@
              */
             this.dir = $state(dir);
             /**
-             * @type {import('../i18n/i18n.svelte').i18nlabel}
+             * @type {import('@i18n/i18n.svelte').i18nlabel}
              */
             this.name = $state(name);
         }

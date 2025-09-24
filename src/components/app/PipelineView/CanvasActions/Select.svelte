@@ -1,8 +1,8 @@
 <script module>
+    import { Pipeline } from "@model/Pipeline.svelte";
+    import { Position } from "@model/Position.svelte";
+    import { Rectangle } from "@model/Rectangle.svelte";
     import { ElementRect } from "runed";
-    import { Pipeline } from "../../../../model/Pipeline.svelte";
-    import { Position } from "../../../../model/Position.svelte";
-    import { Rectangle } from "../../../../model/Rectangle.svelte";
     import { getDragged } from "./Drag.svelte";
     import { getPanMode } from "./Pan.svelte";
     const EDGE_DETECTION_SENSITIVITY = 10;
@@ -106,7 +106,7 @@
     /**
      * Attach order -- LAST
      * @param {ElementRect} rect
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      * @param {Pipeline} pipeline
      */
     export const attachSelectAction = (rect, transform, pipeline) => {

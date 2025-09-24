@@ -1,6 +1,6 @@
 <script module>
-    import { Pipeline } from "../../../../model/Pipeline.svelte";
-    import { roundMult } from "../../../../utils/MathUtils";
+    import { Pipeline } from "@model/Pipeline.svelte";
+    import { roundMult } from "@utils/MathUtils";
 
     /**
      * @type {string} id of the node currently being resized
@@ -15,7 +15,7 @@
 
     /**
      * Attach order -- THIRD
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      * @param {Pipeline} pipeline
      * @param {()=>boolean} isSnapToGrid
      * @param {()=>number} gridSize

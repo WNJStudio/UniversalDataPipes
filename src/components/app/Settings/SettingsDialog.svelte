@@ -1,12 +1,12 @@
 <script>
-    import { getLastSavedSince } from "../../../context/SettingsContext.svelte";
-    import { t } from "../../../i18n/i18n.svelte";
-    import Dialog from "../../ui/Dialog/Dialog.svelte";
-    import DialogDescription from "../../ui/Dialog/DialogDescription.svelte";
-    import DialogHeader from "../../ui/Dialog/DialogHeader.svelte";
-    import DialogTitle from "../../ui/Dialog/DialogTitle.svelte";
-    import Separator from "../../ui/Separator/Separator.svelte";
-    import TabList from "../../ui/Tabs/TabList.svelte";
+    import { getLastSavedSince } from "@context/SettingsContext.svelte";
+    import { t } from "@i18n/i18n.svelte";
+    import Dialog from "@ui/Dialog/Dialog.svelte";
+    import DialogDescription from "@ui/Dialog/DialogDescription.svelte";
+    import DialogHeader from "@ui/Dialog/DialogHeader.svelte";
+    import DialogTitle from "@ui/Dialog/DialogTitle.svelte";
+    import Separator from "@ui/Separator/Separator.svelte";
+    import TabList from "@ui/Tabs/TabList.svelte";
     import AppearanceTab from "./AppearanceTab.svelte";
     import GeneralTab from "./GeneralTab.svelte";
     import GridTab from "./GridTab.svelte";

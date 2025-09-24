@@ -2,9 +2,9 @@
     import {
         getLanguage,
         getLanguageChanger,
-    } from "../../../context/SettingsContext.svelte";
-    import { languages, t } from "../../../i18n/i18n.svelte";
-    import Select from "../../ui/Select/Select.svelte";
+    } from "@context/SettingsContext.svelte";
+    import { languages, t } from "@i18n/i18n.svelte";
+    import Select from "@ui/Select/Select.svelte";
 
     /**
      * @typedef {Object} GeneralTabProps

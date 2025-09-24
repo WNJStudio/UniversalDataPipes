@@ -9,14 +9,14 @@
         getSnapToggler,
         getSnapToGrid,
         LINES,
-    } from "../../../context/SettingsContext.svelte";
-    import { t } from "../../../i18n/i18n.svelte";
-    import Label from "../../ui/Label/Label.svelte";
-    import RadioGroup from "../../ui/RadioGroup/RadioGroup.svelte";
-    import RadioGroupItem from "../../ui/RadioGroup/RadioGroupItem.svelte";
-    import Separator from "../../ui/Separator/Separator.svelte";
-    import Slider from "../../ui/Slider/Slider.svelte";
-    import Switch from "../../ui/Switch/Switch.svelte";
+    } from "@context/SettingsContext.svelte";
+    import { t } from "@i18n/i18n.svelte";
+    import Label from "@ui/Label/Label.svelte";
+    import RadioGroup from "@ui/RadioGroup/RadioGroup.svelte";
+    import RadioGroupItem from "@ui/RadioGroup/RadioGroupItem.svelte";
+    import Separator from "@ui/Separator/Separator.svelte";
+    import Slider from "@ui/Slider/Slider.svelte";
+    import Switch from "@ui/Switch/Switch.svelte";
     const labelClasses =
         "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary";
 

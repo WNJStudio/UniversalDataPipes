@@ -1,18 +1,18 @@
 <script>
-  import { Save } from "@lucide/svelte";
-  import { fly } from "svelte/transition";
-  import { pipelineContext } from "../../../../context/PipelineContext.svelte";
+  import { pipelineContext } from "@context/PipelineContext.svelte";
   import {
     getCurrentView,
     getSidebarStatus,
     getSidebarToggler,
     PIPEVIEW,
-  } from "../../../../context/SettingsContext.svelte";
-  import { t } from "../../../../i18n/i18n.svelte";
-  import { Pipeline, pipelineStorage } from "../../../../model/Pipeline.svelte";
-  import { getMenuDisplayer } from "../../../../portals/MenuPortal.svelte";
-  import Button from "../../../ui/Button/Button.svelte";
-  import ScrollArea from "../../../ui/ScrollArea/ScrollArea.svelte";
+  } from "@context/SettingsContext.svelte";
+  import { t } from "@i18n/i18n.svelte";
+  import { Save } from "@lucide/svelte";
+  import { Pipeline, pipelineStorage } from "@model/Pipeline.svelte";
+  import { getMenuDisplayer } from "@portal/MenuPortal.svelte";
+  import Button from "@ui/Button/Button.svelte";
+  import ScrollArea from "@ui/ScrollArea/ScrollArea.svelte";
+  import { fly } from "svelte/transition";
   import DeleteDialog from "./DeleteDialog.svelte";
   import NoPipelines from "./NoPipelines.svelte";
   import PipelineCard from "./PipelineCard.svelte";

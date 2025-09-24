@@ -1,5 +1,5 @@
 <script module>
-    import { Pipeline } from "../../../../model/Pipeline.svelte";
+    import { Pipeline } from "@model/Pipeline.svelte";
 
     /**
      * @param {()=>string[]} selectedNodes

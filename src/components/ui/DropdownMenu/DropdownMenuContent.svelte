@@ -11,7 +11,7 @@
      */
 
     import { fly } from "svelte/transition";
-    import { getMenuDisplayer } from "../../../portals/MenuPortal.svelte";
+    import { getMenuDisplayer } from "@portal/MenuPortal.svelte";
     import { getOpposite } from "../Sides.svelte";
 
     /** @type {DropdownMenuContentProps & import('svelte/elements').SvelteHTMLElements['div']} */

@@ -4,7 +4,7 @@
 
     /**
      * @typedef {Object} PendingEdgePathProps
-     * @prop {import('../../../../model/Transform.svelte').Transform} canvasTransform
+     * @prop {import('@model/Transform.svelte').Transform} canvasTransform
      * @prop {ElementRect} canvasViewRect
      */
     /** @type {PendingEdgePathProps & import('svelte/elements').SvelteHTMLElements['path']} */

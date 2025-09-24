@@ -5,7 +5,7 @@
         getTooltipDisplayer,
         getTooltipSubscriber,
         getTooltipUnubscriber,
-    } from "../../../portals/TooltipPortal.svelte";
+    } from "@portal/TooltipPortal.svelte";
     import TooltipContent from "./TooltipContent.svelte";
 
     /**

@@ -1,6 +1,6 @@
 <script module>
+    import { clamp } from "@utils/MathUtils";
     import { ElementRect } from "runed";
-    import { clamp } from "../../../../utils/MathUtils";
 
     const ZOOM_SENSITIVITY = 0.001;
     const MIN_ZOOM = 0.001;
@@ -16,7 +16,7 @@
     /**
      * @param {number} delta
      * @param {ElementRect} rect
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      */
     const changeZoom = (delta, rect, transform) => {
         if (!rect) {
@@ -39,14 +39,14 @@
 
     /**
      * @param {ElementRect} rect
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      */
     export const onZoomIn = (rect, transform) => {
         changeZoom(0.01, rect, transform);
     };
     /**
      * @param {ElementRect} rect
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      */
     export const onZoomOut = (rect, transform) => {
         changeZoom(-0.01, rect, transform);
@@ -55,7 +55,7 @@
     /**
      * @param {WheelEvent} e
      * @param {ElementRect} rect
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      */
     const onWheel = (e, rect, transform) => {
         if (e.ctrlKey) {
@@ -84,7 +84,7 @@
 
     /**
      * @param {ElementRect} rect
-     * @param {import('../../../../model/Transform.svelte').Transform} transform
+     * @param {import('@model/Transform.svelte').Transform} transform
      */
     export const attachWheel = (rect, transform) => {
         /**

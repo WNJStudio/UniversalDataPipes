@@ -1,6 +1,6 @@
 <script>
+  import Card from "@ui/Card/Card.svelte";
   import { fly } from "svelte/transition";
-  import Card from "../../../ui/Card/Card.svelte";
   import CategorySelection from "./CategorySelection.svelte";
   import CursorToggle from "./CursorToggle.svelte";
   import DeleteSection from "./DeleteSection.svelte";

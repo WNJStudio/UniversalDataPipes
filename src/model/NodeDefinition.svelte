@@ -1,7 +1,7 @@
 <script module>
+    import { t } from "@i18n/i18n.svelte";
     import { CircleQuestionMark } from "@lucide/svelte";
     import { v4 } from "uuid";
-    import { t } from "../i18n/i18n.svelte";
     import { HandleData } from "./Handle.svelte";
     import { HandleDefinition } from "./HandleDefinition.svelte";
     import { NodeData } from "./Node.svelte";
@@ -11,7 +11,7 @@
     export class NodeDefinition {
         /**
          * @param {import('./NodeCategory.svelte').Categories} category
-         * @param {import('../i18n/i18n.svelte').i18nlabel} name
+         * @param {import('@i18n/i18n.svelte').i18nlabel} name
          * @param {HandleDefinition[]} inputs
          * @param {HandleDefinition[]} outputs
          * @param {import('svelte').Snippet<[{inputs:HandleData[], outputs:HandleData[]}]>} render
@@ -23,7 +23,7 @@
              */
             this.category = category;
             /**
-             * @type {import('../i18n/i18n.svelte').i18nlabel}
+             * @type {import('@i18n/i18n.svelte').i18nlabel}
              */
             this.name = name;
             /**
