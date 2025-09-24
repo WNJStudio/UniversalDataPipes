@@ -22,6 +22,7 @@
     import { attachResizeAction } from "./CanvasActions/Resize.svelte";
     import {
         attachSelectAction,
+        getEdgeSelectionSetter,
         getNodeSelectionChecker,
         getNodeSelectionSetter,
         getSelectedEdges,
@@ -38,6 +39,9 @@
     import PendingEdgePath from "./Nodes/PendingEdgePath.svelte";
     import SelectionRect from "./SelectionRect.svelte";
     import PipelineToolbar from "./Toolbar/PipelineToolbar.svelte";
+    import { attachCopyAction } from "./CanvasActions/Copy.svelte";
+    import { attachCutAction } from "./CanvasActions/Cut.svelte";
+    import { attachPasteAction } from "./CanvasActions/Paste.svelte";
 
     const isSnapToGrid = getSnapToGrid();
     const currentView = getCurrentView();
@@ -62,6 +66,7 @@
 
     const isPanning = getIsPanning();
     const selectNode = getNodeSelectionSetter();
+    const selectEdge = getEdgeSelectionSetter();
     const areNodesSelected = getNodeSelectionChecker();
     const cleanSelection = getSelectionCleaner();
 
@@ -127,6 +132,20 @@
         pipeline,
         data,
         cleanSelection,
+    )}
+    {@attach attachCopyAction(selectedNodes, pipeline)}
+    {@attach attachCutAction(
+        selectedNodes,
+        selectedEdges,
+        pipeline,
+        data,
+        cleanSelection,
+    )}
+    {@attach attachPasteAction(
+        pipeline,
+        cleanSelection,
+        selectNode,
+        selectEdge,
     )}
     {@attach attachPanAction(canvasTransform)}
     {@attach attachConnectAction(canvasRect, canvasTransform, pipeline)}
