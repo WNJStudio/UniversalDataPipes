@@ -16,7 +16,7 @@
 </script>
 
 {#if currentView() === PIPEVIEW}
-    <div transition:slide={{ delay: 300 }}>
+    <div transition:slide={{ delay: 300, axis: "x" }}>
         <Button
             tooltipSide="bottom"
             variant="ghost"

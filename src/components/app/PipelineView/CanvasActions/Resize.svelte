@@ -12,6 +12,7 @@
     let lastResized = $state();
 
     export const getResized = () => () => lastResized;
+    export const getResizingNode = () => () => resizingNode;
 
     /**
      * Attach order -- THIRD

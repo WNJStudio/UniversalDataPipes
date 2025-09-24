@@ -15,6 +15,7 @@
     onNodeClick,
   } from "../CanvasActions/Select.svelte";
   import Handle from "./Handle.svelte";
+  import { getResizingNode } from "../CanvasActions/Resize.svelte";
 
   /**
    * @typedef {Object} BaseNodeProps
@@ -26,6 +27,7 @@
   const isSelected = () => checker([node.id]);
   const isDragging = getIsDragging();
   const isPanning = getIsPanning();
+  const resizingNode = getResizingNode();
   const gridSize = getGridSize();
   const isSnapToGrid = getSnapToGrid();
   let definition = $derived(getDefinition(node.category, node.name));
@@ -95,7 +97,7 @@
   <Card
     class={[
       "shadow-2xl! shadow-black/50 transition-[filter] flex h-full",
-      isPanning()
+      isPanning() || resizingNode() === node.id
         ? ""
         : "[&:not(:has([data-handle-id]:hover)):not(:has([data-resize-handle]:hover))]:hover:brightness-150",
       isSelected()

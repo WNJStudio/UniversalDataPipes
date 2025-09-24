@@ -36,6 +36,8 @@
             e.preventDefault();
             if (e.currentTarget instanceof HTMLElement) {
                 if (e.currentTarget.hasAttribute("data-template-category")) {
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
                     const category = e.currentTarget.getAttribute(
                         "data-template-category",
                     );
