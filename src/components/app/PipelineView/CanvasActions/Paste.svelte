@@ -15,7 +15,6 @@
         nodeSetter,
         edgeSetter,
     ) => {
-        console.time("paste");
         const clipContent = await navigator.clipboard.readText();
         try {
             const { nodes: nodeos, edges: edgeos } = JSON.parse(clipContent);
@@ -72,9 +71,9 @@
                 ),
             );
         } catch (e) {
+            // TODO: toaster
             console.error("Paste failed: ", e);
         }
-        console.timeEnd("paste");
     };
 
     /**
