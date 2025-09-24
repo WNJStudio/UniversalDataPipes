@@ -26,7 +26,7 @@
                 throw new Error("Object signature not matching Size");
             }
 
-            return new Size(obj.width, obj.width);
+            return new Size(obj.width, obj.height);
         }
 
         /**
@@ -36,7 +36,10 @@
             if (typeof obj !== "object") {
                 return false;
             }
-            if (isNaN(obj.width) || isNaN(obj.width)) {
+            if (
+                (obj.width && isNaN(obj.width)) ||
+                (obj.height && isNaN(obj.height))
+            ) {
                 return false;
             }
             return true;
