@@ -1,10 +1,8 @@
 <script>
   import Card from "@ui/Card/Card.svelte";
   import { fly } from "svelte/transition";
-  import CategorySelection from "./CategorySelection.svelte";
   import CursorToggle from "./CursorToggle.svelte";
   import DeleteSection from "./DeleteSection.svelte";
-  import NodeSelection from "./NodeSelection.svelte";
   import ZoomInButton from "./ZoomInButton.svelte";
   import ZoomIndicator from "./ZoomIndicator.svelte";
   import ZoomOutButton from "./ZoomOutButton.svelte";
@@ -14,21 +12,10 @@
    * @prop {number} currentZoom
    * @prop {()=>any} onZoomIn
    * @prop {()=>any} onZoomOut
-   * @prop {(e)=>any} onToolbarDrag
    */
 
   /** @type {PipelineToolbarProps & import('svelte/elements').SvelteHTMLElements['div']} */
-  let { hidden, currentZoom, onZoomIn, onZoomOut, onToolbarDrag, ...props } =
-    $props();
-
-  /** @type {string} */
-  let activeCategory = $state("");
-  let pattern = $state("");
-
-  const spawnNode = (e) => {
-    activeCategory = "";
-    onToolbarDrag(e);
-  };
+  let { hidden, currentZoom, onZoomIn, onZoomOut, ...props } = $props();
 </script>
 
 {#if !hidden}
@@ -39,15 +26,12 @@
       props.class,
     ]}
   >
-    <NodeSelection {spawnNode} {activeCategory} bind:pattern />
     <Card class="bg-card/90 backdrop-blur-xs">
       <div class="p-2">
         <div class="flex items-center divide-x divide-border">
-          <div class="flex items-center gap-2 pr-2">
-            <CategorySelection bind:pattern bind:activeCategory />
-          </div>
+          <CursorToggle />
+          <!-- TODO: Copy Cut Paste -->
           <div class="flex items-center gap-1 px-2">
-            <CursorToggle />
             <ZoomInButton {onZoomIn} />
             <ZoomIndicator {currentZoom} />
             <ZoomOutButton {onZoomOut} />

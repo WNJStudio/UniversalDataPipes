@@ -98,6 +98,11 @@
    * @param {MouseEvent} e
    */
   const onContextMenu = (e) => {
+    if (e.target instanceof HTMLElement) {
+      if (e.target.nodeName === "INPUT" || e.target.nodeName === "TEXTAREA") {
+        return;
+      }
+    }
     e.preventDefault();
     if (e.target instanceof HTMLElement) {
       if (e.target.closest("[data-key]")) {
@@ -133,8 +138,8 @@
 {#if !hidden}
   <div
     transition:fly={{ x: "-100%" }}
-    role="button"
-    tabindex="0"
+    role="complementary"
+    tabindex="-1"
     oncontextmenu={onContextMenu}
     class={[
       "absolute z-50 bg-sidebar/75 w-64 border-r border-border/50 flex flex-col h-full",

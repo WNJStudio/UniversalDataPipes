@@ -30,7 +30,7 @@
      * @param {Pipeline} pipeline
      * @param {(id:string)=>void} selectNode
      */
-    export const onToolbarDrag =
+    export const onLibraryDrag =
         (rect, transform, pipeline, selectNode) =>
         (/** @type {MouseEvent} e */ e) => {
             e.preventDefault();

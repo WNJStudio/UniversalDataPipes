@@ -13,6 +13,7 @@
      * @typedef {Object} Settings
      * @prop {PIPEVIEW|DATAVIEW} currentView
      * @prop {boolean} isSidebarOpen
+     * @prop {boolean} isLibraryOpen
      * @prop {boolean} isSnapToGrid
      * @prop {number} gridSize
      * @prop {DOTS|CROSSES|LINES} currentPattern
@@ -29,6 +30,7 @@
         currentPattern: DOTS,
         gridSize: 20,
         isSidebarOpen: true,
+        isLibraryOpen: true,
         isSnapToGrid: true,
         lang: "system",
     });
@@ -43,6 +45,10 @@
 
     const toggleSidebar = () => {
         settings.current.isSidebarOpen = !settings.current.isSidebarOpen;
+        settings.current.lastSave = Date.now();
+    };
+    const toggleLibrary = () => {
+        settings.current.isLibraryOpen = !settings.current.isLibraryOpen;
         settings.current.lastSave = Date.now();
     };
 
@@ -81,6 +87,7 @@
 
     export const getViewChanger = () => changeView;
     export const getSidebarToggler = () => toggleSidebar;
+    export const getLibraryToggler = () => toggleLibrary;
     export const getSnapToggler = () => toggleSnapToGrid;
     export const getGridChanger = () => changeGridSize;
     export const getPatternChanger = () => changePattern;
@@ -88,6 +95,7 @@
 
     export const getCurrentView = () => () => settings.current.currentView;
     export const getSidebarStatus = () => () => settings.current.isSidebarOpen;
+    export const getLibraryStatus = () => () => settings.current.isLibraryOpen;
     export const getSnapToGrid = () => () => settings.current.isSnapToGrid;
     export const getGridSize = () => () => settings.current.gridSize;
     export const getLastSavedSince = () => () => {

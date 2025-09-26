@@ -31,7 +31,7 @@
             toggleStatus={sidebarStatus()}
             delay={500}
             onclick={() => sidebarToggler()}
-            class="h-8 w-8"
+            class={["h-8 w-8", sidebarStatus() ? "text-primary/90" : ""]}
         >
             {#snippet tooltip()}
                 <span class="text-xs font-normal"

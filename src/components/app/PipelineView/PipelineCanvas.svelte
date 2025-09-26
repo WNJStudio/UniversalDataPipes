@@ -13,12 +13,15 @@
     import { ElementRect } from "runed";
     import { blur } from "svelte/transition";
     import { attachConnectAction } from "./CanvasActions/Connect.svelte";
+    import { attachCopyAction } from "./CanvasActions/Copy.svelte";
+    import { attachCutAction } from "./CanvasActions/Cut.svelte";
     import { attachDeleteAction } from "./CanvasActions/Delete.svelte";
     import {
         attachDragAction,
-        onToolbarDrag,
+        onLibraryDrag,
     } from "./CanvasActions/Drag.svelte";
     import { attachPanAction, getIsPanning } from "./CanvasActions/Pan.svelte";
+    import { attachPasteAction } from "./CanvasActions/Paste.svelte";
     import { attachResizeAction } from "./CanvasActions/Resize.svelte";
     import {
         attachSelectAction,
@@ -34,14 +37,12 @@
         onZoomIn,
         onZoomOut,
     } from "./CanvasActions/Zoom.svelte";
+    import Library from "./Library/Library.svelte";
     import BaseNode from "./Nodes/BaseNode.svelte";
     import EdgePath from "./Nodes/EdgePath.svelte";
     import PendingEdgePath from "./Nodes/PendingEdgePath.svelte";
     import SelectionRect from "./SelectionRect.svelte";
     import PipelineToolbar from "./Toolbar/PipelineToolbar.svelte";
-    import { attachCopyAction } from "./CanvasActions/Copy.svelte";
-    import { attachCutAction } from "./CanvasActions/Cut.svelte";
-    import { attachPasteAction } from "./CanvasActions/Paste.svelte";
 
     const isSnapToGrid = getSnapToGrid();
     const currentView = getCurrentView();
@@ -114,17 +115,18 @@
 {/if}
 <PipelineToolbar
     {hidden}
-    onToolbarDrag={onToolbarDrag(
+    currentZoom={canvasTransform.scale}
+    onZoomIn={() => onZoomIn(canvasRect, canvasTransform)}
+    onZoomOut={() => onZoomOut(canvasRect, canvasTransform)}
+/>
+<Library
+    onLibraryDrag={onLibraryDrag(
         canvasRect,
         canvasTransform,
         pipeline,
         selectNode,
     )}
-    currentZoom={canvasTransform.scale}
-    onZoomIn={() => onZoomIn(canvasRect, canvasTransform)}
-    onZoomOut={() => onZoomOut(canvasRect, canvasTransform)}
 />
-
 <svelte:window
     {@attach attachDeleteAction(
         selectedNodes,

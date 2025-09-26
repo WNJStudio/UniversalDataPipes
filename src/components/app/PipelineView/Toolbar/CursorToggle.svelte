@@ -8,17 +8,19 @@
     const toggle = togglePanMode();
 </script>
 
-<Button tooltipSide="top" variant="ghost" size="icon" onclick={toggle}>
-    {#snippet tooltip()}
-        <p class="text-xs">
-            {panMode()
-                ? t("label.toolbar.panmode")
-                : t("label.toolbar.selectmode")}
-        </p>
-    {/snippet}
-    {#if panMode()}
-        <Hand class="h-5 w-5" />
-    {:else}
-        <MousePointer class="h-5 w-5" />
-    {/if}
-</Button>
+<div class="pr-2">
+    <Button tooltipSide="top" variant="ghost" size="icon" onclick={toggle}>
+        {#snippet tooltip()}
+            <p class="text-xs">
+                {panMode()
+                    ? t("label.toolbar.panmode")
+                    : t("label.toolbar.selectmode")}
+            </p>
+        {/snippet}
+        {#if panMode()}
+            <Hand class="h-5 w-5" />
+        {:else}
+            <MousePointer class="h-5 w-5" />
+        {/if}
+    </Button>
+</div>

@@ -69,8 +69,6 @@
         "label.dialog.ie.importtext": "Import from Text",
         "label.zoomout.tooltip": "Zoom Out (CRTL + Scroll Down)",
         "label.zoomin.tooltip": "Zoom In (CRTL + Scroll Up)",
-        "label.toolbar.search.placeholder": "Search nodes...",
-        "label.toolbar.search.notfound": "No nodes found.",
         "label.toolbar.delete.tooltip": "Delete Selected",
         "label.toolbar.panmode": "Pan Mode (P)",
         "label.toolbar.selectmode": "Select Mode (V)",
@@ -111,5 +109,11 @@
         "label.sidebar.collapse": "Collapse Sidebar (CTRL + B)",
         "label.sidebar.expand": "Expand Sidebar (CTRL + B)",
         "label.data": "Data",
+        "label.library.collapse": "Collapse Library (TAB)",
+        "label.library.expand": "Expand Library (TAB)",
+        "label.library.search.placeholder": "Search nodes...",
+        "label.library.search.notfound": "No nodes found.",
+        "label.library": "Node Library",
+        "label.drag.hint": "Drag nodes onto the canvas",
     };
 </script>

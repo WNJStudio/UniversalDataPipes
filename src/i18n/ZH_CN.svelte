@@ -64,8 +64,6 @@
         "label.dialog.ie.importtext": "从文本导入",
         "label.zoomout.tooltip": "缩小 (CTRL + 向下滚动)",
         "label.zoomin.tooltip": "放大 (CTRL + 向上滚动)",
-        "label.toolbar.search.placeholder": "搜索节点...",
-        "label.toolbar.search.notfound": "未找到节点。",
         "label.toolbar.delete.tooltip": "删除选中项",
         "label.toolbar.panmode": "平移模式 (P)",
         "label.toolbar.selectmode": "选择模式 (V)",
@@ -105,5 +103,11 @@
         "label.sidebar.collapse": "折叠侧边栏 (CTRL + B)",
         "label.sidebar.expand": "展开侧边栏 (CTRL + B)",
         "label.data": "数据",
+        "label.library.collapse": "折叠节点库 (TAB)",
+        "label.library.expand": "展开节点库 (TAB)",
+        "label.library.search.placeholder": "搜索节点...",
+        "label.library.search.notfound": "未找到节点。",
+        "label.library": "节点库",
+        "label.drag.hint": "把节点拖动到画布上",
     };
 </script>
