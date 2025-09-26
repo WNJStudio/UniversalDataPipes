@@ -4,6 +4,7 @@
     import { NodeDefs } from "@model/NodeCategory.svelte";
     import Card from "@ui/Card/Card.svelte";
     import Input from "@ui/Input/Input.svelte";
+    import { smoothScale } from "@ui/Transitions/SmoothScale.svelte";
     import { fade, fly } from "svelte/transition";
 
     /**
@@ -45,28 +46,30 @@
                         ]}
                     >
                         {#if filteredNodes.length === 0}
-                            <p
-                                class="text-sm text-muted-foreground text-center w-full py-4"
+                            <div
+                                transition:smoothScale={{}}
+                                class="h-20 w-full py-4 flex items-center justify-center"
                             >
-                                {t("label.toolbar.search.notfound")}
-                            </p>
+                                <p
+                                    class="flex-1 text-sm text-muted-foreground text-center"
+                                >
+                                    {t("label.toolbar.search.notfound")}
+                                </p>
+                            </div>
                         {/if}
                         {#each filteredNodes as node (node.name)}
-                            <div transition:fade>
-                                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                                <div
-                                    data-template-category={activeCategory}
-                                    data-template-name={node.name}
-                                    onmousedown={spawnNode}
-                                    class="flex flex-col items-center justify-center p-2 rounded-md cursor-grab hover:bg-accent text-muted-foreground hover:text-accent-foreground w-24 h-20 border border-transparent hover:border-primary transition-colors"
-                                >
-                                    <node.icon
-                                        class="h-6 w-6 mb-1 text-primary"
-                                    />
-                                    <p class="text-xs text-center">
-                                        {t(node.name)}
-                                    </p>
-                                </div>
+                            <!-- svelte-ignore a11y_no_static_element_interactions -->
+                            <div
+                                transition:smoothScale={{}}
+                                data-template-category={activeCategory}
+                                data-template-name={node.name}
+                                onmousedown={spawnNode}
+                                class="flex flex-col items-center justify-center p-2 rounded-md cursor-grab hover:bg-accent text-muted-foreground hover:text-accent-foreground w-24 h-20 border border-transparent hover:border-primary transition-colors"
+                            >
+                                <node.icon class="h-6 w-6 mb-1 text-primary" />
+                                <p class="text-xs text-center">
+                                    {t(node.name)}
+                                </p>
                             </div>
                         {/each}
                     </div>

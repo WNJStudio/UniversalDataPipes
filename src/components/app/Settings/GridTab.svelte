@@ -17,6 +17,7 @@
     import Separator from "@ui/Separator/Separator.svelte";
     import Slider from "@ui/Slider/Slider.svelte";
     import Switch from "@ui/Switch/Switch.svelte";
+    import { smoothScale } from "@ui/Transitions/SmoothScale.svelte";
     const labelClasses =
         "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary";
 
@@ -35,7 +36,11 @@
 </script>
 
 {#if !hidden}
-    <div class="grid gap-6 py-4">
+    <div
+        in:smoothScale={{ delay: 300, axis: "height" }}
+        out:smoothScale={{ axis: "height" }}
+        class="grid gap-6 py-4"
+    >
         <div class="flex items-center justify-between">
             <Label for="snap-to-grid" class="flex flex-col space-y-1">
                 <span>{t("label.settings.snaptogrid")}</span>

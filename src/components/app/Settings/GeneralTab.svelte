@@ -5,6 +5,7 @@
     } from "@context/SettingsContext.svelte";
     import { languages, t } from "@i18n/i18n.svelte";
     import Select from "@ui/Select/Select.svelte";
+    import { smoothScale } from "@ui/Transitions/SmoothScale.svelte";
 
     /**
      * @typedef {Object} GeneralTabProps
@@ -18,7 +19,11 @@
 </script>
 
 {#if !hidden}
-    <div class="grid gap-6 py-4">
+    <div
+        in:smoothScale={{ delay: 300, axis: "height" }}
+        out:smoothScale={{ axis: "height" }}
+        class="grid gap-6 py-4"
+    >
         <div class="flex items-center justify-between">
             <div class="flex flex-col space-y-1">
                 <span>{t("label.settings.language")}</span>
