@@ -7,7 +7,7 @@
 
     const pipelineData = dataContext.get();
 
-    const { edges } = pipelineContext.get();
+    const pipeline = pipelineContext.get();
 
     /**
      * @type {import('../NodeProps.svelte').NodeProps}
@@ -20,19 +20,7 @@
     let filesize = $state();
     let fileContent = $state();
 
-    /**
-     * @type {import("@model/Edge.svelte").EdgeData[]}
-     */
-    let myEdges = $derived.by(() => {
-        if (edges) {
-            return Object.values(edges).filter(
-                (edge) =>
-                    outputs?.[0]?.id?.includes?.(edge.start) ||
-                    outputs?.[0]?.id?.includes?.(edge.end),
-            );
-        }
-        return [];
-    });
+    let myEdges = $derived(pipeline.getEdgesOfHandle(outputs?.[0]?.id));
 
     const clearData = () => {
         filename = null;

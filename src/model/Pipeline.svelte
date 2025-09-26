@@ -178,6 +178,15 @@
         }
 
         /**
+         * @param {string} handleId
+         */
+        getEdgesOfHandle(handleId) {
+            return Object.values(this.edges).filter(
+                (e) => e.start === handleId || e.end === handleId,
+            );
+        }
+
+        /**
          * @param {string} nodeId
          */
         getConnectedEdges(nodeId) {

@@ -95,7 +95,6 @@
                 class="w-full h-full relative"
                 style={`transform: translate(${canvasTransform.x * canvasTransform.scale}px, ${canvasTransform.y * canvasTransform.scale}px) scale(${canvasTransform.scale});transform-origin: top left;`}
             >
-                <SelectionRect />
                 <svg
                     data-edge-view="true"
                     class="absolute w-full h-full transform-[scale(1)] left-0 top-0 overflow-visible"
@@ -108,6 +107,7 @@
                 {#each Object.entries(pipeline.nodes) as [id, node] (id)}
                     <BaseNode {node} />
                 {/each}
+                <SelectionRect />
             </div>
         </div>
     </div>

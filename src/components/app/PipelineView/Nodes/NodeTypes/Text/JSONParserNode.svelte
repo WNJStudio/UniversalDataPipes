@@ -8,37 +8,13 @@
 
     const pipelineData = dataContext.get();
 
-    const { edges } = pipelineContext.get();
+    const pipeline = pipelineContext.get();
 
     let errorMessage = $state("");
 
-    /**
-     * @type {import("@model/Edge.svelte").EdgeData[]}
-     */
-    let myInputEdges = $derived.by(() => {
-        if (edges) {
-            return Object.values(edges).filter(
-                (edge) =>
-                    inputs?.[0]?.id?.includes?.(edge.start) ||
-                    inputs?.[0]?.id?.includes?.(edge.end),
-            );
-        }
-        return [];
-    });
+    let myInputEdges = $derived(pipeline.getEdgesOfHandle(inputs?.[0]?.id));
 
-    /**
-     * @type {import("@model/Edge.svelte").EdgeData[]}
-     */
-    let myOutputEdges = $derived.by(() => {
-        if (edges) {
-            return Object.values(edges).filter(
-                (edge) =>
-                    outputs?.[0]?.id?.includes?.(edge.start) ||
-                    outputs?.[0]?.id?.includes?.(edge.end),
-            );
-        }
-        return [];
-    });
+    let myOutputEdges = $derived(pipeline.getEdgesOfHandle(outputs?.[0]?.id));
 
     /**
      * @type {string[]}

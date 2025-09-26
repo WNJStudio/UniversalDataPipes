@@ -10,21 +10,9 @@
 
     const pipelineData = dataContext.get();
 
-    const { edges } = pipelineContext.get();
+    const pipeline = pipelineContext.get();
 
-    /**
-     * @type {import("@model/Edge.svelte").EdgeData[]}
-     */
-    let myEdges = $derived.by(() => {
-        if (edges) {
-            return Object.values(edges).filter(
-                (edge) =>
-                    inputs?.[0]?.id?.includes?.(edge.start) ||
-                    inputs?.[0]?.id?.includes?.(edge.end),
-            );
-        }
-        return [];
-    });
+    let myEdges = $derived(pipeline.getEdgesOfHandle(inputs?.[0]?.id));
 
     /**
      * @type {any[]}
