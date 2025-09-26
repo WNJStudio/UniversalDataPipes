@@ -109,7 +109,7 @@
     <div class="flex flex-1 items-center space-x-2 p-2 bg-muted rounded-md">
         <FileIcon class="h-5 w-5 text-foreground" />
         <div class="flex-1 text-sm truncate">
-            <p class="font-medium">{filename}</p>
+            <p class="font-medium truncate">{filename}</p>
             <p class="text-xs text-muted-foreground">
                 {Math.round(filesize / 1024)} KB
             </p>

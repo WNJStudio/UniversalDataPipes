@@ -112,7 +112,7 @@
         <Handle handle={input} />
       {/each}
     </div>
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 flex flex-col min-w-0">
       <CardHeader
         class="flex flex-row items-center justify-between space-y-0 p-3 bg-card-foreground/5 relative"
       >
