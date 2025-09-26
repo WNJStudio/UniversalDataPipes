@@ -10,6 +10,8 @@
         secondary:
             "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
+        floating:
+            "bg-primary-foreground/20 hover:bg-primary-foreground/90 hover:text-primary/90 rounded-full!",
         link: "text-primary underline-offset-4 hover:underline",
     };
     const SIZES = {
@@ -23,6 +25,7 @@
      * @prop {import('svelte').Snippet} [tooltip]
      * @prop {"top"|"bottom"|"left"|"right"} [tooltipSide]
      * @prop {boolean} [toggle]
+     * @prop {number} [delay]
      * @prop {import('svelte/attachments').Attachment} [attach]
      * @prop {boolean} [toggleStatus]
      * @prop {import('svelte').Snippet} [toggleOn]
@@ -40,6 +43,7 @@
         toggleOn,
         toggleOff,
         toggleStatus,
+        delay,
         variant = "default",
         size = "default",
         ...props
@@ -82,7 +86,12 @@
 {/snippet}
 
 {#if tooltip}
-    <Tooltip preferredSide={tooltipSide} content={tooltip} trigger={button} />
+    <Tooltip
+        preferredSide={tooltipSide}
+        content={tooltip}
+        trigger={button}
+        {delay}
+    />
 {:else}
     {@render button({ attach })}
 {/if}

@@ -19,6 +19,7 @@
   import PipelineMenu from "./PipelineMenu.svelte";
   import SearchBar from "./SearchBar.svelte";
   import SidebarMenu from "./SidebarMenu.svelte";
+  import SidebarToggle from "./SidebarToggle.svelte";
 
   /**
    * @typedef {Object} PipelineSidebarProps
@@ -170,6 +171,7 @@
     </ScrollArea>
   </div>
 {/if}
+<SidebarToggle />
 <DeleteDialog
   {actionCandidateName}
   {closeDialog}

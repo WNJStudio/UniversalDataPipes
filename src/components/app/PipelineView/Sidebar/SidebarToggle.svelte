@@ -9,20 +9,27 @@
         PIPEVIEW,
     } from "@context/SettingsContext.svelte";
     import { t } from "@i18n/i18n.svelte";
-    import { slide } from "svelte/transition";
+    import { fly } from "svelte/transition";
     const sidebarToggler = getSidebarToggler();
     const sidebarStatus = getSidebarStatus();
     const currentView = getCurrentView();
 </script>
 
 {#if currentView() === PIPEVIEW}
-    <div transition:slide={{ delay: 300, axis: "x" }}>
+    <div
+        transition:fly={{ x: "-100%" }}
+        class={[
+            "absolute z-50 top-2 left-2 transition-[translate,color,background-color,border-color,outline-color,text-decoration-color,fill,stroke]",
+            sidebarStatus() ? "translate-x-64" : "",
+        ]}
+    >
         <Button
             tooltipSide="bottom"
-            variant="ghost"
             size="icon"
+            variant="floating"
             toggle
             toggleStatus={sidebarStatus()}
+            delay={500}
             onclick={() => sidebarToggler()}
             class="h-8 w-8"
         >

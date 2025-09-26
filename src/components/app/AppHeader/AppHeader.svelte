@@ -13,7 +13,6 @@
     import TabList from "@ui/Tabs/TabList.svelte";
     import SettingsDialog from "../Settings/SettingsDialog.svelte";
     import Logo from "./Logo.svelte";
-    import SidebarToggle from "./SidebarToggle.svelte";
 
     /** @type {import('svelte/elements').SvelteHTMLElements['header']} */
     let { ...props } = $props();
@@ -38,7 +37,6 @@
     ]}
 >
     <div class="flex items-center gap-2">
-        <SidebarToggle />
         <Logo />
     </div>
     <div class="flex items-center gap-2">
