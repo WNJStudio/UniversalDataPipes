@@ -6,9 +6,13 @@
     import { circInOut } from "svelte/easing";
     import { getDragged } from "../CanvasActions/Drag.svelte";
     import { getPanned } from "../CanvasActions/Pan.svelte";
-    import { getResized } from "../CanvasActions/Resize.svelte";
+    import {
+        getResized,
+        getResizingNode,
+    } from "../CanvasActions/Resize.svelte";
     import {
         getEdgeSelectionChecker,
+        getNodeSelectionChecker,
         onEdgeClick,
     } from "../CanvasActions/Select.svelte";
     import { getZoomed } from "../CanvasActions/Zoom.svelte";
@@ -26,9 +30,20 @@
     const lastDragged = getDragged();
     const lastLoaded = getLoaded();
     const lastResized = getResized();
+    const nodeChecker = getNodeSelectionChecker();
+    const resizingNode = getResizingNode();
     const checker = getEdgeSelectionChecker();
     const isSelected = () => checker([edge.id]);
     let lastUpdated = $state(Date.now());
+    /**
+     * @type {HTMLElement}
+     */
+    let startHandle = $state();
+    /**
+     * @type {HTMLElement}
+     */
+    let endHandle = $state();
+
     /**
      * @type {DOMRect}
      */
@@ -62,22 +77,27 @@
         return "";
     });
     $effect(() => {
-        if (
-            !startRect ||
-            !endRect ||
-            lastPanned() > lastUpdated ||
-            lastZoomed() > lastUpdated ||
-            lastDragged() > lastUpdated ||
-            lastLoaded() > lastUpdated ||
-            lastResized() > lastUpdated
-        ) {
-            const startHandle = document.querySelector(
+        if (!startHandle || !endHandle) {
+            startHandle = document.querySelector(
                 `[data-handle-id="${edge.start}"]`,
             );
-            const endHandle = document.querySelector(
+            endHandle = document.querySelector(
                 `[data-handle-id="${edge.end}"]`,
             );
-            if (startHandle && endHandle) {
+        }
+        if (startHandle && endHandle) {
+            if (
+                !startRect ||
+                !endRect ||
+                lastPanned() > lastUpdated ||
+                lastZoomed() > lastUpdated ||
+                (lastDragged() > lastUpdated &&
+                    nodeChecker([edge.startNode, edge.endNode])) ||
+                lastLoaded() > lastUpdated ||
+                (lastResized() > lastUpdated &&
+                    (resizingNode() === edge.startNode ||
+                        resizingNode() === edge.endNode))
+            ) {
                 startRect = startHandle.getBoundingClientRect();
                 endRect = endHandle.getBoundingClientRect();
             }
