@@ -5,14 +5,12 @@
     import { CloudUpload, FileIcon } from "@lucide/svelte";
     import Button from "@ui/Button/Button.svelte";
 
+    /** @type {import('../NodeRegistry.svelte').NodeProps} */
+    let { inputs, outputs, config } = $props();
+
     const pipelineData = dataContext.get();
 
     const pipeline = pipelineContext.get();
-
-    /**
-     * @type {import('../NodeProps.svelte').NodeProps}
-     */
-    let { inputs, outputs } = $props();
 
     let fileInputRef = $state();
     let isDragging = $state(false);
@@ -20,22 +18,22 @@
     let filesize = $state();
     let fileContent = $state();
 
-    let myEdges = $derived(pipeline.getEdgesOfHandle(outputs?.[0]?.id));
+    let inputEdges = $derived(pipeline.getEdgesOfHandle(outputs?.[0]?.id));
 
     const clearData = () => {
         filename = null;
         filesize = null;
         fileContent = null;
-        if (myEdges.length > 0) {
-            myEdges.forEach((edge) => {
+        if (inputEdges.length > 0) {
+            inputEdges.forEach((edge) => {
                 delete pipelineData[edge.id];
             });
         }
     };
 
     $effect(() => {
-        if (myEdges.length > 0 && fileContent) {
-            myEdges.forEach((edge) => {
+        if (inputEdges.length > 0 && fileContent) {
+            inputEdges.forEach((edge) => {
                 pipelineData[edge.id] = fileContent;
             });
         }

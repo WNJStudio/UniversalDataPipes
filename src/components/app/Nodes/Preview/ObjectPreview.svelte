@@ -5,8 +5,8 @@
     import { RefreshCw } from "@lucide/svelte";
     import Button from "@ui/Button/Button.svelte";
 
-    /** @type {import('../NodeProps.svelte').NodeProps} */
-    let { inputs, outputs } = $props();
+    /** @type {import('../NodeRegistry.svelte').NodeProps} */
+    let { inputs, outputs, config } = $props();
 
     const pipelineData = dataContext.get();
 

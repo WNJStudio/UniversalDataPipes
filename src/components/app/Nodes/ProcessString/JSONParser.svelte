@@ -2,9 +2,8 @@
     import { dataContext } from "@context/DataContext.svelte";
     import { pipelineContext } from "@context/PipelineContext.svelte";
     import { t } from "@i18n/i18n.svelte";
-
-    /** @type {import('../NodeProps.svelte').NodeProps} */
-    let { inputs, outputs } = $props();
+    /** @type {import('../NodeRegistry.svelte').NodeProps} */
+    let { inputs, outputs, config } = $props();
 
     const pipelineData = dataContext.get();
 
@@ -12,26 +11,26 @@
 
     let errorMessage = $state("");
 
-    let myInputEdges = $derived(pipeline.getEdgesOfHandle(inputs?.[0]?.id));
+    let inputEdges = $derived(pipeline.getEdgesOfHandle(inputs?.[0]?.id));
 
-    let myOutputEdges = $derived(pipeline.getEdgesOfHandle(outputs?.[0]?.id));
+    let outputEdges = $derived(pipeline.getEdgesOfHandle(outputs?.[0]?.id));
 
     /**
      * @type {string[]}
      */
     let inputData = $derived.by(() => {
-        if (myInputEdges.length > 0 && pipelineData) {
-            return myInputEdges.flatMap((edge) => pipelineData[edge.id] || []);
+        if (inputEdges.length > 0 && pipelineData) {
+            return outputEdges.flatMap((edge) => pipelineData[edge.id] || []);
         }
         return [];
     });
 
     $effect(() => {
         if (inputData.length > 0) {
-            if (myOutputEdges.length > 0) {
+            if (outputEdges.length > 0) {
                 try {
                     const outputData = inputData.map((i) => JSON.parse(i));
-                    myOutputEdges.forEach((edge) => {
+                    outputEdges.forEach((edge) => {
                         pipelineData[edge.id] = outputData;
                     });
                     errorMessage = "";
@@ -40,8 +39,8 @@
                 }
             }
         } else {
-            if (myOutputEdges.length > 0) {
-                myOutputEdges.forEach((edge) => {
+            if (outputEdges.length > 0) {
+                outputEdges.forEach((edge) => {
                     delete pipelineData[edge.id];
                 });
             }
@@ -56,11 +55,11 @@
         <p class="text-sm text-center text-destructive">
             {errorMessage}
         </p>
-    {:else if myInputEdges.length === 0}
+    {:else if inputEdges.length === 0}
         <p class="text-sm text-center text-muted-foreground">
             {t("label.node.jsonparser.connect.input")}
         </p>
-    {:else if myOutputEdges.length === 0}
+    {:else if outputEdges.length === 0}
         <p class="text-sm text-center text-muted-foreground">
             {t("label.node.jsonparser.connect.output")}
         </p>

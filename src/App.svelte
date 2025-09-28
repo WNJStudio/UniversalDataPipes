@@ -1,10 +1,16 @@
 <script>
     import AppHeader from "@app/AppHeader/AppHeader.svelte";
     import DataView from "@app/DataView/DataView.svelte";
+    import { registerNodes } from "@app/Nodes/NodeRegistry.svelte";
     import PipelineView from "@app/PipelineView/PipelineView.svelte";
     import { t } from "@i18n/i18n.svelte";
     import MenuPortal from "@portal/MenuPortal.svelte";
     import TooltipPortal from "@portal/TooltipPortal.svelte";
+    import { onMount } from "svelte";
+
+    onMount(() => {
+        registerNodes();
+    });
 </script>
 
 <main class={["h-screen w-screen overflow-hidden bg-background"]}>

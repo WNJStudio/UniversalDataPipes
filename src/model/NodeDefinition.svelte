@@ -2,7 +2,6 @@
     import { t } from "@i18n/i18n.svelte";
     import { CircleQuestionMark } from "@lucide/svelte";
     import { v4 } from "uuid";
-    import { HandleData } from "./Handle.svelte";
     import { HandleDefinition } from "./HandleDefinition.svelte";
     import { NodeData } from "./Node.svelte";
     import { Position } from "./Position.svelte";
@@ -10,16 +9,16 @@
 
     export class NodeDefinition {
         /**
-         * @param {import('./NodeCategory.svelte').Categories} category
+         * @param {string} category
          * @param {import('@i18n/i18n.svelte').i18nlabel} name
          * @param {HandleDefinition[]} inputs
          * @param {HandleDefinition[]} outputs
-         * @param {import('svelte').Snippet<[{inputs:HandleData[], outputs:HandleData[]}]>} render
+         * @param {import('svelte').Snippet<[import('@app/Nodes/NodeRegistry.svelte').NodeProps]>} render
          * @param {import('svelte').Component<import('@lucide/svelte').IconProps>} icon
          */
         constructor(category, name, inputs, outputs, render, icon) {
             /**
-             * @type {import('./NodeCategory.svelte').Categories}
+             * @type {string}
              */
             this.category = category;
             /**
@@ -35,7 +34,7 @@
              */
             this.outputs = outputs;
             /**
-             * @type {import('svelte').Snippet<[{inputs:HandleData[], outputs:HandleData[]}]>}
+             * @type {import('svelte').Snippet<[import('@app/Nodes/NodeRegistry.svelte').NodeProps]>}
              */
             this.render = render;
             /**

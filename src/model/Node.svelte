@@ -5,13 +5,14 @@
     /**
      * @typedef {Object} NodeObject
      * @prop {string} id
-     * @prop {import('./NodeCategory.svelte').Categories} category
+     * @prop {string} category
      * @prop {string} name
      * @prop {import('./Position.svelte').PositionObject} position
      * @prop {import('./Size.svelte').SizeObject} [size]
      * @prop {import('./Size.svelte').SizeObject} [minSize]
      * @prop {import('./Handle.svelte').HandleObject[]} inputs
      * @prop {import('./Handle.svelte').HandleObject[]} outputs
+     * @prop {Object} [config]
      */
 
     /**
@@ -27,13 +28,14 @@
         /**
          * Reactive
          * @param {string} id
-         * @param {import('./NodeCategory.svelte').Categories} category
+         * @param {string} category
          * @param {import('@i18n/i18n.svelte').i18nlabel} name
          * @param {Position} position
          * @param {Size} size
          * @param {Size} minSize
          * @param {HandleData[]} inputs
          * @param {HandleData[]} outputs
+         * @param {Object} [config]
          */
         constructor(
             id,
@@ -44,13 +46,14 @@
             minSize = undefined,
             inputs = [],
             outputs = [],
+            config = {},
         ) {
             /**
              * @type {string}
              */
             this.id = $state(id);
             /**
-             * @type {import('./NodeCategory.svelte').Categories}
+             * @type {string}
              */
             this.category = $state(category);
             /**
@@ -77,6 +80,10 @@
              * @type {HandleData[]}
              */
             this.outputs = $state(outputs);
+            /**
+             * @type {Object}
+             */
+            this.config = $state(config);
         }
 
         /**
@@ -105,6 +112,7 @@
                 minSize,
                 inputs,
                 outputs,
+                obj.config,
             );
         }
 
@@ -148,6 +156,7 @@
                 inputs: this.inputs.map((i) => i.toJSON()),
                 outputs: this.outputs.map((o) => o.toJSON()),
                 position: this.position.toJSON(),
+                config: JSON.parse(JSON.stringify(this.config)),
             };
         }
     }
