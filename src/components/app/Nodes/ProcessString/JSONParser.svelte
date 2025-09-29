@@ -20,7 +20,7 @@
      */
     let inputData = $derived.by(() => {
         if (inputEdges.length > 0 && pipelineData) {
-            return outputEdges.flatMap((edge) => pipelineData[edge.id] || []);
+            return inputEdges.flatMap((edge) => pipelineData[edge.id] || []);
         }
         return [];
     });

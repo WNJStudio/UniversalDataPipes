@@ -18,22 +18,23 @@
     let filesize = $state();
     let fileContent = $state();
 
-    let inputEdges = $derived(pipeline.getEdgesOfHandle(outputs?.[0]?.id));
+    let outputEdges = $derived(pipeline.getEdgesOfHandle(outputs?.[0]?.id));
 
     const clearData = () => {
         filename = null;
         filesize = null;
         fileContent = null;
-        if (inputEdges.length > 0) {
-            inputEdges.forEach((edge) => {
+        if (outputEdges.length > 0) {
+            outputEdges.forEach((edge) => {
                 delete pipelineData[edge.id];
             });
         }
     };
 
     $effect(() => {
-        if (inputEdges.length > 0 && fileContent) {
-            inputEdges.forEach((edge) => {
+        if (outputEdges.length > 0 && fileContent) {
+            outputEdges.forEach((edge) => {
+                console.log("o", edge.id);
                 pipelineData[edge.id] = fileContent;
             });
         }
