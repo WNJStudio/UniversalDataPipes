@@ -29,6 +29,7 @@
         "label.node.jsonparser": "JSON Parser",
         "label.node.handle.inputtext": "Input text",
         "label.node.handle.outputobjects": "Output objects",
+        "label.node.textexport": "Export as Text",
         "label.justsaved": "Just saved.",
         "template.lastsaved": (lastsaved) => `Last saved ${lastsaved} ago.`,
         "label.settings": "Settings",
@@ -122,5 +123,6 @@
         "label.library.search.notfound": "No nodes found.",
         "label.library": "Node Library",
         "label.drag.hint": "Drag nodes onto the canvas",
+        "label.ready": "Ready",
     };
 </script>

@@ -29,6 +29,7 @@
         "label.node.jsonparser": "JSON 解析器",
         "label.node.handle.inputtext": "输入文本",
         "label.node.handle.outputobjects": "输出对象",
+        "label.node.textexport": "导出文本",
         "label.justsaved": "刚刚保存。",
         "template.lastsaved": (lastsaved) => `上次保存于 ${lastsaved} 前。`,
         "label.settings": "设置",
@@ -116,5 +117,6 @@
         "label.library.search.notfound": "未找到节点。",
         "label.library": "节点库",
         "label.drag.hint": "把节点拖动到画布上",
+        "label.ready": "准备",
     };
 </script>
