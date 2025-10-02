@@ -5,6 +5,7 @@
      * @typedef {Object} SmoothScaleParams
      * @prop {number} [duration] default 300
      * @prop {number} [delay] default 0
+     * @prop {boolean} [min] default false
      * @prop {"width"|"height"|"both"} [axis] default both
      * @prop {(n:number)=>number} [easing] default cubicOut
      */
@@ -16,7 +17,13 @@
      */
     export const smoothScale = (
         el,
-        { delay = 0, duration = 300, axis = "both", easing = cubicOut },
+        {
+            delay = 0,
+            duration = 300,
+            axis = "both",
+            easing = cubicOut,
+            min = false,
+        },
     ) => {
         const { height, width } = el.getBoundingClientRect();
         const { paddingTop, paddingBottom, paddingLeft, paddingRight } =
@@ -39,14 +46,14 @@
                         ? ""
                         : `padding-top: ${pt}px;
                            padding-bottom: ${pb}px;
-                           height: ${h}px;`
+                           ${min ? "min-" : ""}height: ${h}px;`
                 }
                 ${
                     axis === "height"
                         ? ""
                         : `padding-left: ${pl}px;
                            padding-right: ${pr}px;
-                           width: ${w}px;`
+                           ${min ? "min-" : ""}width: ${w}px;`
                 }
                     opacity: ${iv};
                     overflow: hidden;

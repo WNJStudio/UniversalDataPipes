@@ -114,8 +114,16 @@
          * @param {MouseEvent} e
          */
         const startSelecting = (e) => {
-            e.preventDefault();
             if (e.target instanceof HTMLElement) {
+                if (
+                    e.target.nodeName === "INPUT" ||
+                    e.target.nodeName === "TEXTAREA"
+                ) {
+                    return;
+                }
+            }
+            e.preventDefault();
+            if (e.target instanceof Element) {
                 if (
                     e.target.closest(
                         "[data-handle-id], [data-resize-handle], [data-node-id]",

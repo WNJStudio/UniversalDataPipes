@@ -33,9 +33,9 @@
     export const onLibraryDrag =
         (rect, transform, pipeline, selectNode) =>
         (/** @type {MouseEvent} e */ e) => {
-            e.preventDefault();
             if (e.currentTarget instanceof HTMLElement) {
                 if (e.currentTarget.hasAttribute("data-template-category")) {
+                    e.preventDefault();
                     e.stopPropagation();
                     e.stopImmediatePropagation();
                     const category = e.currentTarget.getAttribute(
@@ -97,12 +97,12 @@
          * @param {MouseEvent} e
          */
         const startDragging = (e) => {
-            e.preventDefault();
-            if (e.target instanceof HTMLElement) {
+            if (e.target instanceof Element) {
                 if (
                     e.target.closest("[data-node-id]") &&
                     !e.target.closest('[data-node-content="true"]')
                 ) {
+                    e.preventDefault();
                     e.stopPropagation();
                     e.stopImmediatePropagation();
                     const targetNodeEl = e.target.closest("[data-node-id]");

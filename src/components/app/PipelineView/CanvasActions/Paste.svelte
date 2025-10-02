@@ -32,11 +32,13 @@
                         const newHid = v4();
                         handleMap[ih.id] = newHid;
                         ih.id = newHid;
+                        ih.nodeId = newNid;
                     });
                     newN.outputs.forEach((oh) => {
                         const newHid = v4();
                         handleMap[oh.id] = newHid;
                         oh.id = newHid;
+                        oh.nodeId = newNid;
                     });
                     newN.position.x = newN.position.x + 10;
                     newN.position.y = newN.position.y + 10;
@@ -92,6 +94,14 @@
          * @param {KeyboardEvent} e
          */
         const onKeyDown = (e) => {
+            if (e.target instanceof HTMLElement) {
+                if (
+                    e.target.nodeName === "INPUT" ||
+                    e.target.nodeName === "TEXTAREA"
+                ) {
+                    return;
+                }
+            }
             if (e.ctrlKey) {
                 if (e.key?.toLowerCase() === "v") {
                     e.preventDefault();

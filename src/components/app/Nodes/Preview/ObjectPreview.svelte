@@ -2,62 +2,123 @@
     import { dataContext } from "@context/DataContext.svelte";
     import { pipelineContext } from "@context/PipelineContext.svelte";
     import { t } from "@i18n/i18n.svelte";
-    import { RefreshCw } from "@lucide/svelte";
+    import { ChevronLeft, ChevronRight } from "@lucide/svelte";
     import Button from "@ui/Button/Button.svelte";
+    import { clamp } from "@utils/MathUtils";
 
     /** @type {import('../NodeRegistry.svelte').NodeProps} */
-    let { inputs, outputs, config } = $props();
+    let { id } = $props();
 
     const pipelineData = dataContext.get();
 
     const pipeline = pipelineContext.get();
 
-    let myEdges = $derived(pipeline.getEdgesOfHandle(inputs?.[0]?.id));
+    let node = $derived(pipeline.nodes[id]);
+
+    let inputEdges = $derived(pipeline.getEdgesOfHandle(node?.inputs?.[0]?.id));
 
     /**
      * @type {any[]}
      */
     let data = $derived.by(() => {
-        if (myEdges.length > 0 && pipelineData) {
-            return myEdges.flatMap((edge) => pipelineData[edge.id] || []);
+        if (inputEdges.length > 0 && pipelineData) {
+            return inputEdges.flatMap((edge) => pipelineData[edge.id] || []);
         }
         return [];
     });
 
-    let randomIndex = $state(0);
+    let currentIndex = $state(0);
 
-    let preview = $derived(data?.[randomIndex]);
-
-    const selectRandom = () => {
-        if (data && data.length > 0) {
-            randomIndex = ~~(Math.random() * data.length);
-        } else {
-            randomIndex = 0;
+    /**
+     * @param {string} valueType
+     */
+    const getColor = (valueType) => {
+        switch (valueType) {
+            case "object":
+                return "bg-yellow-500 text-background col-span-2";
+            case "number":
+                return "bg-green-500";
+            case "string":
+                return "bg-blue-500";
+            case "boolean":
+                return "bg-purple-500";
+            default:
+                return "bg-gray-400";
         }
     };
 </script>
 
-<div
-    class="text-left p-2 rounded-md flex-[1_1_0] min-h-14 overflow-y-scroll custom-scrollbar-2"
->
-    {#if preview}
-        <div class="relative">
-            <pre
-                class="text-xs text-foreground/80 whitespace-pre-wrap font-mono">
-{JSON.stringify(preview, null, 2)}
-        </pre>
+{#snippet entry({ obj })}
+    {#if obj && typeof obj === "object"}
+        <div class="grid grid-cols-2 gap-2 wrap-anywhere items-center">
+            {#if obj instanceof Array}
+                {#each obj as item}
+                    <div class="border-b-border border-2 col-span-2">
+                        {@render entry({ obj: item })}
+                    </div>
+                {/each}
+            {:else}
+                {#each Object.entries(obj) as [key, value]}
+                    <span
+                        class={[
+                            "text-xs rounded-md text-center p-1",
+                            getColor(typeof value),
+                        ]}>{key}</span
+                    >
+                    <div
+                        class={[
+                            typeof value === "object" ? "pl-4 col-span-2" : "",
+                        ]}
+                    >
+                        {@render entry({ obj: value })}
+                    </div>
+                {/each}
+            {/if}
         </div>
-        <Button
-            class="absolute bottom-2.5 right-2.5 hover:bg-transparent hover:text-primary [&_svg]:transition-transform hover:[&_svg]:scale-110 hover:[&_svg]:rotate-12 active:[&_svg]:rotate-180 active:text-primary/50"
-            variant="ghost"
-            size="icon"
-            onclick={selectRandom}
-        >
-            <RefreshCw class="h-5 w-5" />
-        </Button>
     {:else}
-        <p class="text-sm text-center text-muted-foreground">
+        <span class="text-xs text-foreground/75">{obj}</span>
+    {/if}
+{/snippet}
+
+<div class="flex-1 flex flex-col gap-1">
+    {#if data.length > 0}
+        <div class="flex-[1_1_0] overflow-y-scroll custom-scrollbar-2">
+            <div class="relative">
+                {@render entry({ obj: data[currentIndex] })}
+            </div>
+        </div>
+        <div class="flex gap-1 justify-between items-center">
+            <Button
+                variant="ghost"
+                size="icon"
+                class="h-6!"
+                disabled={currentIndex === 0}
+                onclick={() =>
+                    (currentIndex = clamp(currentIndex - 1, 0, data.length))}
+            >
+                <ChevronLeft class="h-5 w-5" />
+            </Button>
+            <span class="flex-1 text-xs text-muted-foreground text-center"
+                >{currentIndex + 1}/{data.length}</span
+            >
+            <Button
+                variant="ghost"
+                size="icon"
+                class="h-6!"
+                disabled={currentIndex === data.length - 1}
+                onclick={() =>
+                    (currentIndex = clamp(currentIndex + 1, 0, data.length))}
+            >
+                <ChevronRight class="h-5 w-5" />
+            </Button>
+        </div>
+    {:else if inputEdges.length === 0}
+        <p class="text-sm text-center text-muted-foreground min-h-14">
             {t("label.node.objectpreview.connect")}
+        </p>
+    {:else}
+        <p class="text-sm text-center text-muted-foreground min-h-14">
+            {t("label.node.nodata")}
         </p>
     {/if}
 </div>

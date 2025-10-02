@@ -38,6 +38,14 @@
          * @param {KeyboardEvent} e
          */
         const onKeyDown = (e) => {
+            if (e.target instanceof HTMLElement) {
+                if (
+                    e.target.nodeName === "INPUT" ||
+                    e.target.nodeName === "TEXTAREA"
+                ) {
+                    return;
+                }
+            }
             if (e.ctrlKey) {
                 if (e.key?.toLowerCase() === "x") {
                     e.preventDefault();

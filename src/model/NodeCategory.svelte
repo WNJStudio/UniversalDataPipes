@@ -31,17 +31,17 @@
          * @param {import('@i18n/i18n.svelte').i18nlabel} name
          * @param {HandleDefinition[]} inputs
          * @param {HandleDefinition[]} outputs
-         * @param {import('svelte').Snippet<[import('@app/Nodes/NodeRegistry.svelte').NodeProps]>} render
+         * @param {import('svelte').Component<import('@app/Nodes/NodeRegistry.svelte').NodeProps>} component
          * @param {import('svelte').Component<import('@lucide/svelte').IconProps>} icon
          */
-        createDefinition(name, inputs, outputs, render, icon) {
+        createDefinition(name, inputs, outputs, component, icon) {
             this.nodes.push(
                 new NodeDefinition(
                     this.name,
                     name,
                     inputs,
                     outputs,
-                    render,
+                    component,
                     icon,
                 ),
             );

@@ -9,9 +9,7 @@
 
     /**
      * @typedef {Object} NodeProps
-     * @prop {import('@model/Handle.svelte').HandleData[]} inputs
-     * @prop {import('@model/Handle.svelte').HandleData[]} outputs
-     * @prop {Object} [config]
+     * @prop {string} id
      */
 
     export const registerNodes = () => {
@@ -31,7 +29,7 @@
                     "OUT",
                 ),
             ],
-            tfin,
+            TextFile,
             FileText,
         );
         Preview.createDefinition(
@@ -44,7 +42,7 @@
                 ),
             ],
             [],
-            ojout,
+            ObjectPreview,
             Braces,
         );
         ProcessString.createDefinition(
@@ -63,18 +61,8 @@
                     "OUT",
                 ),
             ],
-            jsonparser,
+            JSONParser,
             Braces,
         );
     };
 </script>
-
-{#snippet tfin({ inputs, outputs, config })}
-    <TextFile {inputs} {outputs} {config}></TextFile>
-{/snippet}
-{#snippet ojout({ inputs, outputs, config })}
-    <ObjectPreview {inputs} {outputs} {config}></ObjectPreview>
-{/snippet}
-{#snippet jsonparser({ inputs, outputs, config })}
-    <JSONParser {inputs} {outputs} {config}></JSONParser>
-{/snippet}

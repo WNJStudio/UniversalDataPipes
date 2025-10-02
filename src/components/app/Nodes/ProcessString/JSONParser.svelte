@@ -3,17 +3,21 @@
     import { pipelineContext } from "@context/PipelineContext.svelte";
     import { t } from "@i18n/i18n.svelte";
     /** @type {import('../NodeRegistry.svelte').NodeProps} */
-    let { inputs, outputs, config } = $props();
+    let { id } = $props();
 
     const pipelineData = dataContext.get();
 
     const pipeline = pipelineContext.get();
 
+    let node = $derived(pipeline.nodes[id]);
+
     let errorMessage = $state("");
 
-    let inputEdges = $derived(pipeline.getEdgesOfHandle(inputs?.[0]?.id));
+    let inputEdges = $derived(pipeline.getEdgesOfHandle(node?.inputs?.[0]?.id));
 
-    let outputEdges = $derived(pipeline.getEdgesOfHandle(outputs?.[0]?.id));
+    let outputEdges = $derived(
+        pipeline.getEdgesOfHandle(node?.outputs?.[0]?.id),
+    );
 
     /**
      * @type {string[]}
@@ -49,7 +53,7 @@
 </script>
 
 <div
-    class="text-left flex-1 flex flex-col justify-center items-center p-2 rounded-md"
+    class="text-left flex-[1_1_0] flex flex-col justify-center items-center p-2 rounded-md"
 >
     {#if errorMessage !== ""}
         <p class="text-sm text-center text-destructive">
@@ -57,15 +61,15 @@
         </p>
     {:else if inputEdges.length === 0}
         <p class="text-sm text-center text-muted-foreground">
-            {t("label.node.jsonparser.connect.input")}
+            {t("label.node.connect.input")}
         </p>
     {:else if outputEdges.length === 0}
         <p class="text-sm text-center text-muted-foreground">
-            {t("label.node.jsonparser.connect.output")}
+            {t("label.node.connect.output")}
         </p>
     {:else if inputData.length === 0}
         <p class="text-sm text-center text-muted-foreground">
-            {t("label.node.jsonparser.nodata")}
+            {t("label.node.nodata")}
         </p>
     {:else}
         <p class="text-sm text-center text-primary">

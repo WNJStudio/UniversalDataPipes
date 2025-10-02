@@ -2,6 +2,8 @@
     import {
         DATAVIEW,
         getCurrentView,
+        getLibraryStatus,
+        getLibraryToggler,
         getSidebarStatus,
         getSidebarToggler,
         getViewChanger,
@@ -21,10 +23,15 @@
     const currentView = getCurrentView();
     const viewChanger = getViewChanger();
     let sidebarStatus = getSidebarStatus();
+    let libraryStatus = getLibraryStatus();
     let toggleSidebar = getSidebarToggler();
+    let toggleLibrary = getLibraryToggler();
     const onOpenSettings = () => {
         if (sidebarStatus()) {
             toggleSidebar();
+        }
+        if (libraryStatus()) {
+            toggleLibrary();
         }
         settingsDialogOpen = true;
     };

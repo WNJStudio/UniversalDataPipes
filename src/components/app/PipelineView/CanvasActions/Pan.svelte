@@ -26,8 +26,8 @@
          * @param {MouseEvent} e
          */
         const startPanning = (e) => {
-            e.preventDefault();
             if (e.button === 1 || panMode) {
+                e.preventDefault();
                 e.stopPropagation();
                 e.stopImmediatePropagation();
                 panOrigin = {

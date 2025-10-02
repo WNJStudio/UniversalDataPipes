@@ -11,6 +11,22 @@
     onMount(() => {
         registerNodes();
     });
+
+    /**
+     * @param {KeyboardEvent} e
+     */
+    const inputKeyBypass = (e) => {
+        if (e.target instanceof HTMLElement) {
+            if (
+                e.target.nodeName === "INPUT" ||
+                e.target.nodeName === "TEXTAREA"
+            ) {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                return;
+            }
+        }
+    };
 </script>
 
 <main class={["h-screen w-screen overflow-hidden bg-background"]}>
@@ -28,3 +44,5 @@
 <svelte:head>
     <title>{t("label.app.name")}</title>
 </svelte:head>
+
+<svelte:window onkeydown={inputKeyBypass} />

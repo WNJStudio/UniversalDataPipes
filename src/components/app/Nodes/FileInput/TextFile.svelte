@@ -4,13 +4,16 @@
     import { t } from "@i18n/i18n.svelte";
     import { CloudUpload, FileIcon } from "@lucide/svelte";
     import Button from "@ui/Button/Button.svelte";
+    import { bytesToString } from "@utils/MathUtils";
 
     /** @type {import('../NodeRegistry.svelte').NodeProps} */
-    let { inputs, outputs, config } = $props();
+    let { id } = $props();
 
     const pipelineData = dataContext.get();
 
     const pipeline = pipelineContext.get();
+
+    let node = $derived(pipeline.nodes[id]);
 
     let fileInputRef = $state();
     let isDragging = $state(false);
@@ -18,7 +21,9 @@
     let filesize = $state();
     let fileContent = $state();
 
-    let outputEdges = $derived(pipeline.getEdgesOfHandle(outputs?.[0]?.id));
+    let outputEdges = $derived(
+        pipeline.getEdgesOfHandle(node?.outputs?.[0]?.id),
+    );
 
     const clearData = () => {
         filename = null;
@@ -34,7 +39,6 @@
     $effect(() => {
         if (outputEdges.length > 0 && fileContent) {
             outputEdges.forEach((edge) => {
-                console.log("o", edge.id);
                 pipelineData[edge.id] = fileContent;
             });
         }
@@ -105,12 +109,14 @@
 </script>
 
 {#if filename}
-    <div class="flex flex-1 items-center space-x-2 p-2 bg-muted rounded-md">
+    <div
+        class="flex flex-1 min-h-36 items-center space-x-2 p-2 bg-muted rounded-md"
+    >
         <FileIcon class="h-5 w-5 text-foreground" />
         <div class="flex-1 text-sm truncate">
             <p class="font-medium truncate">{filename}</p>
             <p class="text-xs text-muted-foreground">
-                {Math.round(filesize / 1024)} KB
+                {bytesToString(filesize)}
             </p>
         </div>
         <Button size="sm" variant="ghost" onclick={clearData}
@@ -132,8 +138,10 @@
         ondragover={handleDragOver}
         ondrop={handleDrop}
         class={[
-            "flex flex-col flex-1 items-center justify-center p-4 border-2 border-dashed rounded-md text-center",
-            isDragging ? "border-primary bg-primary/10" : "border-border",
+            "flex flex-col flex-1 min-h-36 items-center justify-center p-4 border-2 border-dashed rounded-md text-center",
+            isDragging
+                ? "border-primary bg-primary/10"
+                : "border-muted-foreground",
         ]}
     >
         <CloudUpload class="h-8 w-8 text-muted-foreground mb-2" />

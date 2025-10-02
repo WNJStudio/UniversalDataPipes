@@ -31,9 +31,9 @@
          * @param {MouseEvent} e
          */
         const startResizing = (e) => {
-            e.preventDefault();
             if (e.target instanceof HTMLElement) {
                 if (e.target.closest("[data-resize-handle]")) {
+                    e.preventDefault();
                     e.stopPropagation();
                     e.stopImmediatePropagation();
                     const targetHandle = e.target.closest(

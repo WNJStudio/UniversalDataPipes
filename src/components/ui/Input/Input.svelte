@@ -1,5 +1,5 @@
 <script>
-    import { useDebounce } from "runed";
+    import { onClickOutside, useDebounce } from "runed";
 
     /**
      * @typedef {Object} InputProps
@@ -8,12 +8,21 @@
      */
     /** @type {InputProps & import('svelte/elements').HTMLInputAttributes} */
     let { delay = 300, onValueChange, ...props } = $props();
+    /**
+     * @type {HTMLInputElement}
+     */
+    let ref = $state();
 
     const changeValue = useDebounce(onValueChange, () => delay);
+    onClickOutside(
+        () => ref,
+        () => ref?.blur(),
+    );
 </script>
 
 <input
     {...props}
+    bind:this={ref}
     onclick={(e) => e.currentTarget.focus()}
     oninput={(e) => changeValue(e.currentTarget.value)}
     class={[

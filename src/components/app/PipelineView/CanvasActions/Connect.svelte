@@ -26,9 +26,9 @@
          * @param {MouseEvent} e
          */
         const startConnecting = (e) => {
-            e.preventDefault();
             if (e.target instanceof HTMLElement) {
                 if (e.target.closest("[data-handle-id]") && transform && rect) {
+                    e.preventDefault();
                     e.stopPropagation();
                     e.stopImmediatePropagation();
                     const targetHandle = e.target.closest("[data-handle-id]");

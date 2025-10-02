@@ -37,7 +37,13 @@
     let openCategories = $state(Object.keys(NodeDefs));
     let hidden = $derived(!libraryStatus() || currentView() !== PIPEVIEW);
     let pattern = $state("");
-    let query = $derived(new RegExp(pattern, "i"));
+    let query = $derived.by(() => {
+        try {
+            return new RegExp(pattern, "i");
+        } catch (error) {
+            return new RegExp("", "i");
+        }
+    });
 
     /**
      * @type {CategoryFiltered[]}

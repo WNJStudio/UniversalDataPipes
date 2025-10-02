@@ -21,7 +21,7 @@
         </DropdownMenuItem>
         <DropdownMenuItem
             onClick={openDeleteDialog}
-            class="text-destructive focus:bg-destructive/10 focus:text-destructive hover:bg-destructive/10 hover:text-destructive"
+            class="text-destructive hover:bg-destructive/80 hover:text-destructive-foreground"
         >
             <Trash2 class="mr-2 h-4 w-4" />
             <span>{t("label.delete")}</span>

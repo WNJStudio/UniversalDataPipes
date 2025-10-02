@@ -6,6 +6,7 @@
     import { NodeData } from "./Node.svelte";
     import { Position } from "./Position.svelte";
     import { Size } from "./Size.svelte";
+    import DefaultNode from "@app/Nodes/Default/DefaultNode.svelte";
 
     export class NodeDefinition {
         /**
@@ -13,10 +14,10 @@
          * @param {import('@i18n/i18n.svelte').i18nlabel} name
          * @param {HandleDefinition[]} inputs
          * @param {HandleDefinition[]} outputs
-         * @param {import('svelte').Snippet<[import('@app/Nodes/NodeRegistry.svelte').NodeProps]>} render
+         * @param {import('svelte').Component<import('@app/Nodes/NodeRegistry.svelte').NodeProps>} component
          * @param {import('svelte').Component<import('@lucide/svelte').IconProps>} icon
          */
-        constructor(category, name, inputs, outputs, render, icon) {
+        constructor(category, name, inputs, outputs, component, icon) {
             /**
              * @type {string}
              */
@@ -34,9 +35,9 @@
              */
             this.outputs = outputs;
             /**
-             * @type {import('svelte').Snippet<[import('@app/Nodes/NodeRegistry.svelte').NodeProps]>}
+             * @type {import('svelte').Component<import('@app/Nodes/NodeRegistry.svelte').NodeProps>}
              */
-            this.render = render;
+            this.component = component;
             /**
              * @type {import('svelte').Component<import('@lucide/svelte').IconProps>}
              */
@@ -67,11 +68,7 @@
         "label.default",
         [],
         [],
-        defaultNode,
+        DefaultNode,
         CircleQuestionMark,
     );
 </script>
-
-{#snippet defaultNode({ inputs, outputs })}
-    <p class="text-muted-foreground text-2xl font-body">{t("label.default")}</p>
-{/snippet}
