@@ -1,5 +1,10 @@
 <script module>
-    import { Braces, Download, FileText } from "@lucide/svelte";
+    import {
+        Braces,
+        Download,
+        FileText,
+        TextCursorInput,
+    } from "@lucide/svelte";
     import { HandleTypes } from "@model/Handle.svelte";
     import { HandleDefinition } from "@model/HandleDefinition.svelte";
     import { NodeDefs } from "@model/NodeCategory.svelte";
@@ -7,6 +12,7 @@
     import ObjectPreview from "./Preview/ObjectPreview.svelte";
     import JSONParser from "./ProcessString/JSONParser.svelte";
     import TextExport from "./Export/Text.svelte";
+    import StringConstant from "./Constant/String.svelte";
 
     /**
      * @typedef {Object} NodeProps
@@ -14,12 +20,14 @@
      */
 
     export const registerNodes = () => {
-        const { FileInput, Preview, ProcessString, Export } = NodeDefs;
+        const { FileInput, Preview, ProcessString, Export, Constant } =
+            NodeDefs;
 
         FileInput.nodes = [];
         Preview.nodes = [];
         ProcessString.nodes = [];
         Export.nodes = [];
+        Constant.nodes = [];
 
         FileInput.createDefinition(
             "label.node.textinput",
@@ -72,6 +80,19 @@
             [],
             TextExport,
             Download,
+        );
+        Constant.createDefinition(
+            "label.node.stringconst",
+            [],
+            [
+                new HandleDefinition(
+                    "label.node.handle.outputstring",
+                    HandleTypes.string,
+                    "OUT",
+                ),
+            ],
+            StringConstant,
+            TextCursorInput,
         );
     };
 </script>

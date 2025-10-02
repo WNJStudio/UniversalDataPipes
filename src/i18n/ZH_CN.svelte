@@ -29,6 +29,8 @@
         "label.node.jsonparser": "JSON 解析器",
         "label.node.handle.inputtext": "输入文本",
         "label.node.handle.outputobjects": "输出对象",
+        "label.node.stringconst": "字符串常量",
+        "label.node.handle.outputstring": "输出字符串",
         "label.node.textexport": "导出文本",
         "label.justsaved": "刚刚保存。",
         "template.lastsaved": (lastsaved) => `上次保存于 ${lastsaved} 前。`,

@@ -29,6 +29,8 @@
         "label.node.jsonparser": "JSON Parser",
         "label.node.handle.inputtext": "Input text",
         "label.node.handle.outputobjects": "Output objects",
+        "label.node.stringconst": "Constant Strings",
+        "label.node.handle.outputstring": "Output strings",
         "label.node.textexport": "Export as Text",
         "label.justsaved": "Just saved.",
         "template.lastsaved": (lastsaved) => `Last saved ${lastsaved} ago.`,
