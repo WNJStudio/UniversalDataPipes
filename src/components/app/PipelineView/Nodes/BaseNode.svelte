@@ -100,7 +100,7 @@
     <Card
         class={[
             "shadow-2xl! shadow-black/50 transition-[filter] flex h-full",
-            isPanning() || resizingNode() === node.id
+            isPanning() || resizingNode() === node.id || isSelected()
                 ? ""
                 : "hover:ring-2 hover:ring-primary/50 hover:ring-offset-2 hover:ring-offset-background",
             isSelected()
@@ -109,7 +109,7 @@
         ]}
     >
         <div
-            class="flex flex-col gap-2 w-2 bg-card-foreground/5 py-3 justify-center"
+            class="flex flex-col gap-4 w-2 bg-card-foreground/5 py-3 justify-center"
         >
             {#each node.inputs as input (input.id)}
                 <Handle handle={input} />
@@ -139,7 +139,7 @@
             <div class="bg-card-foreground/5 h-2"></div>
         </div>
         <div
-            class="flex flex-col gap-2 w-2 bg-card-foreground/5 py-3 justify-center"
+            class="flex flex-col gap-4 w-2 bg-card-foreground/5 py-3 justify-center"
         >
             {#each node.outputs as output (output.id)}
                 <Handle handle={output} />

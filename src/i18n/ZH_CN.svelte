@@ -32,6 +32,7 @@
         "label.node.stringconst": "字符串常量",
         "label.node.handle.outputstring": "输出字符串",
         "label.node.textexport": "导出文本",
+        "label.node.sse": "服务端事件流",
         "label.justsaved": "刚刚保存。",
         "template.lastsaved": (lastsaved) => `上次保存于 ${lastsaved} 前。`,
         "label.settings": "设置",
@@ -120,5 +121,15 @@
         "label.library": "节点库",
         "label.drag.hint": "把节点拖动到画布上",
         "label.ready": "准备",
+        "label.body": "Body",
+        "label.headers": "Headers",
+        "label.endpoint": "URL端点",
+        "label.stop": "停止",
+        "label.reset": "重置",
+        "label.send": "发送",
+        "label.sending": "发送中...",
+        "label.url.invalid": "URL无效",
+        "label.url.insert": "输入URL",
+        "label.sse.waiting": "已连接, 等待信息中...",
     };
 </script>

@@ -2,6 +2,7 @@
   "version": "5",
   "specifiers": {
     "npm:@lucide/svelte@0.544": "0.544.0_svelte@5.38.7__acorn@8.15.0",
+    "npm:@microsoft/fetch-event-source@^2.0.1": "2.0.1",
     "npm:@sveltejs/vite-plugin-svelte@^6.1.1": "6.1.4_svelte@5.38.7__acorn@8.15.0_vite@7.1.4__picomatch@4.0.3",
     "npm:@tailwindcss/vite@^4.1.13": "4.1.13_vite@7.1.4__picomatch@4.0.3",
     "npm:runed@~0.31.1": "0.31.1_svelte@5.38.7__acorn@8.15.0",
@@ -199,6 +200,9 @@
       "dependencies": [
         "svelte"
       ]
+    },
+    "@microsoft/fetch-event-source@2.0.1": {
+      "integrity": "sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA=="
     },
     "@napi-rs/wasm-runtime@0.2.12": {
       "integrity": "sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==",
@@ -803,6 +807,7 @@
     "packageJson": {
       "dependencies": [
         "npm:@lucide/svelte@0.544",
+        "npm:@microsoft/fetch-event-source@^2.0.1",
         "npm:@sveltejs/vite-plugin-svelte@^6.1.1",
         "npm:@tailwindcss/vite@^4.1.13",
         "npm:runed@~0.31.1",

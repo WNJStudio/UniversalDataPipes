@@ -3,6 +3,7 @@
         Braces,
         Download,
         FileText,
+        Globe,
         TextCursorInput,
     } from "@lucide/svelte";
     import { HandleTypes } from "@model/Handle.svelte";
@@ -13,6 +14,7 @@
     import JSONParser from "./ProcessString/JSONParser.svelte";
     import TextExport from "./Export/Text.svelte";
     import StringConstant from "./Constant/String.svelte";
+    import SSE from "./HTTP/SSE.svelte";
 
     /**
      * @typedef {Object} NodeProps
@@ -20,7 +22,7 @@
      */
 
     export const registerNodes = () => {
-        const { FileInput, Preview, ProcessString, Export, Constant } =
+        const { FileInput, Preview, ProcessString, Export, Constant, HTTP } =
             NodeDefs;
 
         FileInput.nodes = [];
@@ -28,6 +30,7 @@
         ProcessString.nodes = [];
         Export.nodes = [];
         Constant.nodes = [];
+        HTTP.nodes = [];
 
         FileInput.createDefinition(
             "label.node.textinput",
@@ -93,6 +96,16 @@
             ],
             StringConstant,
             TextCursorInput,
+        );
+        HTTP.createDefinition(
+            "label.node.sse",
+            [
+                new HandleDefinition("label.headers", HandleTypes.object, "IN"),
+                new HandleDefinition("label.body", HandleTypes.object, "IN"),
+            ],
+            [new HandleDefinition("label.data", HandleTypes.object, "OUT")],
+            SSE,
+            Globe,
         );
     };
 </script>

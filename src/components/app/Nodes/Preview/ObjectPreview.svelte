@@ -29,6 +29,12 @@
 
     let currentIndex = $state(0);
 
+    $effect(() => {
+        if (currentIndex > data.length) {
+            currentIndex = data.length - 1;
+        }
+    });
+
     /**
      * @param {string} valueType
      */

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@lucide/svelte": "^0.544.0",
+    "@microsoft/fetch-event-source": "^2.0.1",
     "@tailwindcss/vite": "^4.1.13",
     "runed": "^0.31.1",
     "tailwindcss": "^4.1.13",

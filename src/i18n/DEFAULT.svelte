@@ -32,6 +32,7 @@
         "label.node.stringconst": "Constant Strings",
         "label.node.handle.outputstring": "Output strings",
         "label.node.textexport": "Export as Text",
+        "label.node.sse": "Server Sent Events",
         "label.justsaved": "Just saved.",
         "template.lastsaved": (lastsaved) => `Last saved ${lastsaved} ago.`,
         "label.settings": "Settings",
@@ -126,5 +127,15 @@
         "label.library": "Node Library",
         "label.drag.hint": "Drag nodes onto the canvas",
         "label.ready": "Ready",
+        "label.body": "Body",
+        "label.headers": "Headers",
+        "label.endpoint": "URL Endpoint",
+        "label.stop": "Stop",
+        "label.reset": "Reset",
+        "label.send": "Send",
+        "label.sending": "Sending...",
+        "label.url.invalid": "The URL is not valid",
+        "label.url.insert": "Input the URL",
+        "label.sse.waiting": "Connected, waiting for messages...",
     };
 </script>
