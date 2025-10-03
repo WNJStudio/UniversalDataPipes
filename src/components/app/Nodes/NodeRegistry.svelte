@@ -4,6 +4,7 @@
         Download,
         FileText,
         Globe,
+        Hash,
         RectangleEllipsis,
         SquareStack,
         TextCursorInput,
@@ -19,6 +20,7 @@
     import SSE from "./HTTP/SSE.svelte";
     import SetField from "./ProcessObject/SetField.svelte";
     import NCopies from "./OperationList/NCopies.svelte";
+    import NumberConstant from "./Constant/Number.svelte";
 
     /**
      * @typedef {Object} NodeProps
@@ -110,6 +112,19 @@
             ],
             StringConstant,
             TextCursorInput,
+        );
+        Constant.createDefinition(
+            "label.node.numberconst",
+            [],
+            [
+                new HandleDefinition(
+                    "label.node.handle.outputnumbers",
+                    HandleTypes.number,
+                    "OUT",
+                ),
+            ],
+            NumberConstant,
+            Hash,
         );
         HTTP.createDefinition(
             "label.node.sse",
