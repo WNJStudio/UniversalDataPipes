@@ -137,5 +137,10 @@
         "label.url.invalid": "The URL is not valid",
         "label.url.insert": "Input the URL",
         "label.sse.waiting": "Connected, waiting for messages...",
+        "label.node.set.field.name": "Input the field name",
+        "label.node.field.name": "Field name",
+        "label.node.set.field.success": "Field set successful",
+        "label.node.setfield": "Set field",
+        "label.node.handle.field.data": "Field data",
     };
 </script>

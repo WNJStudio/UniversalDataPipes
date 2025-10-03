@@ -4,6 +4,7 @@
         Download,
         FileText,
         Globe,
+        RectangleEllipsis,
         TextCursorInput,
     } from "@lucide/svelte";
     import { HandleTypes } from "@model/Handle.svelte";
@@ -15,6 +16,7 @@
     import TextExport from "./Export/Text.svelte";
     import StringConstant from "./Constant/String.svelte";
     import SSE from "./HTTP/SSE.svelte";
+    import SetField from "./ProcessObject/SetField.svelte";
 
     /**
      * @typedef {Object} NodeProps
@@ -22,8 +24,15 @@
      */
 
     export const registerNodes = () => {
-        const { FileInput, Preview, ProcessString, Export, Constant, HTTP } =
-            NodeDefs;
+        const {
+            FileInput,
+            Preview,
+            ProcessString,
+            Export,
+            Constant,
+            HTTP,
+            ProcessObject,
+        } = NodeDefs;
 
         FileInput.nodes = [];
         Preview.nodes = [];
@@ -31,6 +40,7 @@
         Export.nodes = [];
         Constant.nodes = [];
         HTTP.nodes = [];
+        ProcessObject.nodes = [];
 
         FileInput.createDefinition(
             "label.node.textinput",
@@ -106,6 +116,30 @@
             [new HandleDefinition("label.data", HandleTypes.object, "OUT")],
             SSE,
             Globe,
+        );
+        ProcessObject.createDefinition(
+            "label.node.setfield",
+            [
+                new HandleDefinition(
+                    "label.node.handle.inputobjects",
+                    HandleTypes.object,
+                    "IN",
+                ),
+                new HandleDefinition(
+                    "label.node.handle.field.data",
+                    HandleTypes.any,
+                    "IN",
+                ),
+            ],
+            [
+                new HandleDefinition(
+                    "label.node.handle.outputobjects",
+                    HandleTypes.object,
+                    "OUT",
+                ),
+            ],
+            SetField,
+            RectangleEllipsis,
         );
     };
 </script>

@@ -131,5 +131,10 @@
         "label.url.invalid": "URL无效",
         "label.url.insert": "输入URL",
         "label.sse.waiting": "已连接, 等待信息中...",
+        "label.node.set.field.name": "输入属性名称",
+        "label.node.field.name": "属性名称",
+        "label.node.set.field.success": "属性设定成功",
+        "label.node.setfield": "设置属性",
+        "label.node.handle.field.data": "属性数据",
     };
 </script>
