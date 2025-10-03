@@ -136,5 +136,7 @@
         "label.node.set.field.success": "属性设定成功",
         "label.node.setfield": "设置属性",
         "label.node.handle.field.data": "属性数据",
+        "label.node.ncopies.copies": "复制个数",
+        "label.node.ncopies": "复制N遍",
     };
 </script>

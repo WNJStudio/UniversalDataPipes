@@ -142,5 +142,7 @@
         "label.node.set.field.success": "Field set successful",
         "label.node.setfield": "Set field",
         "label.node.handle.field.data": "Field data",
+        "label.node.ncopies.copies": "Number of copies",
+        "label.node.ncopies": "Copy N Times",
     };
 </script>

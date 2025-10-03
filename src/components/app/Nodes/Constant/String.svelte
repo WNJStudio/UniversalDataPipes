@@ -5,6 +5,7 @@
     import Button from "@ui/Button/Button.svelte";
     import Input from "@ui/Input/Input.svelte";
     import { smoothScale } from "@ui/Transitions/SmoothScale.svelte";
+    import { onMount } from "svelte";
     import { v4 } from "uuid";
 
     /** @type {import('../NodeRegistry.svelte').NodeProps} */
@@ -25,32 +26,32 @@
      */
     let strings = $state([]);
 
-    let lastUpdated = $state(0);
-    let lastSynced = $state(0);
-
     $effect(() => {
-        if (lastUpdated === 0) {
-            strings =
-                node.config.strings?.map((/** @type {string} */ s) => ({
-                    id: v4(),
-                    value: s,
-                })) || [];
-            lastUpdated = Date.now();
-        }
-        if (lastSynced < lastUpdated) {
-            node.config.strings = strings.map((s) => s.value);
-            lastSynced = Date.now();
-        }
         if (outputEdges.length > 0) {
-            outputEdges.forEach((edge) => {
-                pipelineData[edge.id] = strings.map((s) => s.value);
-            });
+            if (strings.length > 0) {
+                outputEdges.forEach((edge) => {
+                    pipelineData[edge.id] = strings.map((s) => s.value);
+                });
+            } else {
+                outputEdges.forEach((edge) => {
+                    delete pipelineData[edge.id];
+                });
+            }
+        }
+    });
+
+    onMount(() => {
+        if (node.config.strings) {
+            strings = node.config.strings?.map((/** @type {string} */ s) => ({
+                id: v4(),
+                value: s,
+            }));
         }
     });
 
     const onAdd = () => {
         strings.push({ id: v4(), value: "" });
-        lastUpdated = Date.now();
+        node.config.strings = strings.map((s) => s.value);
     };
 
     /**
@@ -58,7 +59,7 @@
      */
     const onRemove = (i) => {
         strings.splice(i, 1);
-        lastUpdated = Date.now();
+        node.config.strings = strings.map((s) => s.value);
     };
 
     /**
@@ -67,7 +68,7 @@
      */
     const onChange = (i, value) => {
         strings[i].value = value;
-        lastUpdated = Date.now();
+        node.config.strings = strings.map((s) => s.value);
     };
 </script>
 

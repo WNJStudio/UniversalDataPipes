@@ -92,6 +92,7 @@
      */
     const setFieldname = (v) => {
         fieldName = v;
+        node.config.fieldName = v;
     };
 </script>
 

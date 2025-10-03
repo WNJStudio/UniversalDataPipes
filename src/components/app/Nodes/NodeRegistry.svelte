@@ -5,6 +5,7 @@
         FileText,
         Globe,
         RectangleEllipsis,
+        SquareStack,
         TextCursorInput,
     } from "@lucide/svelte";
     import { HandleTypes } from "@model/Handle.svelte";
@@ -17,6 +18,7 @@
     import StringConstant from "./Constant/String.svelte";
     import SSE from "./HTTP/SSE.svelte";
     import SetField from "./ProcessObject/SetField.svelte";
+    import NCopies from "./OperationList/NCopies.svelte";
 
     /**
      * @typedef {Object} NodeProps
@@ -32,6 +34,7 @@
             Constant,
             HTTP,
             ProcessObject,
+            OperationList,
         } = NodeDefs;
 
         FileInput.nodes = [];
@@ -41,6 +44,7 @@
         Constant.nodes = [];
         HTTP.nodes = [];
         ProcessObject.nodes = [];
+        OperationList.nodes = [];
 
         FileInput.createDefinition(
             "label.node.textinput",
@@ -140,6 +144,13 @@
             ],
             SetField,
             RectangleEllipsis,
+        );
+        OperationList.createDefinition(
+            "label.node.ncopies",
+            [new HandleDefinition("label.data", HandleTypes.any, "IN")],
+            [new HandleDefinition("label.data", HandleTypes.any, "OUT")],
+            NCopies,
+            SquareStack,
         );
     };
 </script>
