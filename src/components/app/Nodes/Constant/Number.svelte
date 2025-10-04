@@ -35,5 +35,6 @@
     <InputList
         bind:items={node.config.numbers}
         listClass="flex-[1_1_0] min-h-14"
+        type="number"
     />
 </div>
