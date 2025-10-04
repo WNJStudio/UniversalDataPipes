@@ -76,21 +76,14 @@
                     let newH = cn.size.height
                         ? cn.size.height + deltaY
                         : nodeRect.height + deltaY;
-                    if (isSnapToGrid()) {
-                        const minWGrid = roundMult(
-                            cn.minSize.width,
-                            gridSize(),
-                        );
-                        const minHGrid = roundMult(
-                            cn.minSize.height,
-                            gridSize(),
-                        );
-                        newW = Math.max(minWGrid, roundMult(newW, gridSize()));
-                        newH = Math.max(minHGrid, roundMult(newH, gridSize()));
-                    } else {
-                        newW = Math.max(cn.minSize.width, newW);
-                        newH = Math.max(cn.minSize.height, newH);
-                    }
+                    newW = Math.max(
+                        cn.minSize.width,
+                        isSnapToGrid() ? roundMult(newW, gridSize()) : newW,
+                    );
+                    newH = Math.max(
+                        cn.minSize.height,
+                        isSnapToGrid() ? roundMult(newH, gridSize()) : newH,
+                    );
                     cn.size.width = newW;
                     cn.size.height = newH;
                     lastResized = Date.now();

@@ -61,9 +61,7 @@
     );
 </script>
 
-<div
-    class="flex-[1_1_0] overflow-y-auto custom-scrollbar-2 flex flex-col justify-center items-center p-2"
->
+<div class="flex-1 flex flex-col justify-center items-center p-2">
     <NodeMessage
         class="flex-1"
         error={errorMessage}

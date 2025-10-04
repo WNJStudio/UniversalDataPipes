@@ -176,7 +176,7 @@
         </div>
         <NodeMessage
             class="flex-1"
-            primary={t("label.url.insert")}
+            primary={endpoint === "" ? t("label.url.insert") : ""}
             error={status === "url_invalid"
                 ? t("label.url.invalid")
                 : errorMessage}

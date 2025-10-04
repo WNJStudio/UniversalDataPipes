@@ -42,9 +42,7 @@
     };
 </script>
 
-<div
-    class="flex-[1_1_0] overflow-y-auto custom-scrollbar-2 flex flex-col gap-2"
->
+<div class="flex-1 flex flex-col gap-2">
     <NodeMessage
         class="flex-1"
         primary={inputEdges.length === 0 ? t("label.node.connect.input") : ""}
