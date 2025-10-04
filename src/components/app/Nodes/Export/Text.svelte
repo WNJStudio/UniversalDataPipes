@@ -51,7 +51,7 @@
             {:else if data.length === 0}
                 {t("label.node.nodata")}
             {:else}
-                {t("label.ready")}
+                {t("label.ready.to.export")}
             {/if}
         </span>
     </div>

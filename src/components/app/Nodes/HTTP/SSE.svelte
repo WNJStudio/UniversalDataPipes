@@ -155,7 +155,7 @@
             </span>
             <span class="text-muted-foreground text-sm">
                 {#if headers}
-                    {t("label.ready")}
+                    {t("label.ok")}
                 {:else}
                     {t("label.node.nodata")}
                 {/if}
@@ -167,7 +167,7 @@
             </span>
             <span class="text-muted-foreground text-sm">
                 {#if body}
-                    {t("label.ready")}
+                    {t("label.ok")}
                 {:else}
                     {t("label.node.nodata")}
                 {/if}
@@ -180,7 +180,7 @@
                 {:else if status === "error"}
                     {errorMessage}
                 {:else if status === "ready"}
-                    {t("label.ready")}
+                    {t("label.ready.to.send")}
                 {:else if status === "sending"}
                     {t("label.sending")}
                 {:else if status === "waiting"}
