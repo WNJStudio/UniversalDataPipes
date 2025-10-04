@@ -98,8 +98,10 @@
                     (resizingNode() === edge.startNode ||
                         resizingNode() === edge.endNode))
             ) {
-                startRect = startHandle.getBoundingClientRect();
-                endRect = endHandle.getBoundingClientRect();
+                window.requestAnimationFrame(() => {
+                    startRect = startHandle.getBoundingClientRect();
+                    endRect = endHandle.getBoundingClientRect();
+                });
             }
             lastUpdated = Date.now();
         }
