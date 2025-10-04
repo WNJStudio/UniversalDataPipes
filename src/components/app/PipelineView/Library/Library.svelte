@@ -73,7 +73,7 @@
      * @param {KeyboardEvent} e
      */
     const onkeydown = (e) => {
-        if (e.key === "Tab") {
+        if (e.key === "`") {
             e.preventDefault();
             libraryToggler();
         }
