@@ -31,7 +31,7 @@
     });
 </script>
 
-<div class="flex-1 flex flex-col gap-2 min-h-14">
+<div class="flex-1 flex flex-col gap-2">
     <InputList
         bind:items={node.config.numbers}
         listClass="flex-[1_1_0] min-h-14"

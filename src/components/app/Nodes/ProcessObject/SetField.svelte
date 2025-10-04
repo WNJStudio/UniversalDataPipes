@@ -4,6 +4,7 @@
     import { t } from "@i18n/i18n.svelte";
     import Input from "@ui/Input/Input.svelte";
     import { onMount } from "svelte";
+    import NodeMessage from "../NodeMessage.svelte";
 
     /** @type {import('../NodeRegistry.svelte').NodeProps} */
     let { id } = $props();
@@ -13,12 +14,6 @@
     const pipeline = pipelineContext.get();
 
     let fieldName = $state("");
-
-    let message = $derived(
-        fieldName === ""
-            ? t("label.node.set.field.name")
-            : t("label.node.set.field.success"),
-    );
 
     let node = $derived(pipeline.nodes[id]);
 
@@ -102,9 +97,9 @@
         value={fieldName}
         onValueChange={setFieldname}
     />
-    <div class="flex-1 flex items-center justify-center">
-        <span class="text-center text-sm text-primary">
-            {message}
-        </span>
-    </div>
+    <NodeMessage
+        class="flex-1"
+        primary={fieldName === "" ? t("label.node.set.field.name") : ""}
+        success={fieldName !== "" ? t("label.node.set.field.success") : ""}
+    />
 </div>

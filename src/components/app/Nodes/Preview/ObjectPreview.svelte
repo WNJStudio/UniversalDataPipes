@@ -5,6 +5,7 @@
     import { ChevronLeft, ChevronRight } from "@lucide/svelte";
     import Button from "@ui/Button/Button.svelte";
     import { clamp } from "@utils/MathUtils";
+    import NodeMessage from "../NodeMessage.svelte";
 
     /** @type {import('../NodeRegistry.svelte').NodeProps} */
     let { id } = $props();
@@ -59,7 +60,7 @@
         <div class="grid grid-cols-2 gap-2 wrap-anywhere items-center">
             {#if obj instanceof Array}
                 {#each obj as item}
-                    <div class="border-b-border border-2 col-span-2">
+                    <div class="border-b-muted-foreground border-2 col-span-2">
                         {@render entry({ obj: item })}
                     </div>
                 {/each}
@@ -119,12 +120,11 @@
             </Button>
         </div>
     {:else if inputEdges.length === 0}
-        <p class="text-sm text-center text-muted-foreground min-h-14">
-            {t("label.node.objectpreview.connect")}
-        </p>
+        <NodeMessage
+            class="flex-1 min-h-14"
+            primary={t("label.node.objectpreview.connect")}
+        />
     {:else}
-        <p class="text-sm text-center text-muted-foreground min-h-14">
-            {t("label.node.nodata")}
-        </p>
+        <NodeMessage class="flex-1 min-h-14" mute={t("label.node.nodata")} />
     {/if}
 </div>

@@ -69,7 +69,7 @@
     };
 </script>
 
-<div class="flex-1 flex flex-col gap-2 min-h-20 justify-between">
+<div class="flex-1 flex flex-col gap-2 justify-between">
     <Input
         placeholder={t("label.node.ncopies.copies")}
         value={copies}

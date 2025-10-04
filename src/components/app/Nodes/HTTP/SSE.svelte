@@ -9,6 +9,7 @@
     import Button from "@ui/Button/Button.svelte";
     import Input from "@ui/Input/Input.svelte";
     import { onMount } from "svelte";
+    import NodeMessage from "../NodeMessage.svelte";
 
     /** @type {import('../NodeRegistry.svelte').NodeProps} */
     let { id } = $props();
@@ -173,23 +174,19 @@
                 {/if}
             </span>
         </div>
-        <div class="flex-1 flex justify-center items-center">
-            <span class="text-center text-sm text-primary">
-                {#if status === "url_invalid"}
-                    {t("label.url.invalid")}
-                {:else if status === "error"}
-                    {errorMessage}
-                {:else if status === "ready"}
-                    {t("label.ready.to.send")}
-                {:else if status === "sending"}
-                    {t("label.sending")}
-                {:else if status === "waiting"}
-                    {t("label.sse.waiting")}
-                {:else}
-                    {t("label.url.insert")}
-                {/if}
-            </span>
-        </div>
+        <NodeMessage
+            class="flex-1"
+            primary={t("label.url.insert")}
+            error={status === "url_invalid"
+                ? t("label.url.invalid")
+                : errorMessage}
+            success={status === "ready" ? t("label.ready.to.send") : ""}
+            info={status === "sending"
+                ? t("label.sending")
+                : status === "waiting"
+                  ? t("label.sse.waiting")
+                  : ""}
+        />
     </div>
     <div class="flex gap-2 justify-between items-center">
         <Button

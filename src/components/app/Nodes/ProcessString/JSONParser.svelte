@@ -2,6 +2,7 @@
     import { dataContext } from "@context/DataContext.svelte";
     import { pipelineContext } from "@context/PipelineContext.svelte";
     import { t } from "@i18n/i18n.svelte";
+    import NodeMessage from "../NodeMessage.svelte";
     /** @type {import('../NodeRegistry.svelte').NodeProps} */
     let { id } = $props();
 
@@ -50,30 +51,24 @@
             }
         }
     });
+
+    let requiredConnectionMessage = $derived(
+        inputEdges.length === 0
+            ? t("label.node.connect.input")
+            : outputEdges.length === 0
+              ? t("label.node.connect.output")
+              : "",
+    );
 </script>
 
 <div
-    class="text-left flex-[1_1_0] flex flex-col justify-center items-center p-2 rounded-md"
+    class="flex-[1_1_0] overflow-y-auto custom-scrollbar-2 flex flex-col justify-center items-center p-2"
 >
-    {#if errorMessage !== ""}
-        <p class="text-sm text-center text-destructive">
-            {errorMessage}
-        </p>
-    {:else if inputEdges.length === 0}
-        <p class="text-sm text-center text-muted-foreground">
-            {t("label.node.connect.input")}
-        </p>
-    {:else if outputEdges.length === 0}
-        <p class="text-sm text-center text-muted-foreground">
-            {t("label.node.connect.output")}
-        </p>
-    {:else if inputData.length === 0}
-        <p class="text-sm text-center text-muted-foreground">
-            {t("label.node.nodata")}
-        </p>
-    {:else}
-        <p class="text-sm text-center text-primary">
-            {t("label.node.jsonparser.success")}
-        </p>
-    {/if}
+    <NodeMessage
+        class="flex-1"
+        error={errorMessage}
+        primary={requiredConnectionMessage}
+        mute={inputData.length === 0 ? t("label.node.nodata") : ""}
+        success={t("label.node.jsonparser.success")}
+    />
 </div>
